@@ -1,0 +1,39 @@
+﻿
+
+<img src="images/logo.png" alt="" />
+<input id="Text1" type="text" />
+
+<style>
+    rel="stylesheet" href="/stylesheets/main.css"
+    #Select1 {
+        height: 89px;
+        width: 469px;
+    }
+</style>
+<div class="ui four column grid login page stackable" [ngBusy]="loginFn">
+    <div class="column centered aligned form_wrapper">
+        <div class="logo_container">
+            <img src="logo.png" />
+        </div>
+        <form class="ui form">
+            <sm-loader [complete]="!formSubmited" class="inverted" text="Loading..."></sm-loader>
+            <div class="field">
+                <label>Username</label>
+                <div class="ui left icon input">
+                    <input label="Username" type="text" name="username" [(ngModel)]="model.username" placeholder="Username">
+                    <i class="user icon"></i>
+                </div>
+            </div>
+            <div class="field">
+                <label>Password</label><select id="Select1" name="D1">
+                    <option></option>
+                </select>
+                <div class="ui left icon input">
+                    <input label="Password" type="password" name="password" [(ngModel)]="model.password" placeholder="Password">
+                    <i class="lock icon"></i>
+                </div>
+            </div>
+            <sm-button class="primary" (click)="login()">LOGIN</sm-button>
+        </form>
+    </div>
+</div>

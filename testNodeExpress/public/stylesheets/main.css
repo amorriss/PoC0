@@ -1,0 +1,207 @@
+@import "~semantic-ui/dist/semantic.css";
+@import "~angular2-busy/build/style/busy.css";
+
+html {  }
+body {
+    font-family: 'Helvetica Neue', Arial, Helvetica, sans-serif;
+}
+h1, h2, h3, h4, h5 {
+    font-family: 'Helvetica Neue', Arial, Helvetica, sans-serif;
+    font-weight: normal;
+}
+button {
+    font-family: 'Helvetica Neue', Arial, Helvetica, sans-serif !important;
+}
+.main_container {
+    height: 100%;
+}
+
+.page {
+    height: 100%;
+}
+
+.capitalize {
+    text-transform: capitalize;
+}
+
+.right_align{
+    text-align: right;
+}
+
+/* ICON FONTS CSS */
+@font-face {
+    font-family: 'icomoon';
+    src: url('./assets/fonts/icomoon.eot');
+    src: url('./assets/fonts/icomoon.eot') format('embedded-opentype'),
+    url('./assets/fonts/icomoon.ttf') format('truetype'),
+    url('./assets/fonts/icomoon.woff') format('woff'),
+    url('./assets/fonts/icomoon.svg') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+    /* use !important to prevent issues with browser extensions that change fonts */
+    font-family: 'icomoon' !important;
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+
+    /* Better Font Rendering =========== */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-ic_stamp:before {
+    content: "\e900";
+}
+.icon-ic_back .path1:before {
+    content: "\e901";
+    color: rgb(0, 0, 0);
+}
+.icon-ic_back .path2:before {
+    content: "\e902";
+    margin-left: -1em;
+    color: rgb(35, 31, 32);
+}
+.icon-ic_calendar:before {
+    content: "\e903";
+}
+.icon-ic_save:before {
+    content: "\e904";
+}
+.icon-ic_arrows:before {
+    content: "\e905";
+}
+.icon-ic_arrow-right:before {
+    content: "\e906";
+}
+.icon-ic_arrow-left:before {
+    content: "\e907";
+}
+.icon-ic_menu_drowdown:before {
+    content: "\e908";
+}
+.icon-ic_sort:before {
+    content: "\e909";
+}
+.icon-ic_transaction_detail:before {
+    content: "\e90a";
+}
+.icon-ic_counterparty:before {
+    content: "\e90b";
+}
+.icon-ic_next:before {
+    content: "\e90c";
+}
+
+/* OVERWRITE SEMANTIC CSS STYLES */
+.login .ui.primary.button {
+    background: #ffffff;
+    color: #D11F30;
+}
+
+.ui.secondary.pointing.menu {
+    margin-bottom: 0;
+}
+
+.ui.secondary.pointing.menu .active.item {
+    color: #D11F30;
+}
+
+.profile_menu .ui.pointing.dropdown.item, .profile_menu .avatar_container.item {
+    padding: 10px 5px;
+}
+
+.profile_menu i.dropdown.icon {
+    display: none;
+}
+
+button.to_verify_btn.ui.button{
+    background: #939393;
+    color: #ffffff;
+    font-size: 12px;
+    width: 100%;
+    text-align: left;
+}
+
+button.to_verify_btn i {
+    top: -6px;
+    left: 8px;
+    float: right;
+    position: relative;
+    -webkit-transform: rotate(-45deg);
+    -moz-transform: rotate(-45deg);
+    -ms-transform: rotate(-45deg);
+    -o-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+}
+
+div.master_page_btn.ui.dropdown, button.master_page_btn.ui.button, div.master_page_btn.ui.active.button:hover{
+    background: #D11F30;
+    color: #ffffff;
+    width: 100%;
+}
+
+.ui.secondary.pointing.menu .item.menu_container{
+    padding-left: 0;
+}
+
+.ui.secondary.pointing.menu .item.avatar_container {
+    padding: 10px 0;
+}
+
+.ui.secondary.pointing.menu .item.avatar_container img {
+    width: 45px;
+}
+
+.primary_btn.ui.button {
+    background: #E82934;
+    color: #ffffff;
+}
+
+.secondary_btn.ui.button {
+    background: #939393;
+    color: #ffffff;
+}
+
+.create_instruction_page .ui.grid select {
+    width: 200px;
+}
+.ui.modal.account_details_modal {
+    width: 50%;
+    margin-left: -25%;
+}
+.ui.modal.account_details_modal .ui.header{
+    display: none;
+}
+.ui.modal.account_details_modal div.content {
+    border-top-left-radius: .28571429rem;
+    border-top-right-radius: .28571429rem;
+    border-top: 6px solid #D11F30;
+}
+.ui.modal.account_details_modal div.dropdown div.content {
+    border: none;
+}
+.ui.input input {
+    height: 37px;
+    width: 177px;
+}
+.errorMessage{
+    color: red;
+    width: 177px;
+    display: inline-block;
+    font-size: 10px;
+    padding-left: 10px;
+}
+
+@media only screen and (max-width: 767px){
+    .ui.table:not(.unstackable) thead {
+        display: block;
+        float: left;
+        width: 50%;
+    }
+}

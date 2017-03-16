@@ -1,0 +1,118 @@
+﻿<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Project X</title>
+   <script src="socket.io/socket.io.js"></script>
+    
+
+    <script>
+        function buttonClick() {
+            var socket = io.connect();
+            var now = new Date();
+        socket.emit('speak', { data: 'You clicked button1' }); 
+        console.log("button1 clicked");
+        document.getElementById("Text1").value = now;
+    }
+    </script>
+   
+    <script>
+        function dropdownSelection() {
+            var socket = io.connect();
+            var data = document.getElementById("Select1").value;
+            //document.getElementById("Text2").value = data;
+            socket.emit('ddselect', { data: data});
+            console.log("drop down selected");
+        }
+    </script>
+
+    <style type="text/css">
+        #Text2 {
+            width: 386px;
+            z-index: 1;
+            left: 18px;
+            top: 234px;
+            position: absolute;
+        }
+        #Text1 {
+            width: 381px;
+            z-index: 1;
+            left: 792px;
+            top: 244px;
+            position: absolute;
+        }
+        #Button1 {
+            z-index: 1;
+            left: 794px;
+            top: 313px;
+            position: absolute;
+        }
+    </style>
+
+ </head>
+<body style="position: absolute; z-index: 1; left: 0px; top: 0px; height: 612px; width: 3245px">
+    
+     <script>
+         var socket = io.connect();
+
+         socket.on('message', function (data) {
+             console.log(data.message);
+
+             document.getElementById("Text1").value = data.message;
+            // socket.emit('speak', { data: 'Hello from Edge 1' });
+         });
+         socket.on('dd_data', function (data) {
+             console.log("dd_data in browser called with ...");
+             console.log(data.data);
+             document.getElementById("Text2").value = data.data;
+            // socket.emit('speak', { data: 'Hello from Edge 2' });
+         });
+
+
+        
+
+
+    </script>
+    
+    <input id="Text1" type="text" />
+    <br />
+    <br />
+    <input id="Text2" type="text" />
+
+
+    <p>
+        &nbsp;</p>
+    <p>
+        &nbsp;</p>
+    <p>
+        &nbsp;</p>
+&nbsp;
+
+    <select id="Select1" onclick="dropdownSelection()" name="D1">
+        <option value="option 1" >option 1</option>
+        <option value="option 2">option 2</option>
+        <option value="option 3">option 3</option>
+        <option value="option 4">option 4</option>
+        <option value="option 5">option 5</option>
+        <option value="option 6">option 6</option>
+    </select>
+
+
+    <input id="Button1" type="button" value="press" onclick ="buttonClick()" /><br />
+    <br />
+    <br />
+    <br />
+    <br />
+
+
+    <img src="images\logo.png" width="50" height="50"/>
+
+     <br />
+    <br />
+
+   
+    &nbsp;
+
+</body>
+</html>
