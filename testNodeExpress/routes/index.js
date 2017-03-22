@@ -7,7 +7,12 @@ var router = express.Router();
 router.get('/', function (req, res) {
     //res.render('index', { title: 'Testing ....' });
     res.sendfile("views/login.html");
-    // res.sendFile("views/Page1.html");
+    //res.sendfile("views/main.html");
+});
+router.get('/main', function (req, res) {
+    //res.render('index', { title: 'Testing ....' });
+    //res.sendfile("views/login.html");
+    res.sendfile("views/main.html");
 });
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = router;

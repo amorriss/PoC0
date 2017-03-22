@@ -5,7 +5,6 @@ module.exports = {
         io.on('connection', function (socket) {
             socket.emit('message', { 'message': 'This is Project X' });
             console.log("connection server function called from browser");
-            //  socket.emit('dd_data', { 'data': 'DATA HERE' });
             socket.on('speak', function (data) {
                 console.log(data);
                 console.log("speak server function called from browser");
@@ -15,20 +14,20 @@ module.exports = {
                 socket.broadcast.emit('dd_data', {
                     data: data.data
                 });
-                //socket.emit('dd_data', { 'data': 'DATA HERE' });
                 console.log("ddselect server function called from browser");
                 console.log(data);
             });
             socket.on('login', function (data) {
                 console.log("login server function called from browser");
-                console.log(data.data);
+                console.log(data);
                 if (validatelogin(data.data)) {
                     console.log("login successful ...");
-                    socket.broadcast.emit('login', { data: "login successful" });
+                    socket.broadcast.emit('loginRet', { data: "success" });
+                    console.log("exiting login server function ...");
                 }
                 else {
                     console.log("login failed ...");
-                    socket.broadcast.emit('login', { data: "login failed" });
+                    socket.broadcast.emit('loginRet', { data: "failed" });
                 }
             });
         });

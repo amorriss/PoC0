@@ -15,18 +15,21 @@
             top: 279px;
             position: relative;
         }
+
         #Text1 {
             z-index: 1;
             left: 867px;
             top: 273px;
             position: relative;
         }
+
         #passwordtext {
             z-index: 1;
             left: 1200px;
             top: 429px;
             position: absolute;
         }
+
         #nametext {
             z-index: 1;
             left: 1204px;
@@ -50,27 +53,32 @@
     <script>
         var socket = io.connect();
 
-        socket.on('message', function (data) {
-            console.log(data.message);
-            console.log("message in browser called with ...");
-            document.getElementById("Text1").value = data.message;
-            // socket.emit('speak', { data: 'Hello from Edge 1' });
-        });
-        socket.on('login', function (data) {
+        socket.on('loginRet', function (data) {
             console.log("login in browser called with ...");
             console.log(data.data);
+            var str = data.data;
+            console.log(str);
+            if (str.substring(0, 7) == "success") {
+                window.location("main");
+            } else {
+                window.location("loginfail");
+            }
         });
+
+
 
     </script>
 
-    <div style="position: absolute; top:338px; left:789px; width:150px; z-index: 2; height: 36px;">Name</div> 
+    <div style="position: absolute; top: 338px; left: 789px; width: 150px; z-index: 2; height: 36px;">Name</div>
     <p>
-        &nbsp;</p>
-    <div style="position: absolute; top:432px; left:794px; width:150px; z-index: 2; height: 36px;">Password</div> 
+        &nbsp;
+    </p>
+    <div style="position: absolute; top: 432px; left: 794px; width: 150px; z-index: 2; height: 36px;">Password</div>
     <p>
-        <input type="password" id="passwordtext" type="text" /></p>
+        <input type="password" id="passwordtext" />
+    </p>
 
-    <input style="position: absolute; top:578px; left:1480px; z-index: 1;" id="Button1" type="button" value="Go" onclick ="login()" />
-        <input id="nametext" type="text" />
+    <input style="position: absolute; top: 578px; left: 1480px; z-index: 1;" id="Button1" type="button" value="Go" onclick="login()" />
+    <input id="nametext" type="text" />
 </body>
 </html>

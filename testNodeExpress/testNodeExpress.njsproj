@@ -32,6 +32,9 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
+    <Content Include="views\loginfail.html">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="views\error.html">
       <SubType>Code</SubType>
     </Content>
@@ -39,10 +42,13 @@
       <SubType>Code</SubType>
     </Content>
     <Content Include="public\images\counterparty.png" />
-    <Content Include="views\Page1.html">
+    <Content Include="views\main.html">
       <SubType>Code</SubType>
     </Content>
     <TypeScriptCompile Include="app.ts" />
+    <TypeScriptCompile Include="routes\error.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="routes\index.ts" />
     <TypeScriptCompile Include="routes\user.ts" />
     <TypeScriptCompile Include="Scripts\typings\node\node.d.ts" />

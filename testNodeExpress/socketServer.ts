@@ -1,4 +1,5 @@
-﻿var socketIo = require('socket.io');
+﻿
+var socketIo = require('socket.io');
 
 module.exports = {
     startService: function (server) {
@@ -8,7 +9,6 @@ module.exports = {
 
             socket.emit('message', { 'message': 'This is Project X' });
             console.log("connection server function called from browser");
-          //  socket.emit('dd_data', { 'data': 'DATA HERE' });
 
             socket.on('speak', function (data) {
                 console.log(data);
@@ -18,27 +18,26 @@ module.exports = {
 
             socket.on('ddselect', function (data) {
                 socket.broadcast.emit('dd_data', {
-                   data: data.data
-                    });
-                //socket.emit('dd_data', { 'data': 'DATA HERE' });
+                    data: data.data
+                });
                 console.log("ddselect server function called from browser");
                 console.log(data);
             });
 
             socket.on('login', function (data) {
                 console.log("login server function called from browser");
-                console.log(data.data);
+                console.log(data);
+
                 if (validatelogin(data.data)) {
                     console.log("login successful ...");
-                    socket.broadcast.emit('login', { data: "login successful" });
-                    //res.sendFile("views/Page1.html");
+                    socket.broadcast.emit('loginRet', { data: "success" });
+
+                    console.log("exiting login server function ...");
                 } else {
                     console.log("login failed ...");
-                    socket.broadcast.emit('login', { data:"login failed" });
+                    socket.broadcast.emit('loginRet', { data: "failed" });
                 }
-                
             });
-           
         });
 
         return io;
@@ -55,7 +54,7 @@ function validatelogin(data: string) {
 
     return loggedIn;
 };
-    
+
 
 
 
