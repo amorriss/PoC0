@@ -1,5 +1,5 @@
-@import "~semantic-ui/dist/semantic.css";
-@import "~angular2-busy/build/style/busy.css";
+/*@import "~semantic-ui/dist/semantic.css";
+@import "~angular2-busy/build/style/busy.css"; */
 
 html {  }
 body {
@@ -52,7 +52,7 @@ button {
 
     /* Better Font Rendering =========== */
     -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+   /* -moz-osx-font-smoothing: grayscale; */
 }
 
 .icon-ic_stamp:before {

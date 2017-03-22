@@ -32,6 +32,12 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
+    <Content Include="views\error.html">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="views\login.html">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="public\images\counterparty.png" />
     <Content Include="views\Page1.html">
       <SubType>Code</SubType>

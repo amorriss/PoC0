@@ -4,11 +4,12 @@
 <head>
     <meta charset="utf-8" />
     <title>Project X</title>
+    <link rel="stylesheet" href=".\stylesheets\main.css" />
    <script src="socket.io/socket.io.js"></script>
     
 
     <script>
-        function buttonClick() {
+        function buttonClick() { 
             var socket = io.connect();
             var now = new Date();
         socket.emit('speak', { data: 'You clicked button1' }); 
@@ -26,6 +27,7 @@
             console.log("drop down selected");
         }
     </script>
+
 
     <style type="text/css">
         #Text2 {
@@ -69,10 +71,6 @@
             // socket.emit('speak', { data: 'Hello from Edge 2' });
          });
 
-
-        
-
-
     </script>
     
     <input id="Text1" type="text" />
@@ -80,17 +78,16 @@
     <br />
     <input id="Text2" type="text" />
 
-
     <p>
         &nbsp;</p>
     <p>
         &nbsp;</p>
     <p>
         &nbsp;</p>
-&nbsp;&nbsp;
 
-
-    <input id="Button1" type="button" value="press" onclick ="buttonClick()" /><select id="Select1" onclick="dropdownSelection()" name="D1">
+    <input id="Button1" type="button" value="press" onclick ="buttonClick()" />
+    
+    <select id="Select1" onclick="dropdownSelection()" name="D1">
         <option value="option 1" >option 1</option>
         <option value="option 2">option 2</option>
         <option value="option 3">option 3</option>

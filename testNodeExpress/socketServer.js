@@ -19,8 +19,28 @@ module.exports = {
                 console.log("ddselect server function called from browser");
                 console.log(data);
             });
+            socket.on('login', function (data) {
+                console.log("login server function called from browser");
+                console.log(data.data);
+                if (validatelogin(data.data)) {
+                    console.log("login successful ...");
+                    socket.broadcast.emit('login', { data: "login successful" });
+                }
+                else {
+                    console.log("login failed ...");
+                    socket.broadcast.emit('login', { data: "login failed" });
+                }
+            });
         });
         return io;
     }
 };
+function validatelogin(data) {
+    var loggedIn = false;
+    if (data.substr(5, 10) == "secret") {
+        loggedIn = true;
+    }
+    return loggedIn;
+}
+;
 //# sourceMappingURL=socketServer.js.map
