@@ -7,6 +7,35 @@
     <title>Login</title>
     <link rel="stylesheet" href=".\stylesheets\main.css" />
     <script src="socket.io/socket.io.js"></script>
+    
+
+    <script>
+        function login() {
+            var socket = io.connect();
+            var data = document.getElementById("nametext").value;
+            data += ":" + document.getElementById("passwordtext").value;
+            socket.emit('login', { data: data });
+            console.log(data + " tried to login");
+        }
+    </script>
+
+    <style> 
+.flex-container {
+    display: -webkit-flex;
+    display: flex;
+    width: 400px;
+    height: 250px;
+    background-color: lightgrey;
+}
+
+.flex-item {
+    background-color: cornflowerblue;
+    width: 100px;
+    height: 100px;
+    margin: 10px;
+}
+</style>
+
 
     <style type="text/css">
         #Text2 {
@@ -25,60 +54,48 @@
 
         #passwordtext {
             z-index: 1;
-            left: 1200px;
-            top: 429px;
+            left: 499px;
+            top: 446px;
             position: absolute;
         }
 
         #nametext {
             z-index: 1;
-            left: 1204px;
-            top: 330px;
+            left: 499px;
+            top: 337px;
             position: absolute;
         }
+
+
     </style>
 
-    <script>
-        function login() {
-            var socket = io.connect();
-            var data = document.getElementById("nametext").value;
-            data += ":" + document.getElementById("passwordtext").value;
-            socket.emit('login', { data: data });
-            console.log(data + " tried to login");
-        }
-    </script>
-
 </head>
-<body>
+<body style="position: relative">
     <script>
         var socket = io.connect();
 
         socket.on('loginRet', function (data) {
             console.log("login in browser called with ...");
-            console.log(data.data);
             var str = data.data;
-            console.log(str);
             if (str.substring(0, 7) == "success") {
                 window.location("main");
             } else {
-                window.location("loginfail");
+                var name = document.getElementById("nametext").value;
+                console.log(name.data);
+                window.alert("Login Failed for " + name);
+                window.location("loginfail?name=" + name);
             }
         });
-
-
-
     </script>
+    <img alt="" src="images/logo.png" width="200" height="200"/><hr />
+    <h1 style="position: absolute; left:700px; width:300px; z-index: 1; top: 74px; height: 73px;"> Project X</h1> 
 
-    <div style="position: absolute; top: 338px; left: 789px; width: 150px; z-index: 2; height: 36px;">Name</div>
-    <p>
-        &nbsp;
-    </p>
-    <div style="position: absolute; top: 432px; left: 794px; width: 150px; z-index: 2; height: 36px;">Password</div>
-    <p>
-        <input type="password" id="passwordtext" />
-    </p>
+    <div class="flex-item" style="position: absolute; top: 339px; left: 243px; width: 150px; z-index: 2; height: 36px;">Name</div>
+    <div style="position: absolute; top: 448px; left: 243px; width: 150px; z-index: 2; height: 36px;">Password</div>
 
-    <input style="position: absolute; top: 578px; left: 1480px; z-index: 1;" id="Button1" type="button" value="Go" onclick="login()" />
+    <input type="password" id="passwordtext" />
+    <input style="position: absolute; top: 436px; left: 825px; z-index: 1;" id="Button1" type="button" value="Go" onclick="login()" />
     <input id="nametext" type="text" />
+    
 </body>
 </html>

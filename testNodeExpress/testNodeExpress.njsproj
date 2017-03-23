@@ -32,6 +32,9 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
+    <Content Include="views\error.pug">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="views\loginfail.html">
       <SubType>Code</SubType>
     </Content>
@@ -42,6 +45,9 @@
       <SubType>Code</SubType>
     </Content>
     <Content Include="public\images\counterparty.png" />
+    <Content Include="views\loginfail.pug">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="views\main.html">
       <SubType>Code</SubType>
     </Content>

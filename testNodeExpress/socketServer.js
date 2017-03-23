@@ -19,7 +19,6 @@ module.exports = {
             });
             socket.on('login', function (data) {
                 console.log("login server function called from browser");
-                console.log(data);
                 if (validatelogin(data.data)) {
                     console.log("login successful ...");
                     socket.broadcast.emit('loginRet', { data: "success" });
