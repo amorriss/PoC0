@@ -35,7 +35,8 @@ module.exports = {
 };
 function validatelogin(data) {
     var loggedIn = false;
-    if (data.substr(5, 10) == "secret") {
+    var credentials = data.split(":");
+    if (credentials[1] == "secret") {
         loggedIn = true;
     }
     return loggedIn;

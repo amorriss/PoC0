@@ -7,95 +7,60 @@
     <title>Login</title>
     <link rel="stylesheet" href=".\stylesheets\main.css" />
     <script src="socket.io/socket.io.js"></script>
-    
+
 
     <script>
         function login() {
             var socket = io.connect();
-            var data = document.getElementById("nametext").value;
+            var data = document.getElementById("SelectName").value;
             data += ":" + document.getElementById("passwordtext").value;
             socket.emit('login', { data: data });
             console.log(data + " tried to login");
         }
     </script>
 
-    <style> 
-.flex-container {
-    display: -webkit-flex;
-    display: flex;
-    width: 400px;
-    height: 250px;
-    background-color: lightgrey;
-}
-
-.flex-item {
-    background-color: cornflowerblue;
-    width: 100px;
-    height: 100px;
-    margin: 10px;
-}
-</style>
-
-
-    <style type="text/css">
-        #Text2 {
-            z-index: 1;
-            left: 863px;
-            top: 279px;
-            position: relative;
-        }
-
-        #Text1 {
-            z-index: 1;
-            left: 867px;
-            top: 273px;
-            position: relative;
-        }
-
-        #passwordtext {
-            z-index: 1;
-            left: 499px;
-            top: 446px;
-            position: absolute;
-        }
-
-        #nametext {
-            z-index: 1;
-            left: 499px;
-            top: 337px;
-            position: absolute;
-        }
-
-
-    </style>
-
 </head>
-<body style="position: relative">
+<body>
     <script>
         var socket = io.connect();
 
         socket.on('loginRet', function (data) {
             console.log("login in browser called with ...");
+            var name = document.getElementById("SelectName").value;
+            console.log(name.data);
             var str = data.data;
             if (str.substring(0, 7) == "success") {
+                localStorage.setItem("name", name);
                 window.location("main");
             } else {
-                var name = document.getElementById("nametext").value;
-                console.log(name.data);
                 window.alert("Login Failed for " + name);
                 window.location("loginfail?name=" + name);
             }
         });
     </script>
-    <img alt="" src="images/logo.png" width="200" height="200"/><hr />
-    <h1 style="position: absolute; left:700px; width:300px; z-index: 1; top: 74px; height: 73px;"> Project X</h1> 
+    <img alt="" src="images/logo.png" width="200" height="200" /><hr />
+    <h1>Project X</h1>
 
-    <div class="flex-item" style="position: absolute; top: 339px; left: 243px; width: 150px; z-index: 2; height: 36px;">Name</div>
-    <div style="position: absolute; top: 448px; left: 243px; width: 150px; z-index: 2; height: 36px;">Password</div>
+    <div class="flex-container">
+        <div class="flex-container3">
+            <div>
+                <div>Name</div>
+                <select id="SelectName" name="D1" autofocus="autofocus">
+                    <option>- </option>
+                    <option>Adam</option>
+                    <option>Hugues</option>
+                    <option>Neil</option>
+                </select>
+            </div>
+            <div>
+                <div>Password</div>
+                <input type="password" id="passwordtext" />
+            </div>
 
-    <input type="password" id="passwordtext" />
-    <input style="position: absolute; top: 436px; left: 825px; z-index: 1;" id="Button1" type="button" value="Go" onclick="login()" />
-    <input id="nametext" type="text" />
-    
+        </div>
+        <div>
+            &nbsp; <button id="Button1" type="button" onclick="login()">Login</button>
+        </div>
+    </div>
 </body>
 </html>

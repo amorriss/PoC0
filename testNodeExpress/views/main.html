@@ -28,19 +28,22 @@
         }
     </script>
 
-
-
-
 </head>
 
 <body>
 
     <script>
+
+        window.onload = function () {
+            console.log("onload called : " + localStorage.getItem("name"));
+            var ts = new Date().toLocaleString();
+            document.getElementById("hLoggedInAs").innerText = "Logged is as " + localStorage.getItem("name") + " on " + ts;
+        };
+
         var socket = io.connect();
 
         socket.on('message', function (data) {
             console.log(data.message);
-
             document.getElementById("Text1").value = data.message;
         });
         socket.on('dd_data', function (data) {
@@ -50,53 +53,60 @@
         });
     </script>
 
-    <img alt="" src="images/logo.png" width="200" height="200" /><hr />
-    <h1 style="position: absolute; left: 700px; width: 300px; z-index: 1; top: 74px; height: 73px;">Project X</h1>
+    <img alt="" src="images/logo.png" width="200" height="200" />
+    <h1>Project X    </h1>
+    <h2 id="hLoggedInAs">Logged in as </h2>
+    <hr />
 
-    <div>
-        <p>Select Service</p>
-        <select id="Select1" name="D1">
-            <option>Service 1</option>
-            <option>Service 2</option>
-            <option>Service 3</option>
-            <option>Service 4</option>
-            <option>Service 5</option>
-            <option>Service 6</option>
-        </select>
+    <div class="flex-container">
+        <div class="flex-container2">
+            <div>
+                <div>
+                    <p>Select Service</p>
+                    <select id="Select1" name="D1">
+                        <option>Service 1</option>
+                        <option>Service 2</option>
+                        <option>Service 3</option>
+                        <option>Service 4</option>
+                        <option>Service 5</option>
+                        <option>Service 6</option>
+                    </select>
+                </div>
+                <div>
+                    <p>Select Identify Verification</p>
+                    <select id="Select2" name="D2">
+                        <option>ID Verify 1</option>
+                        <option>ID Verify 2</option>
+                        <option>ID Verify 3</option>
+                        <option>ID Verify 4</option>
+                        <option>ID Verify 5</option>
+                    </select>
+                </div>
+                <div>
+                    <p>Value Limit</p>
+                    <input id="Text1" type="text" />
+                </div>
+                <div>
+                    <p>Time Limit</p>
+                    <input id="Text2" type="text" />
+                </div>
+            </div>
+            <div>&nbsp;</div>
+            <div>
+                <div>
+                    <p>Divisibility</p>
+                    <input id="Text3" type="text" />
+                </div>
+                <div>
+                    <p>Tax</p>
+                    <input id="Text4" type="text" />
+                </div>
+                <div>
+                    <p>Additional Info</p>
+                    <textarea id="TextArea1" cols="20" name="S1" rows="2"></textarea>
+                </div>
+            </div>
+        </div>
     </div>
-    <div>
-        <p>Select Identify Verification</p>
-        <select id="Select2" name="D2">
-            <option>ID Verify 1</option>
-            <option>ID Verify 2</option>
-            <option>ID Verify 3</option>
-            <option>ID Verify 4</option>
-            <option>ID Verify 5</option>
-        </select>
-    </div>
-    <div>
-        <p>
-            <p>Value Limit</p>
-            <input id="Text1" type="text" />
-        </p>
-        <p>
-            <p>Time Limit</p>
-            <input id="Text2" type="text" />
-        </p>
-    </div>
-     <div>
-        <p>
-            <p>Divisibility</p>
-            <input id="Text3" type="text" />
-        </p>
-        <p>
-            <p>Tax</p>
-            <input id="Text4" type="text" />
-        </p>
-    </div>
-    <textarea id="TextArea1" cols="20" name="S1" rows="2"></textarea>
-
-
-
 </body>
 </html>

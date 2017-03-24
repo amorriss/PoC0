@@ -29,6 +29,11 @@ router.get('/error', (req: express.Request, res: express.Response) => {
     res.render('error', { title: 'There was an ERROR !' });
 });
 
+router.post('/', (req: express.Request, res: express.Response) => {
+    //res.render('index', { title: 'Testing ....' });
+    res.sendfile("views/login.html");
+});
+
 export default router;
 
 

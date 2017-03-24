@@ -5,4 +5,11 @@ block content
   img.className#IdName(src="images/logo.png" alt="No logo" width=200 height=200)
   hr
   h1= title
-  p Your login failed #{name}. Maybe you should leave!
+  p 
+  p Your login failed #{name}. 
+  p Why not try again.
+
+  form(method='POST' action='/')
+    button(type='submit') Back
+
+ 

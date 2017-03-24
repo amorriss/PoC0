@@ -23,6 +23,10 @@ router.get('/loginfail', function (req, res) {
 router.get('/error', function (req, res) {
     res.render('error', { title: 'There was an ERROR !' });
 });
+router.post('/', function (req, res) {
+    //res.render('index', { title: 'Testing ....' });
+    res.sendfile("views/login.html");
+});
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = router;
 //# sourceMappingURL=index.js.map
