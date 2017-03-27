@@ -1,0 +1,129 @@
+﻿<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Project X</title>
+    <link rel="stylesheet" href=".\stylesheets\main.css" />
+    <script src="socket.io/socket.io.js"></script>
+
+    <script>
+        function logout() {
+            var socket = io.connect();
+            socket.emit('logout', { data: 'You clicked the logout button' });
+            console.log("logout button clicked");
+        };
+
+        function createService() {
+            var data = document.getElementsByClassName("selectedrow");
+            var socket = io.connect();
+            socket.emit('createService', { data: data[0].innerText });
+            console.log("create button clicked");
+        };
+
+        function highlight(e) {
+
+            var strData = e.target.innerText;
+            console.log(strData);
+
+            if (selected[0]) selected[0].className = '';   // clear previous selection
+
+            // enable Create button. It gets disabled only if top title row selected 
+            document.getElementById("createButton").removeAttribute("disabled");
+
+            if (strData == "<New Service>") {   // Create button
+                document.getElementById("createButton").innerText = "Create";
+                e.target.parentNode.className = 'selectedrow';
+            } else if (strData != "Housing Service") {   // Amend button & ignore title row
+                document.getElementById("createButton").innerText = "Amend";
+                e.target.parentNode.className = 'selectedrow';
+            } else {  // title row so disable Create button
+                document.getElementById("createButton").setAttribute('disabled', 'disabled');
+            }
+        };
+    </script>
+
+</head>
+<body>
+
+    <script>
+        window.onload = function () {
+            console.log("onload called : " + localStorage.getItem("name"));
+            var ts = new Date().toLocaleString();
+            document.getElementById("hLoggedInAs").innerText = "Logged is as " + localStorage.getItem("name") + " on " + ts;
+
+            var table = document.getElementById("servicetable");
+            selected = table.getElementsByClassName("selectedrow");
+            table.onclick = highlight;
+        };
+
+        var socket = io.connect();
+
+        socket.on('logoutRet', function (data) {
+            console.log("logout in browser called ...");
+            window.location("/");
+        });
+
+        socket.on('createServiceRet', function (data) {
+            console.log("Create service in browser called ...");
+            localStorage.setItem("createdservice", data.data);
+            window.location("createservice");
+        });
+
+    </script>
+
+    <div class="flex-title">
+        <div>
+            <img alt="no logo" src="images/logo.png" width="200" height="200" />
+        </div>
+        <div>
+            <h1>Digital Notary - Housing Right Registration</h1>
+        </div>
+        <div>
+            <h2 id="hLoggedInAs">Logged in as </h2>
+        </div>
+    </div>
+    <div>
+        <hr />
+    </div>
+
+    <div class="flex-container">
+        <div class="flex-container2">
+            <div>
+                <div>
+                    <div>
+                        <h2>Available Services</h2>
+
+                        <div style="overflow-x:auto;">
+
+                            <table id="servicetable" style="width: 700px;">
+                                <tr style="height:20px">
+                                    <td id="tabletitle">Housing Service</td>
+                                </tr>
+                                <tr>
+                                    <td>Crest Housing Service</td>
+                                </tr>
+                                <tr>
+                                    <td>&lt;New Service&gt;</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <br />
+                        <div class="flex-button-right">
+                            <button id="createButton" type="button" onclick="createService() ">Create</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex-container4">
+            <div>
+                &nbsp;
+            <button id="logoutButton" type="button" onclick="logout()">Logout</button>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

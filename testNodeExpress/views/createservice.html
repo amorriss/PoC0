@@ -1,0 +1,108 @@
+﻿<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Project X</title>
+    <link rel="stylesheet" href=".\stylesheets\main.css" />
+    <script src="socket.io/socket.io.js"></script>
+
+    <script>
+        function logout() {
+            var socket = io.connect();
+            socket.emit('logout', { data: 'You clicked the logout button' });
+            console.log("logout button clicked");
+        };
+
+        function createNewService() {
+            var socket = io.connect();
+            socket.emit('createNewService', { data: 'You clicked the create button' });
+            console.log("create button clicked");
+        };
+
+    </script>
+</head>
+<body>
+
+    <script>
+
+        window.onload = function () {
+            console.log("onload called : " + localStorage.getItem("name"));
+            var ts = new Date().toLocaleString();
+            document.getElementById("hLoggedInAs").innerText = "Logged is as " + localStorage.getItem("name") + " on " + ts;
+
+            // get service created
+            document.getElementById("servicename").innerText = localStorage.getItem("createdservice");
+        };
+
+        var socket = io.connect();
+
+        socket.on('logoutRet', function (data) {
+            console.log("logout in browser called ...");
+            window.location("/");
+        });
+
+        socket.on('createNewServiceRet', function (data) {
+            console.log("Create new service in browser called ...");
+            window.location("createright");
+        });
+
+    </script>
+
+    <div class="flex-title">
+        <div>
+            <img alt="no logo" src="images/logo.png" width="200" height="200" />
+        </div>
+        <div>
+            <h1>Digital Notary - Service Creation</h1>
+        </div>
+        <div>
+            <h2 id="hLoggedInAs">Logged in as </h2>
+        </div>
+    </div>
+    <div>
+        <hr />
+    </div>
+
+    <div class="flex-container">
+        <div class="flex-container2">
+            <div>
+                <div>
+                    <div>
+                        <div>
+                            <p>Service Name</p>
+                            <input id="servicename" type="text" />
+                        </div>
+                        <br />
+                        <div>
+                            <table style="width: 700px;">
+                                <tr>
+                                    <td>Eligible Users</td>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td>Tommi</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="flex-container4">
+            <div>
+                &nbsp;
+            <button id="createButton" type="button" onclick="createNewService()" disabled="disabled">Create</button>
+            </div>
+            <br />
+            <div>
+                &nbsp;
+            <button id="logoutButton" type="button" onclick="logout()">Logout</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

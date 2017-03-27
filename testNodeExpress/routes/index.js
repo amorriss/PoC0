@@ -7,11 +7,19 @@ var router = express.Router();
 var name = "none";
 router.get('/', function (req, res) {
     //res.render('index', { title: 'Testing ....' });
-    res.sendfile("views/login.html");
+    res.sendfile("views/createright.html");
 });
-router.get('/main', function (req, res) {
+router.get('/createright', function (req, res) {
     //res.render('index', { title: 'Testing ....' });
-    res.sendfile("views/main.html");
+    res.sendfile("views/createright.html");
+});
+router.get('/createservice', function (req, res) {
+    //res.render('index', { title: 'Testing ....' });
+    res.sendfile("views/createservice.html");
+});
+router.get('/services', function (req, res) {
+    //res.render('index', { title: 'Testing ....' });
+    res.sendfile("views/services.html");
 });
 router.get('/loginfail', function (req, res) {
     //read form data

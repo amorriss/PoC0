@@ -9,12 +9,22 @@ var name = "none";
 
 router.get('/', (req: express.Request, res: express.Response) => {
     //res.render('index', { title: 'Testing ....' });
-    res.sendfile("views/login.html");
+    res.sendfile("views/createright.html");
 });
 
-router.get('/main', (req: express.Request, res: express.Response) => {
+router.get('/createright', (req: express.Request, res: express.Response) => {
     //res.render('index', { title: 'Testing ....' });
-    res.sendfile("views/main.html");
+    res.sendfile("views/createright.html");
+});
+
+router.get('/createservice', (req: express.Request, res: express.Response) => {
+    //res.render('index', { title: 'Testing ....' });
+    res.sendfile("views/createservice.html");
+});
+
+router.get('/services', (req: express.Request, res: express.Response) => {
+    //res.render('index', { title: 'Testing ....' });
+    res.sendfile("views/services.html");
 });
 
 router.get('/loginfail', (req: express.Request, res: express.Response) => {

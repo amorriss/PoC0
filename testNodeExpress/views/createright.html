@@ -1,0 +1,164 @@
+﻿<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Project X</title>
+    <link rel="stylesheet" href=".\stylesheets\main.css" />
+    <script src="socket.io/socket.io.js"></script>
+
+
+    <script>
+
+        var IDrequired = false;
+
+        function dropdownSelection() {
+            var socket = io.connect();
+            var data = document.getElementById("selectRight").value;
+            //document.getElementById("Text2").value = data;
+            socket.emit('ddselect', { data: data });
+            console.log("drop down name selected");
+        };
+
+        function createRight() {
+            var socket = io.connect();
+            socket.emit('createRight', { data: 'You clicked the create button' });
+            console.log("create button clicked");
+        };
+
+        function logout() {
+            var socket = io.connect();
+            socket.emit('logout', { data: 'You clicked the logout button' });
+            console.log("logout button clicked");
+        };
+
+        function enableID(value) {
+            console.log(document.getElementById(value).getAttribute("disabled"));
+            if (document.getElementById(value).getAttribute("disabled") == false) {
+                document.getElementById(value).setAttribute('disabled', 'disabled');
+                IDrequired = false;
+            } else {
+                document.getElementById(value).removeAttribute("disabled");
+                IDrequired = true;
+            }
+        }
+    </script>
+
+</head>
+
+<body>
+
+    <script>
+
+        window.onload = function () {
+            console.log("onload called : " + localStorage.getItem("name"));
+            var ts = new Date().toLocaleString();
+            document.getElementById("hLoggedInAs").innerText = "Logged is as " + localStorage.getItem("name") + " on " + ts;
+        };
+
+        var socket = io.connect();
+
+        socket.on('message', function (data) {
+            console.log(data.message);
+            //document.getElementById("Text1").value = data.message;
+        });
+        socket.on('dd_data', function (data) {
+            console.log("dd_data in browser called with ...");
+            console.log(data.data);
+            //document.getElementById("Text2").value = data.data;
+        });
+
+        socket.on('logoutRet', function (data) {
+            console.log("logout in browser called ...");
+            window.location("/");
+        });
+
+        socket.on('createRightRet', function (data) {
+            console.log("Create right in browser called ...");
+            window.location("create");
+        });
+
+    </script>
+
+    <div class="flex-title">
+        <div>
+            <img alt="no logo" src="images/logo.png" width="200" height="200" />
+        </div>
+        <div>
+            <h1>Digital Notary - Housing Companies Registration</h1>
+        </div>
+        <div>
+            <h2 id="hLoggedInAs">Logged in as </h2>
+        </div>
+    </div>
+    <div>
+        <hr />
+    </div>
+
+    <div class="flex-container">
+        <div class="flex-container2">
+            <div class="flex-container5">
+                <div>
+                    <p>Right</p>
+                    <input id="RightText" type="text" />
+                </div>
+                <div class="flex-container1">
+                    <input id="IDrequired" type="checkbox" onclick="enableID('selectID')" />
+                    <div>
+                        <p>Select Identify Verification</p>
+                        <select id="selectID" name="D2" disabled="disabled">
+                            <option>Belgian Identity Service</option>
+                            <option>Finnish Identity Service</option>
+                            <option>UK Identity Service</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="flex-container1">
+                    <input id="Limitrequired" type="checkbox" onclick="enableID('Limittext')" />
+                    <div>
+                        <p>Value Limit</p>
+                        <input id="Limittext" type="text" disabled="disabled" />
+                    </div>
+                </div>
+                <div>&nbsp;</div>
+                <div class="flex-container1">
+                    <input id="Timerequired" type="checkbox" onclick="enableID('Timetext')" />
+                    <div>
+                        <p>Time Limit</p>
+                        <input id="Timetext" type="text" disabled="disabled" />
+                    </div>
+                </div>
+
+                <div class="flex-container1">
+                    <input id="Divisibilityrequired" type="checkbox" onclick="enableID('Divisibilitytext')" />
+                    <div>
+                        <p>Divisibility</p>
+                        <input id="Divisibilitytext" type="text" disabled="disabled" />
+                    </div>
+                </div>
+            </div>
+        <div class="flex-container5">
+            <div>
+                <p>Tax Required</p>
+                <input id="Taxrequired" type="checkbox" onclick="enableID('Taxtext')" />
+            </div>
+            <div>
+                <p>Tax</p>
+                <input id="Taxtext" type="text" disabled="disabled" />
+            </div>
+        </div>
+    </div>
+    <div class="flex-container4">
+        <div>
+            &nbsp;
+            <button id="createButton" type="button" onclick="createRight()">Create</button>
+        </div>
+        <br />
+        <div>
+            &nbsp;
+            <button id="logoutButton" type="button" onclick="logout()">Logout</button>
+        </div>
+    </div>
+    </div>
+</body>
+</html>

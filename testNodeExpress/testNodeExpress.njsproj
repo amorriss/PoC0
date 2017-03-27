@@ -32,6 +32,12 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
+    <Content Include="views\createservice.html">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="views\services.html">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="views\error.pug">
       <SubType>Code</SubType>
     </Content>
@@ -48,7 +54,7 @@
     <Content Include="views\loginfail.pug">
       <SubType>Code</SubType>
     </Content>
-    <Content Include="views\main.html">
+    <Content Include="views\createright.html">
       <SubType>Code</SubType>
     </Content>
     <TypeScriptCompile Include="app.ts" />

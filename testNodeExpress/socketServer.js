@@ -29,6 +29,26 @@ module.exports = {
                     socket.broadcast.emit('loginRet', { data: "failed" });
                 }
             });
+            socket.on('createRight', function (data) {
+                console.log(data);
+                console.log("Create right server function called from browser");
+                socket.broadcast.emit('createRightRet', { 'message': 'Created Right' });
+            });
+            socket.on('createService', function (data) {
+                console.log(data);
+                console.log("Create service server function called from browser");
+                socket.broadcast.emit('createServiceRet', { data: data.data });
+            });
+            socket.on('createNewService', function (data) {
+                console.log(data);
+                console.log("Create new service server function called from browser");
+                socket.broadcast.emit('createNewServiceRet', { 'message': 'Created New Service' });
+            });
+            socket.on('logout', function (data) {
+                console.log(data);
+                console.log("logout server function called from browser");
+                socket.broadcast.emit('logoutRet', { 'message': 'Logged Out' });
+            });
         });
         return io;
     }
