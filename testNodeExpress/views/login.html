@@ -29,13 +29,13 @@
             var name = document.getElementById("SelectName").value;
             console.log(name);
             var str = data.data;
-         //   if (str.substring(0, 7) == "success") {
-                localStorage.setItem("name", name);
-                window.location("services");
-           // } else {
-           //     window.alert("Login Failed for " + name);
-           //     window.location("loginfail?name=" + name);
-           // }
+            //   if (str.substring(0, 7) == "success") {
+            localStorage.setItem("name", name);
+            window.location("services");
+            // } else {
+            //     window.alert("Login Failed for " + name);
+            //     window.location("loginfail?name=" + name);
+            // }
         });
     </script>
     <div class="flex-title">
@@ -51,7 +51,7 @@
         <hr />
     </div>
     <div class="flex-container">
-        <div class="flex-container3">
+        <div class="flex-containerlogin">
             <div>
                 <div>Name</div>
                 <select id="SelectName" name="D1" autofocus="autofocus">
@@ -63,11 +63,10 @@
                 <div>Password</div>
                 <input type="password" id="passwordtext" />
             </div>
-
-        </div>
-        <div>
-            &nbsp;
+            <div>
+                &nbsp;
             <button id="Button1" type="button" onclick="login()">Login</button>
+            </div>
         </div>
     </div>
 </body>

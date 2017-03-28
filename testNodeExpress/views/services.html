@@ -15,10 +15,10 @@
         };
 
         function createService() {
+            console.log("create button clicked");
             var data = document.getElementsByClassName("selectedrow");
             var socket = io.connect();
             socket.emit('createService', { data: data[0].innerText });
-            console.log("create button clicked");
         };
 
         function highlight(e) {
@@ -67,6 +67,7 @@
         socket.on('createServiceRet', function (data) {
             console.log("Create service in browser called ...");
             localStorage.setItem("createdservice", data.data);
+
             window.location("createservice");
         });
 
@@ -94,10 +95,10 @@
                     <div>
                         <h2>Available Services</h2>
 
-                        <div style="overflow-x:auto;">
+                        <div style="overflow-x: auto;">
 
-                            <table id="servicetable" style="width: 700px;">
-                                <tr style="height:20px">
+                            <table id="servicetable" style="width: 600px;">
+                                <tr style="height: 20px">
                                     <td id="tabletitle">Housing Service</td>
                                 </tr>
                                 <tr>
@@ -109,15 +110,17 @@
                             </table>
                         </div>
                         <br />
-                        <div class="flex-button-right">
-                            <button id="createButton" type="button" onclick="createService() ">Create</button>
-                        </div>
+
                     </div>
                 </div>
             </div>
         </div>
 
         <div class="flex-container4">
+            <div>
+                &nbsp;
+                <button id="createButton" type="button" onclick="createService()">Create</button>
+            </div>
             <div>
                 &nbsp;
             <button id="logoutButton" type="button" onclick="logout()">Logout</button>

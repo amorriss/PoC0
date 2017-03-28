@@ -25,36 +25,39 @@ body {
 
 .flex-container1 {
     display: flex;
-    width: 300px;
-    height: 80px;
+    width: 252px;
+    height:80px;
     background-color: white;
     flex-direction: row;
-    
+    flex:none;
+    flex-wrap:wrap;
+    align-items:center;
+    justify-content:space-between;  
 }
 
 .flex-container2 {
     display: flex;
-    width: 1200px;
-    height: 500px;
+    width: 700px;
+    height: 400px;
     background-color: white;
-    border: 1px solid;
+    /*border: 1px solid;*/
     overflow: auto;
-    justify-content: space-around;
-    float: left;
+    justify-content: space-between;
     flex-direction: row;
+    flex-wrap: wrap;
+    align-content: space-around;
+    flex: none;
 }
 
-.flex-container3 {
+.flex-containerlogin {
     display: flex;
     width: 650px;
     height: 150px;
     background-color: white;
-    border: 1px solid;
     overflow: auto;
-    justify-content: center;
-    float: left;
+    justify-content: space-between;
     flex-direction: row;
-    align-items: center;
+    align-items:flex-end;
 }
 
 .flex-container4 {
@@ -74,10 +77,10 @@ body {
     height: 450px;
     background-color: white;
     overflow: auto;
-    justify-content: center;
-    flex-direction: row;
-    align-items: center;
+    flex-direction: column;
     border: 1px solid;
+    align-items:center;
+    align-content:center;
 }
 .flex-title {
     display: flex;
@@ -130,19 +133,29 @@ h4, h5 {
 button {
     font-family: 'Helvetica Neue', Arial, Helvetica, sans-serif !important;
     border: 1px solid;
-    width: 80px;
-    height: 20px;
+    width: 85px;
+    height: 25px;
 }
 
+text {
+    flex:none;
+}
 
 input {
-    width: 200px;
+    width: 250px;
     border: 1px solid;
 }
 
 select {
-    width: 200px;
+    width: 250px;
     border: 1px solid;
+}
+
+.checkbox {
+    flex:none;
+    flex-basis:0;
+    width: 20px;
+    height: 20px;
 }
 
 .main1 {
