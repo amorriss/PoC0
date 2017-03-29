@@ -28,7 +28,7 @@
         window.onload = function () {
             console.log("onload called : " + localStorage.getItem("name"));
             var ts = new Date().toLocaleString();
-            document.getElementById("hLoggedInAs").innerText = "Logged in as " + localStorage.getItem("name") + " on " + ts;
+            document.getElementById("hLoggedInAs").innerText = "Welcome " + localStorage.getItem("name"); // + " on " + ts;
 
             // get service created
             document.getElementById("servicetext").innerText = localStorage.getItem("servicename");
@@ -60,10 +60,10 @@
             <img alt="no logo" src="images/logo.png" width="200" height="200" />
         </div>
         <div>
-            <h1>Digital Notary - Service Creation</h1>
+            <h1>Digital Notary - Create Service</h1>
         </div>
         <div>
-            <h2 id="hLoggedInAs">Logged in as </h2>
+            <h2 id="hLoggedInAs">Welcome </h2>
         </div>
     </div>
     <div>
@@ -81,7 +81,7 @@
                         </div>
                         <br />
                         <div>
-                            <table style="width: 600px;">
+                            <table id="users" style="width: 600px; background-color:white;">
                                 <tr>
                                     <td>Eligible Users</td>
                                 </tr>
@@ -93,6 +93,20 @@
                                 </tr>
                             </table>
                         </div>
+                       <!-- <br />
+                        <div>
+                            <table id="rights" style="width: 600px; background-color:white;">
+                                <tr>
+                                    <td>Rights</td>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td>Right to something or other</td>
+                                </tr>
+                            </table>
+                        </div> -->
                     </div>
                 </div>
             </div>
@@ -103,6 +117,8 @@
                 &nbsp;
             <button id="createButton" type="button" onclick="createNewService()" disabled="disabled">Create</button>
             </div>
+            <br />
+            <br />
             <br />
             <div>
                 &nbsp;

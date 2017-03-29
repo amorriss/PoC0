@@ -29,13 +29,13 @@
             var name = document.getElementById("SelectName").value;
             console.log(name);
             var str = data.data;
-            //   if (str.substring(0, 7) == "success") {
-            localStorage.setItem("name", name);
-            window.location("services");
-            // } else {
-            //     window.alert("Login Failed for " + name);
-            //     window.location("loginfail?name=" + name);
-            // }
+            if (str.substring(0, 7) == "success") {
+                localStorage.setItem("name", name);
+                window.location("services");
+            } else {
+                window.alert("Login Failed for " + name);
+                window.location("loginfail?name=" + name);
+            }
         });
     </script>
     <div class="flex-title">

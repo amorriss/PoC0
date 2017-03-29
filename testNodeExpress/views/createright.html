@@ -49,7 +49,7 @@
         window.onload = function () {
             console.log("onload called : " + localStorage.getItem("name"));
             var ts = new Date().toLocaleString();
-            document.getElementById("hLoggedInAs").innerText = "Logged in as " + localStorage.getItem("name") + " on " + ts;
+            document.getElementById("hLoggedInAs").innerText = "Welcome " + localStorage.getItem("name"); // + " on " + ts;
             document.getElementById("servicename").innerText = localStorage.getItem("servicename");
         };
 
@@ -83,10 +83,10 @@
             <img alt="no logo" src="images/logo.png" width="200" height="200" />
         </div>
         <div>
-            <h1>Digital Notary - Housing Companies Registration</h1>
+            <h1>Digital Notary - Create Right</h1>
         </div>
         <div>
-            <h2 id="hLoggedInAs">Logged in as </h2>
+            <h2 id="hLoggedInAs">Welcome </h2>
         </div>
     </div>
     <div>
@@ -138,11 +138,13 @@
                 </div>
                 <!--</div>-->
             </div>
-            <div class="flex-containerbuttons" style="float:left">
+            <div class="flex-containerbuttonshigh" style="float:left">
                 <div>
                     &nbsp;
             <button id="createButton" type="button" onclick="createRight()">Create</button>
                 </div>
+                <br />
+                <br />
                 <br />
                 <div>
                     &nbsp;

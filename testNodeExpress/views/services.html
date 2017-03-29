@@ -54,8 +54,8 @@
 
         window.onload = function () {
             console.log("onload called : " + localStorage.getItem("name"));
-            var ts = new Date().toLocaleString();
-            document.getElementById("hLoggedInAs").innerText = "Logged in as " + localStorage.getItem("name") + " on " + ts;
+            var ts = new Date();
+            document.getElementById("hLoggedInAs").innerHTML = "Welcome " + localStorage.getItem("name"); // + "<br/>" + ts.toString('dddd, MMMM') ;
 
             var table = document.getElementById("servicetable");
             selected = table.getElementsByClassName("selectedrow");
@@ -86,10 +86,10 @@
             <img alt="no logo" src="images/logo.png" width="200" height="200" />
         </div>
         <div>
-            <h1>Digital Notary - Housing Right Registration</h1>
+            <h1>Digital Notary - Services</h1>
         </div>
         <div>
-            <h2 id="hLoggedInAs">Logged in as </h2>
+            <h2 id="hLoggedInAs">Welcome </h2>
         </div>
     </div>
     <div>
@@ -97,15 +97,16 @@
     </div>
 
     <div class="flex-containercentre">
+       <!-- <img alt="no back arrow" src="images/back_arrow.png" width="25" height="25" /> -->
         <div class="flex-container3">
             <div>
                 <div>
                     <div>
-                        <h2>Available Services</h2>
+                        <h4>Available Services</h4>
 
                         <div style="overflow-x: auto;">
 
-                            <table id="servicetable" style="width: 600px;">
+                            <table id="servicetable" style="width: 600px; background-color:white;">
                                 <tr style="height: 20px">
                                     <td id="tabletitle">Passport Application</td>
                                 </tr>
@@ -129,6 +130,8 @@
                 &nbsp;
                 <button id="createButton" type="button" onclick="createService()" disabled="disabled">Create</button>
             </div>
+            <br />
+            <br />
             <br />
             <div>
                 &nbsp;

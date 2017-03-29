@@ -32,6 +32,7 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
+    <Content Include="public\images\back_arrow.png" />
     <Content Include="views\createservice.html">
       <SubType>Code</SubType>
     </Content>

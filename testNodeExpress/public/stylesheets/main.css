@@ -10,6 +10,7 @@ body {
     position: relative;
     height: 100vh;
     margin: 0;
+    background-color: rgb(66,66,66);
 }
 
 
@@ -18,9 +19,9 @@ body {
     display: flex;
     width: 100%;
     height: 50%;
-    align-items:flex-end;
+    align-items: flex-end;
     -ms-flex-align: center;
-    justify-content:center;
+    justify-content: center;
 }
 
 .flex-containerbottom {
@@ -37,7 +38,7 @@ body {
     display: flex;
     width: 255px;
     height:80px;
-    background-color: white;
+    background-color: lightgray;
     flex-direction: row;
     flex:none;
     flex-wrap:wrap;
@@ -49,8 +50,7 @@ body {
     display: flex;
     width: 700px;
     height: 350px;
-    background-color: white;
-    border: 1px solid lightgrey;
+    background-color: lightgray;
     overflow: auto;
     justify-content: space-between;
     flex-direction: row;
@@ -67,35 +67,47 @@ body {
     display: flex;
     width: 700px;
     height: 200px;
-    background-color: white;
-    border: 1px solid lightgrey;
+    background-color: lightgray;
     overflow: auto;
     justify-content: center;
     flex-direction: row;
     flex-wrap: wrap;
     flex: none;
+    align-items:center;
 }
 
 .flex-containerlogin {
     display: flex;
     width: 650px;
     height: 150px;
-    background-color:white;
+    background-color:lightgray;
     overflow: auto;
     justify-content: space-between;
     flex-direction: row;
-    align-items:flex-end;
+    align-items:center;
+    padding:30px;
 }
 
 .flex-containerbuttons {
     display: flex;
-    width: 120px;
+    width: 140px;
     height: 200px;
-    background-color: white;
+    background-color: lightgray;
     overflow: auto;
     flex-direction: column;
-    align-items: center;
-    justify-content:flex-end;
+    align-items:flex-start;
+    justify-content:center;
+}
+
+.flex-containerbuttonshigh {
+    display: flex;
+    width: 140px;
+    height: 380px;
+    background-color: lightgray;
+    overflow: auto;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
 }
 
 .flex-container5 {
@@ -113,7 +125,7 @@ body {
     display: flex;
     width: 100%;
     height: 210px;
-    background-color: white;
+    background-color: rgb(117,117,117);
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
@@ -145,29 +157,41 @@ table, th, td {
 h1 {
     font-family: 'Helvetica Neue', Arial, Helvetica, sans-serif;
     font-weight: bold;
+    color:white;
+    #background-color:darkgray;
+    
 }
 
 h2 {
     font-family: 'Helvetica Neue', Arial, Helvetica, sans-serif;
     font-weight: lighter;
+    height:210px;
+    width:320px;
+    background-color:rgb(146,146,146);
+    color:white;
+    display:flex;
+    align-items:center;
+    flex-wrap:wrap;
+    justify-content:center;
 }
 
 h3 {
     font-family: 'Helvetica Neue', Arial, Helvetica, sans-serif;
     font-weight: lighter;
     align-self:center;
+    color:white;
 }
 
 h4, h5 {
     font-family: 'Helvetica Neue', Arial, Helvetica, sans-serif;
-    font-weight: normal;
+    font-weight: lighter;
 }
 
 button {
     font-family: 'Helvetica Neue', Arial, Helvetica, sans-serif !important;
     border: 1px solid;
-    width: 85px;
-    height: 25px;
+    width: 100px;
+    height: 40px;
 }
 
 text {
