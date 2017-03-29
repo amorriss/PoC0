@@ -28,10 +28,10 @@
         window.onload = function () {
             console.log("onload called : " + localStorage.getItem("name"));
             var ts = new Date().toLocaleString();
-            document.getElementById("hLoggedInAs").innerText = "Logged is as " + localStorage.getItem("name") + " on " + ts;
+            document.getElementById("hLoggedInAs").innerText = "Logged in as " + localStorage.getItem("name") + " on " + ts;
 
             // get service created
-            document.getElementById("servicename").innerText = localStorage.getItem("createdservice");
+            document.getElementById("servicetext").innerText = localStorage.getItem("servicename");
         };
 
         var socket = io.connect();
@@ -43,8 +43,15 @@
 
         socket.on('createNewServiceRet', function (data) {
             console.log("Create new service in browser called ...");
+            var sname = document.getElementById("servicetext").value;
+            localStorage.setItem("servicename", sname);
             window.location("createright");
         });
+
+        function enableButton() {
+            console.log("enableButton called");
+            document.getElementById("createButton").removeAttribute("disabled");
+        };
 
     </script>
 
@@ -63,18 +70,18 @@
         <hr />
     </div>
 
-    <div class="flex-container">
-        <div class="flex-container2">
+    <div class="flex-containercentre">
+        <div class="flex-container3">
             <div>
                 <div>
                     <div>
                         <div>
                             <p>Service Name</p>
-                            <input id="servicename" type="text" />
+                            <input id="servicetext" type="text" onkeypress="enableButton()"/>
                         </div>
                         <br />
                         <div>
-                            <table style="width: 700px;">
+                            <table style="width: 600px;">
                                 <tr>
                                     <td>Eligible Users</td>
                                 </tr>
@@ -91,10 +98,10 @@
             </div>
 
         </div>
-        <div class="flex-container4">
+        <div class="flex-containerbuttons">
             <div>
                 &nbsp;
-            <button id="createButton" type="button" onclick="createNewService()" >Create</button>
+            <button id="createButton" type="button" onclick="createNewService()" disabled="disabled">Create</button>
             </div>
             <br />
             <div>

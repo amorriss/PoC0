@@ -49,7 +49,8 @@
         window.onload = function () {
             console.log("onload called : " + localStorage.getItem("name"));
             var ts = new Date().toLocaleString();
-            document.getElementById("hLoggedInAs").innerText = "Logged is as " + localStorage.getItem("name") + " on " + ts;
+            document.getElementById("hLoggedInAs").innerText = "Logged in as " + localStorage.getItem("name") + " on " + ts;
+            document.getElementById("servicename").innerText = localStorage.getItem("servicename");
         };
 
         var socket = io.connect();
@@ -71,7 +72,8 @@
 
         socket.on('createRightRet', function (data) {
             console.log("Create right in browser called ...");
-            window.location("create");
+            //window.location("create");
+            alert("Right created");
         });
 
     </script>
@@ -91,61 +93,62 @@
         <hr />
     </div>
 
-    <div class="flex-container">
-        <div class="flex-container2">
-            <!-- <div class="flex-container5">
+    <h3 id="servicename"></h3>
+    <div class="flex-containercentre">
+            <div class="flex-container2">
+                <!-- <div class="flex-container5">
                 <div class="flex-container1">--->
-            <div>
-                <p>&nbsp;Right</p>
-                &nbsp;<input id="RightText" type="text" />
-                <!-- non breaking space hack. Needs fixing using CSS / Flexbox -->
+                <div>
+                    <p>Right</p>
+                    <input id="RightText" type="text" />
+                    <!-- non breaking space hack. Needs fixing using CSS / Flexbox -->
+                </div>
+                <!--</div>-->
+                <div class="flex-container1">
+                    <p>Identify Verification</p>
+                    <input class="checkbox" id="IDrequired" type="checkbox" onclick="enableID('selectID')" />
+                    <select id="selectID" name="D2" disabled="disabled">
+                        <option>Belgian Identity Service</option>
+                        <option>Finnish Identity Service</option>
+                        <option>UK Identity Service</option>
+                    </select>
+                </div>
+                <div class="flex-container1">
+                    <p>Value Limit</p>
+                    <input class="checkbox" id="Limitrequired" type="checkbox" onclick="enableID('Limittext')" />
+                    <input id="Limittext" type="number" value="0" disabled="disabled" />
+                </div>
+                <div>&nbsp;</div>
+                <!--</div>-->
+                <!--<div class="flex-container5">-->
+                <div class="flex-container1">
+                    <p>Time Limit</p>
+                    <input class="checkbox" id="Timerequired" type="checkbox" onclick="enableID('Timetext')" />
+                    <input id="Timetext" type="date" disabled="disabled" />
+                </div>
+                <div class="flex-container1">
+                    <p>Divisibility</p>
+                    <input class="checkbox" id="Divisibilityrequired" type="checkbox" onclick="enableID('Divisibilitytext')" />
+                    <!-- <input id="Divisibilitytext" type="text" disabled="disabled" /> -->
+                </div>
+                <div class="flex-container1">
+                    <p>Tax</p>
+                    <input class="checkbox" id="Taxrequired" type="checkbox" onclick="enableID('Taxtext')" />
+                    <!-- <input id="Taxtext" type="text" disabled="disabled" /> -->
+                </div>
+                <!--</div>-->
             </div>
-            <!--</div>-->
-            <div class="flex-container1">
-                <p>Identify Verification</p>
-                <input class="checkbox" id="IDrequired" type="checkbox" onclick="enableID('selectID')" />
-                <select id="selectID" name="D2" disabled="disabled">
-                    <option>Belgian Identity Service</option>
-                    <option>Finnish Identity Service</option>
-                    <option>UK Identity Service</option>
-                </select>
-            </div>
-            <div class="flex-container1">
-                <p>Value Limit</p>
-                <input class="checkbox" id="Limitrequired" type="checkbox" onclick="enableID('Limittext')" />
-                <input id="Limittext" type="text" disabled="disabled" />
-            </div>
-            <div>&nbsp;</div>
-            <!--</div>-->
-            <!--<div class="flex-container5">-->
-            <div class="flex-container1">
-                <p>Time Limit</p>
-                <input class="checkbox" id="Timerequired" type="checkbox" onclick="enableID('Timetext')" />
-                <input id="Timetext" type="text" disabled="disabled" />
-            </div>
-            <div class="flex-container1">
-                <p>Divisibility</p>
-                <input class="checkbox" id="Divisibilityrequired" type="checkbox" onclick="enableID('Divisibilitytext')" />
-                <input id="Divisibilitytext" type="text" disabled="disabled" />
-            </div>
-            <div class="flex-container1">
-                <p>Tax</p>
-                <input class="checkbox" id="Taxrequired" type="checkbox" onclick="enableID('Taxtext')" />
-                <input id="Taxtext" type="text" disabled="disabled" />
-            </div>
-            <!--</div>-->
-        </div>
-        <div class="flex-container4">
-            <div>
-                &nbsp;
+            <div class="flex-containerbuttons" style="float:left">
+                <div>
+                    &nbsp;
             <button id="createButton" type="button" onclick="createRight()">Create</button>
-            </div>
-            <br />
-            <div>
-                &nbsp;
+                </div>
+                <br />
+                <div>
+                    &nbsp;
             <button id="logoutButton" type="button" onclick="logout()">Logout</button>
+                </div>
             </div>
-        </div>
     </div>
 </body>
 </html>

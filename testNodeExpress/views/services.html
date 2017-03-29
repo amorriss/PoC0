@@ -33,9 +33,11 @@
 
             if (strData == "<New Service>") {   // Create button
                 document.getElementById("createButton").innerText = "Create";
+                createNew = true;
                 e.target.parentNode.className = 'selectedrow';
             } else if (strData != "Housing Service") {   // Amend button & ignore title row
                 document.getElementById("createButton").innerText = "Amend";
+                createNew = false;
                 e.target.parentNode.className = 'selectedrow';
             } else {  // title row so disable Create button
                 document.getElementById("createButton").setAttribute('disabled', 'disabled');
@@ -47,10 +49,13 @@
 <body>
 
     <script>
+
+        var createNew = false;
+
         window.onload = function () {
             console.log("onload called : " + localStorage.getItem("name"));
             var ts = new Date().toLocaleString();
-            document.getElementById("hLoggedInAs").innerText = "Logged is as " + localStorage.getItem("name") + " on " + ts;
+            document.getElementById("hLoggedInAs").innerText = "Logged in as " + localStorage.getItem("name") + " on " + ts;
 
             var table = document.getElementById("servicetable");
             selected = table.getElementsByClassName("selectedrow");
@@ -66,9 +71,12 @@
 
         socket.on('createServiceRet', function (data) {
             console.log("Create service in browser called ...");
-            localStorage.setItem("createdservice", data.data);
-
-            window.location("createservice");
+            localStorage.setItem("servicename", data.data);
+            if (createNew) {
+                window.location("createservice");
+            } else {
+                window.location("createright");
+            }
         });
 
     </script>
@@ -88,8 +96,8 @@
         <hr />
     </div>
 
-    <div class="flex-container">
-        <div class="flex-container2">
+    <div class="flex-containercentre">
+        <div class="flex-container3">
             <div>
                 <div>
                     <div>
@@ -99,10 +107,10 @@
 
                             <table id="servicetable" style="width: 600px;">
                                 <tr style="height: 20px">
-                                    <td id="tabletitle">Housing Service</td>
+                                    <td id="tabletitle">Passport Application</td>
                                 </tr>
                                 <tr>
-                                    <td>Crest Housing Service</td>
+                                    <td>Land Registry</td>
                                 </tr>
                                 <tr>
                                     <td>&lt;New Service&gt;</td>
@@ -116,11 +124,12 @@
             </div>
         </div>
 
-        <div class="flex-container4">
+        <div class="flex-containerbuttons">
             <div>
                 &nbsp;
-                <button id="createButton" type="button" onclick="createService()">Create</button>
+                <button id="createButton" type="button" onclick="createService()" disabled="disabled">Create</button>
             </div>
+            <br />
             <div>
                 &nbsp;
             <button id="logoutButton" type="button" onclick="logout()">Logout</button>
