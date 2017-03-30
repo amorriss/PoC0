@@ -30,7 +30,7 @@
             console.log(name);
             var str = data.data;
             if (str.substring(0, 7) == "success") {
-                localStorage.setItem("name", name);
+                sessionStorage.setItem("name", name);
                 window.location("houses");
             } else {
                 window.alert("Login Failed for " + name);

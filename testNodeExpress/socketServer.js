@@ -62,7 +62,7 @@ module.exports = {
 function validatelogin(data) {
     var loggedIn = false;
     var credentials = data.split(":");
-    if ((credentials[0] == "Páivi") && (credentials[1] == "secret")) {
+    if ((credentials[0] == "Païvi") && (credentials[1] == "secret")) {
         loggedIn = true;
     }
     else if ((credentials[0] == "Tommi") && (credentials[1] == "password")) {

@@ -53,9 +53,9 @@
         var createNew = false;
 
         window.onload = function () {
-            console.log("onload called : " + localStorage.getItem("name"));
+            console.log("onload called : " + sessionStorage.getItem("name"));
             var ts = new Date();
-            document.getElementById("hLoggedInAs").innerHTML = "Welcome " + localStorage.getItem("name"); // + "<br/>" + ts.toString('dddd, MMMM') ;
+            document.getElementById("hLoggedInAs").innerHTML = "Welcome " + sessionStorage.getItem("name"); // + "<br/>" + ts.toString('dddd, MMMM') ;
 
             var table = document.getElementById("servicetable");
             selected = table.getElementsByClassName("selectedrow");
@@ -71,7 +71,7 @@
 
         socket.on('createHouseRet', function (data) {
             console.log("Create service in browser called ...");
-            localStorage.setItem("servicename", data.data);
+            sessionStorage.setItem("servicename", data.data);
             if (createNew) {
                 window.location("createhouse");
             } else {

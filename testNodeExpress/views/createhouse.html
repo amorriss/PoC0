@@ -26,12 +26,12 @@
     <script>
 
         window.onload = function () {
-            console.log("onload called : " + localStorage.getItem("name"));
+            console.log("onload called : " + sessionStorage.getItem("name"));
             var ts = new Date().toLocaleString();
-            document.getElementById("hLoggedInAs").innerText = "Welcome " + localStorage.getItem("name"); // + " on " + ts;
+            document.getElementById("hLoggedInAs").innerText = "Welcome " + sessionStorage.getItem("name"); // + " on " + ts;
 
             // get service created
-            document.getElementById("servicetext").innerText = localStorage.getItem("servicename");
+            document.getElementById("servicetext").innerText = sessionStorage.getItem("servicename");
         };
 
         var socket = io.connect();
@@ -44,7 +44,7 @@
         socket.on('createNewServiceRet', function (data) {
             console.log("Create new service in browser called ...");
             var sname = document.getElementById("servicetext").value;
-            localStorage.setItem("servicename", sname);
+            sessionStorage.setItem("servicename", sname);
             window.location("createright");
         });
 

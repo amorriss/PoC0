@@ -47,10 +47,10 @@
     <script>
 
         window.onload = function () {
-            console.log("onload called : " + localStorage.getItem("name"));
+            console.log("onload called : " + sessionStorage.getItem("name"));
             var ts = new Date().toLocaleString();
-            document.getElementById("hLoggedInAs").innerText = "Welcome " + localStorage.getItem("name"); // + " on " + ts;
-            document.getElementById("servicename").innerText = localStorage.getItem("servicename");
+            document.getElementById("hLoggedInAs").innerText = "Welcome " + sessionStorage.getItem("name"); // + " on " + ts;
+            document.getElementById("servicename").innerText = sessionStorage.getItem("servicename");
         };
 
         var socket = io.connect();

@@ -53,9 +53,9 @@
         var createNew = false;
 
         window.onload = function () {
-            console.log("onload called : " + localStorage.getItem("name"));
+            console.log("onload called : " + sessionStorage.getItem("name"));
             var ts = new Date();
-            document.getElementById("hLoggedInAs").innerHTML = "Welcome " + localStorage.getItem("name"); // + "<br/>" + ts.toString('dddd, MMMM') ;
+            document.getElementById("hLoggedInAs").innerHTML = "Welcome " + sessionStorage.getItem("name"); // + "<br/>" + ts.toString('dddd, MMMM') ;
 
             // set up table for selection
             var table = document.getElementById("servicetable");
@@ -72,7 +72,7 @@
 
         socket.on('createServiceRet', function (data) {
             console.log("Create service in browser called ...");
-            localStorage.setItem("servicename", data.data);
+            sessionStorage.setItem("servicename", data.data);
             if (createNew) {
                 window.location("createservice");
             } else {
@@ -97,7 +97,10 @@
     <div>
         <hr />
     </div>
-   
+     <div>
+         <!-- moves screen down same amount as back arrow on other screens. Invisible cos we don't want to use it to logout -->
+         <img alt="no logo" src="images/back_arrow.png" width="30" height="30" style="background-color:rgb(181, 27, 69); visibility:hidden" />
+    </div>
     <div class="flex-containercentre">
         <!-- <img alt="no back arrow" src="images/back_arrow.png" width="25" height="25" /> -->
         <div class="flex-containerredtitle">
