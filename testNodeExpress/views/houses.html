@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <title>Project X</title>
-    <link rel="stylesheet" href=".\stylesheets\main.css" />
+    <link rel="stylesheet" href=".\stylesheets\HC.css" />
     <script src="socket.io/socket.io.js"></script>
 
     <script>
@@ -18,7 +18,7 @@
             console.log("create button clicked");
             var data = document.getElementsByClassName("selectedrow");
             var socket = io.connect();
-            socket.emit('createService', { data: data[0].innerText });
+            socket.emit('createHouse', { data: data[0].innerText });
         };
 
         function highlight(e) {
@@ -57,7 +57,6 @@
             var ts = new Date();
             document.getElementById("hLoggedInAs").innerHTML = "Welcome " + localStorage.getItem("name"); // + "<br/>" + ts.toString('dddd, MMMM') ;
 
-            // set up table for selection
             var table = document.getElementById("servicetable");
             selected = table.getElementsByClassName("selectedrow");
             table.onclick = highlight;
@@ -67,16 +66,16 @@
 
         socket.on('logoutRet', function (data) {
             console.log("logout in browser called ...");
-            window.location("/");
+            window.location("/HC");
         });
 
-        socket.on('createServiceRet', function (data) {
+        socket.on('createHouseRet', function (data) {
             console.log("Create service in browser called ...");
             localStorage.setItem("servicename", data.data);
             if (createNew) {
-                window.location("createservice");
+                window.location("createhouse");
             } else {
-                window.location("createright");
+                //window.location("createright");
             }
         });
 
@@ -84,54 +83,47 @@
 
     <div class="flex-title">
         <div>
-            <img alt="no logo" src="images/logo.png" width="200" height="200" />
+            <img alt="no logo" src="images/HC.png" width="200" height="150" />
         </div>
         <div>
-            <h1>Digital Notary</h1>
-            <h3>Services</h3>
+            <h1>Housing Companies - Houses</h1>
         </div>
-        <div>
-            <h2 id="hLoggedInAs">Welcome </h2>
-        </div>
+        <div>&nbsp;</div>
+        <div>&nbsp;</div>
     </div>
     <div>
         <hr />
     </div>
-   
+
     <div class="flex-containercentre">
-        <!-- <img alt="no back arrow" src="images/back_arrow.png" width="25" height="25" /> -->
-        <div class="flex-containerredtitle">
-            <div class="flex-container5">
-                <h3>Services</h3>
-            </div>
-            <div class="flex-container3">
+       <!-- <img alt="no back arrow" src="images/back_arrow.png" width="25" height="25" /> -->
+        <div class="flex-container3">
+            <div>
                 <div>
                     <div>
-                        <div>
-                            <h4>Available Services</h4>
+                        <h4>Available ServHousesices</h4>
 
-                            <div style="overflow-x: auto;">
+                        <div style="overflow-x: auto;">
 
-                                <table id="servicetable" style="width: 600px; background-color: white;">
-                                    <tr style="height: 20px">
-                                        <td id="tabletitle">Passport Application</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Land Registry</td>
-                                    </tr>
-                                    <tr>
-                                        <td>&lt;New Service&gt;</td>
-                                    </tr>
-                                </table>
-                            </div>
-                            <br />
-
+                            <table id="servicetable" style="width: 600px; background-color:white;">
+                                <tr style="height: 20px">
+                                    <td id="tabletitle">Very Small Flat</td>
+                                </tr>
+                                <tr>
+                                    <td>Yurt</td>
+                                </tr>
+                                <tr>
+                                    <td>&lt;New House&gt;</td>
+                                </tr>
+                            </table>
                         </div>
+                        <br />
+
                     </div>
                 </div>
             </div>
         </div>
-        <div>&nbsp;</div>
+
         <div class="flex-containerbuttons">
             <div>
                 &nbsp;

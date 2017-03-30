@@ -1,0 +1,74 @@
+﻿<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Login</title>
+    <link rel="stylesheet" href=".\stylesheets\HC.css" />
+    <script src="socket.io/socket.io.js"></script>
+
+
+    <script>
+        function login() {
+            var socket = io.connect();
+            var data = document.getElementById("SelectName").value;
+            data += ":" + document.getElementById("passwordtext").value;
+            socket.emit('login', { data: data });
+            console.log(data + " tried to login");
+        }
+    </script>
+
+</head>
+<body>
+    <script>
+        var socket = io.connect();
+
+        socket.on('loginRet', function (data) {
+            console.log("login in browser called with ...");
+            var name = document.getElementById("SelectName").value;
+            console.log(name);
+            var str = data.data;
+            if (str.substring(0, 7) == "success") {
+                localStorage.setItem("name", name);
+                window.location("houses");
+            } else {
+                window.alert("Login Failed for " + name);
+                window.location("HCloginfail?name=" + name);
+            }
+        });
+    </script>
+    <div class="flex-title">
+        <div>
+            <img alt="no logo" src="images/HC.png" width="200" height="150" />
+        </div>
+        <div>
+            <h1>Housing Companies - Login</h1>
+        </div>
+        <div>&nbsp;</div>
+        <div>&nbsp;</div>
+    </div>
+    <div>
+        <hr />
+    </div>
+    <div class="flex-containercentre">
+        <div class="flex-containerlogin">
+            <div>
+                <div>Name</div>
+                <select id="SelectName" name="D1" autofocus="autofocus">
+                    <option>- </option>
+                    <option>Tommi</option>
+                </select>
+            </div>
+            <div>
+                <div>Password</div>
+                <input type="password" id="passwordtext" />
+            </div>
+            <div>
+                &nbsp;
+            <button id="Button1" type="button" onclick="login()">Login</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

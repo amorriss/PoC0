@@ -33,7 +33,26 @@
   </PropertyGroup>
   <ItemGroup>
     <Content Include="public\images\back_arrow.png" />
+    <Content Include="public\images\HC-background.jpg" />
+    <Content Include="public\stylesheets\HC.css">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="views\createhouse.html">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="views\createservice.html">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="views\HClayout.pug">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="views\HClogin.html">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="views\HCloginfail.pug">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="views\houses.html">
       <SubType>Code</SubType>
     </Content>
     <Content Include="views\services.html">
@@ -51,7 +70,7 @@
     <Content Include="views\login.html">
       <SubType>Code</SubType>
     </Content>
-    <Content Include="public\images\counterparty.png" />
+    <Content Include="public\images\HC.png" />
     <Content Include="views\loginfail.pug">
       <SubType>Code</SubType>
     </Content>

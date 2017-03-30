@@ -49,6 +49,12 @@ module.exports = {
                 console.log("logout server function called from browser");
                 socket.broadcast.emit('logoutRet', { 'message': 'Logged Out' });
             });
+            // HC ------------------------------------------------------------------
+            socket.on('createHouse', function (data) {
+                console.log(data);
+                console.log("Create house server function called from browser");
+                socket.broadcast.emit('createHouseRet', { data: data.data });
+            });
         });
         return io;
     }
@@ -56,7 +62,10 @@ module.exports = {
 function validatelogin(data) {
     var loggedIn = false;
     var credentials = data.split(":");
-    if (credentials[1] == "secret") {
+    if ((credentials[0] == "Páivi") && (credentials[1] == "secret")) {
+        loggedIn = true;
+    }
+    else if ((credentials[0] == "Tommi") && (credentials[1] == "password")) {
         loggedIn = true;
     }
     return loggedIn;

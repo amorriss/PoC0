@@ -5,6 +5,27 @@
 var express = require("express");
 var router = express.Router();
 var name = "none";
+// ---------------------- Housing co. routing ------------------
+router.get('/HC', function (req, res) {
+    //res.render('index', { title: 'Testing ....' });
+    res.sendfile("views/HClogin.html");
+});
+router.get('/createhouse', function (req, res) {
+    //res.render('index', { title: 'Testing ....' });
+    res.sendfile("views/createhouse.html");
+});
+router.get('/houses', function (req, res) {
+    //res.render('index', { title: 'Testing ....' });
+    res.sendfile("views/houses.html");
+});
+router.get('/HCloginfail', function (req, res) {
+    //read form data
+    console.log("in index.HCloginfail");
+    console.log(req.param("name"));
+    name = req.param("name");
+    res.render('HCloginfail', { name: name.toString() });
+});
+// ------------------- Housing reg routing --------------------
 router.get('/', function (req, res) {
     //res.render('index', { title: 'Testing ....' });
     res.sendfile("views/login.html");

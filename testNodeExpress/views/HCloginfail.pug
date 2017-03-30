@@ -1,0 +1,13 @@
+﻿extends layout
+
+block content
+
+  img.className#IdName(src="images/HC.png" alt="No logo" width=100 height=100)
+  hr
+  h1= title
+  p 
+  p Your login failed #{name}. 
+  p Why not try again.
+
+  form(method='POST' action='/')
+    button(type='submit') Back

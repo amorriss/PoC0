@@ -76,6 +76,10 @@
             alert("Right created");
         });
 
+        function goBack() {
+            window.history.back();
+        };
+
     </script>
 
     <div class="flex-title">
@@ -83,7 +87,8 @@
             <img alt="no logo" src="images/logo.png" width="200" height="200" />
         </div>
         <div>
-            <h1>Digital Notary - Create Right</h1>
+            <h1>Digital Notary</h1>
+            <h3 id="servicename"> </h3>
         </div>
         <div>
             <h2 id="hLoggedInAs">Welcome </h2>
@@ -92,9 +97,15 @@
     <div>
         <hr />
     </div>
-
-    <h3 id="servicename"></h3>
+     <div>
+         <span style="padding-left:80px; "></span>
+        <img alt="no logo" src="images/back_arrow.png" width="30" height="30" style="background-color:rgb(181, 27, 69)" onclick="goBack()"/>
+    </div>
     <div class="flex-containercentre">
+        <div class="flex-containerredhightitle">
+            <div class="flex-container5">
+                <h3>Create Right</h3>
+            </div>
             <div class="flex-container2">
                 <!-- <div class="flex-container5">
                 <div class="flex-container1">--->
@@ -138,19 +149,20 @@
                 </div>
                 <!--</div>-->
             </div>
-            <div class="flex-containerbuttonshigh" style="float:left">
-                <div>
-                    &nbsp;
+        </div>
+        <div class="flex-containerbuttonshigh" style="float: left">
+            <div>
+                &nbsp;
             <button id="createButton" type="button" onclick="createRight()">Create</button>
-                </div>
-                <br />
-                <br />
-                <br />
-                <div>
-                    &nbsp;
-            <button id="logoutButton" type="button" onclick="logout()">Logout</button>
-                </div>
             </div>
+            <br />
+            <br />
+            <br />
+            <div>
+                &nbsp;
+            <button id="logoutButton" type="button" onclick="logout()">Logout</button>
+            </div>
+        </div>
     </div>
 </body>
 </html>

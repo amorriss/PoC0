@@ -1,4 +1,4 @@
-/*@import "~semantic-ui/dist/semantic.css";
+﻿/*@import "~semantic-ui/dist/semantic.css";
 @import "~angular2-busy/build/style/busy.css"; */
 
 
@@ -6,11 +6,12 @@ html {
 }
 
 body {
-    font-family: 'Helvetica Neue', Arial, Helvetica, sans-serif;
+    font-family: Castellar, Helvetica, sans-serif;
     position: relative;
     height: 100vh;
     margin: 0;
-    background-color: rgb(66,66,66);
+    background-color: azure;
+    background-image:url("../images/HC-background.jpg");
 }
 
 
@@ -18,51 +19,39 @@ body {
     /* Specifies that the contents will be laid out according to Flexbox rules. */
     display: flex;
     width: 100%;
-    height: 70%;
-    align-items:center;
+    height: 50%;
+    align-items: flex-end;
+    -ms-flex-align: center;
     justify-content: center;
 }
 
-.flex-containerredtitle {
+.flex-containerbottom {
     /* Specifies that the contents will be laid out according to Flexbox rules. */
     display: flex;
-    width: 700px;
-    height: 300px;
-    align-items: flex-start;
-    -ms-flex-align: start;
-    justify-content: flex-start;
-    flex-direction: column;
+    width: 100%;
+    height: 50%;
+    align-items: flex-end;
+    -ms-flex-align: center;
+    justify-content: center;
 }
-
-.flex-containerredhightitle {
-    /* Specifies that the contents will be laid out according to Flexbox rules. */
-    display: flex;
-    width: 800px;
-    height: 500px;
-    align-items: flex-start;
-    -ms-flex-align: start;
-    justify-content: flex-start;
-    flex-direction: column;
-}
-
 
 .flex-container1 {
     display: flex;
     width: 255px;
-    height:80px;
-    background-color: lightgray;
+    height: 80px;
+    background-color: snow;
     flex-direction: row;
-    flex:none;
-    flex-wrap:wrap;
-    align-items:center;
-    justify-content:space-between;  
+    flex: none;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
 }
 
 .flex-container2 {
     display: flex;
     width: 700px;
     height: 350px;
-    background-color: lightgray;
+    background-color: snow;
     overflow: auto;
     justify-content: space-between;
     flex-direction: row;
@@ -79,64 +68,66 @@ body {
     display: flex;
     width: 700px;
     height: 200px;
-    background-color: lightgray;
+    background-color: snow;
     overflow: auto;
     justify-content: center;
     flex-direction: row;
     flex-wrap: wrap;
     flex: none;
-    align-items:center;
+    align-items: center;
 }
 
 .flex-containerlogin {
     display: flex;
-    width: 650px;
-    height: 150px;
-    background-color:lightgray;
+    width: 250px;
+    height: 200px;
+    background-color:snow;
     overflow: auto;
     justify-content: space-between;
-    flex-direction: row;
-    align-items:center;
-    padding:30px;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px;
 }
 
 .flex-containerbuttons {
     display: flex;
     width: 140px;
     height: 200px;
-    background-color: rgb(66,66,66);
+    background-color: snow;
     overflow: auto;
     flex-direction: column;
-    align-items:center;
-    justify-content: flex-end;
+    align-items: flex-start;
+    justify-content: center;
 }
 
 .flex-containerbuttonshigh {
     display: flex;
     width: 140px;
     height: 380px;
-    background-color: rgb(66,66,66);
+    background-color: snow;
     overflow: auto;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
 }
 
 .flex-container5 {
     display: flex;
-    width: 400px;
-    height: 80px;
-    background-color:rgb(209, 0 ,33);
+    width: 500px;
+    height: 450px;
+    background-color: white;
     overflow: auto;
     flex-direction: column;
-    align-items:flex-start;
-    align-content:flex-start;
+    border: 1px solid;
+    align-items: center;
+    align-content: center;
 }
+
 .flex-title {
     display: flex;
     width: 100%;
-    height: 200px;
-    background-color: rgb(117,117,117);
+    height: 150px;
+    background-color:white;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
@@ -149,7 +140,7 @@ body {
 }
 
 table, th, td {
-    font-family: 'Helvetica Neue', Arial, Helvetica, sans-serif;
+    font-family: Castellar, Helvetica, sans-serif;
     font-weight: lighter;
     border: 1px solid;
     border-style: solid;
@@ -166,33 +157,30 @@ table, th, td {
 }*/
 
 h1 {
-    font-family: 'Helvetica Neue', Arial, Helvetica, sans-serif;
-    font-weight: normal;
-    color:white;
-    font-size:50px;
+    font-family: Castellar, Helvetica, sans-serif;
+    font-weight: bold;
+    color:cadetblue;
     #background-color:darkgray;
-    
 }
 
 h2 {
-    font-family: 'Helvetica Neue', Arial, Helvetica, sans-serif;
+    font-family: Castellar, Helvetica, sans-serif;
     font-weight: lighter;
-    height:200px;
-    width:320px;
-    background-color:rgb(146,146,146);
-    color:white;
-    display:flex;
-    align-items:center;
-    flex-wrap:wrap;
-    justify-content:center;
+    height: 150px;
+    width: 320px;
+    background-color: rgb(146,146,146);
+    color: darkgray;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
 h3 {
-    font-family: 'Helvetica Neue', Arial, Helvetica, sans-serif;
+    font-family: Castellar, Helvetica, sans-serif;
     font-weight: lighter;
-    align-self:center;
-    color:white;
-    font-size:30px;
+    align-self: center;
+    color: white;
 }
 
 h4, h5 {
@@ -201,14 +189,15 @@ h4, h5 {
 }
 
 button {
-    font-family: 'Helvetica Neue', Arial, Helvetica, sans-serif !important;
-    border: 1px solid;
-    width: 100px;
+    font-family: Castellar, Helvetica, sans-serif !important;
+    border: 1px solid black;
+    width: 90px;
     height: 40px;
+    background-color: snow
 }
 
 text {
-    flex:none;
+    flex: none;
 }
 
 input {
@@ -222,8 +211,8 @@ select {
 }
 
 .checkbox {
-    flex:none;
-    flex-basis:0;
+    flex: none;
+    flex-basis: 0;
     width: 20px;
     height: 20px;
 }
@@ -247,10 +236,9 @@ select {
 }
 
 .highlight {
-    background-color:yellow;
-
+    background-color: yellow;
 }
 
 .selectedrow {
-    background-color:blanchedalmond;
+    background-color: blanchedalmond;
 }

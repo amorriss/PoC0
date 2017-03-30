@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <title>Project X</title>
-    <link rel="stylesheet" href=".\stylesheets\main.css" />
+    <link rel="stylesheet" href=".\stylesheets\HC.css" />
     <script src="socket.io/socket.io.js"></script>
 
     <script>
@@ -19,24 +19,6 @@
             socket.emit('createNewService', { data: 'You clicked the create button' });
             console.log("create button clicked");
         };
-
-        function highlight(e) {  // used to select a row in the table
-
-            var strData = e.target.innerText;
-            console.log(strData);
-
-            if (selected[0]) selected[0].className = '';   // clear previous selection
-
-            if (strData == "Tommi") {   // Create button
-              //  document.getElementById("createButton").innerText = "Create";
-                e.target.parentNode.className = 'selectedrow';
-                // enable Create button. It gets disabled only if top title row selected 
-                document.getElementById("createButton").removeAttribute("disabled");
-            } else {  // title row so disable Create button
-                document.getElementById("createButton").setAttribute('disabled', 'disabled');
-            }
-        };
-
     </script>
 </head>
 <body>
@@ -49,19 +31,14 @@
             document.getElementById("hLoggedInAs").innerText = "Welcome " + localStorage.getItem("name"); // + " on " + ts;
 
             // get service created
-           // document.getElementById("servicetext").innerText = localStorage.getItem("servicename");
-
-            // set up table for selection
-            var table = document.getElementById("userstable");
-            selected = table.getElementsByClassName("selectedrow");
-            table.onclick = highlight;
+            document.getElementById("servicetext").innerText = localStorage.getItem("servicename");
         };
 
         var socket = io.connect();
 
         socket.on('logoutRet', function (data) {
             console.log("logout in browser called ...");
-            window.location("/");
+            window.location("/HC");
         });
 
         socket.on('createNewServiceRet', function (data) {
@@ -76,59 +53,46 @@
             document.getElementById("createButton").removeAttribute("disabled");
         };
 
-        function goBack() {
-            window.history.back();
-        };
-
     </script>
 
     <div class="flex-title">
         <div>
-            <img alt="no logo" src="images/logo.png" width="200" height="200" />
+            <img alt="no logo" src="images/HC.png" width="200" height="150" />
         </div>
         <div>
-            <h1>Digital Notary</h1>
-            <h3>New Service</h3>
+            <h1>Housing Companies - Create House</h1>
         </div>
-        <div>
-            <h2 id="hLoggedInAs">Welcome </h2>
-        </div>
+        <div>&nbsp;</div>
+        <div>&nbsp;</div>
     </div>
     <div>
         <hr />
     </div>
-     <div>
-         <span style="padding-left:80px; "></span>
-        <img alt="no logo" src="images/back_arrow.png" width="30" height="30" style="background-color:rgb(181, 27, 69);" onclick="goBack()"/>
-    </div>
+
     <div class="flex-containercentre">
-        <div class="flex-containerredtitle">
-            <div class="flex-container5">
-                <h3>Create Service</h3>
-            </div>
-            <div class="flex-container3">
+        <div class="flex-container3">
+            <div>
                 <div>
                     <div>
                         <div>
-                            <div>
-                                <p></p>
-                                <input id="servicetext" type="text" />
-                            </div>
-                            <br />
-                            <div>
-                                <table id="userstable" style="width: 600px; background-color: white;">
-                                    <tr>
-                                        <td>Eligible Users</td>
-                                    </tr>
-                                    <tr>
-                                        <td>&nbsp;</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Tommi</td>
-                                    </tr>
-                                </table>
-                            </div>
-                            <!-- <br />
+                            <p>House Name</p>
+                            <input id="servicetext" type="text" onkeypress="enableButton()"/>
+                        </div>
+                        <br />
+                        <div>
+                            <table id="users" style="width: 600px; background-color:white;">
+                                <tr>
+                                    <td>Eligible Users</td>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td>Hanna</td>
+                                </tr>
+                            </table>
+                        </div>
+                       <!-- <br />
                         <div>
                             <table id="rights" style="width: 600px; background-color:white;">
                                 <tr>
@@ -142,10 +106,10 @@
                                 </tr>
                             </table>
                         </div> -->
-                        </div>
                     </div>
                 </div>
             </div>
+
         </div>
         <div class="flex-containerbuttons">
             <div>
