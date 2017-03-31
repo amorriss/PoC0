@@ -37,6 +37,9 @@
     <Content Include="public\stylesheets\HC.css">
       <SubType>Code</SubType>
     </Content>
+    <Content Include="public\stylesheets\StyleSheet1.css">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="views\createhouse.html">
       <SubType>Code</SubType>
     </Content>

@@ -1,5 +1,38 @@
 ﻿extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
+  script. 
+    var toggleView = 'front';
+    function test() {
+      if (toggleView == 'front') {
+        document.getElementById('mainimage').src = 'images/logo.png';
+        toggleView = 'back';
+      } else {
+        document.getElementById('mainimage').src = 'images/HC-background.jpg';
+        toggleView = 'front';
+      } 
+    };
+    var x = setInterval(function() {
+      var now = new Date().getTime();
+      document.getElementById("tm").innerHTML = now;
+    }, 1000);
+  div(class="flex-title2")
+    div 
+      h1 House
+    div 
+      h2(id='tm') time and date here
+  div(class='flex-containercentre')
+      img(src='images/HC-background.jpg' id='mainimage')
+      div(class='flex-containerbutton')
+        button#Button1(type='button', onclick='test()', class='rounded-button') Back
+        button#Button2(type='button', onclick='test()', class='rounded-button') Data
+      div
+        table#servicetable
+          tr(style='height: 20px')
+            td#tabletitle Passport Application
+          |                                     
+          tr
+            td Land Registry
+          |                                     
+          tr
+            td &lt;New Service&gt;

@@ -207,6 +207,8 @@ button {
     height: 40px;
 }
 
+
+
 text {
     flex:none;
 }
@@ -254,3 +256,5 @@ select {
 .selectedrow {
     background-color:blanchedalmond;
 }
+
+
