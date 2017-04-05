@@ -35,8 +35,8 @@ router.get('/HCloginfail', (req: express.Request, res: express.Response) => {
 // ------------------- Housing reg routing --------------------
 
 router.get('/', (req: express.Request, res: express.Response) => {
-    res.render('index', { title: 'Testing ....' });
-  //  res.sendfile("views/login.html");
+  //  res.render('index', { title: 'Testing ....' });
+    res.sendfile("views/login.html");
 });
 
 router.get('/createright', (req: express.Request, res: express.Response) => {

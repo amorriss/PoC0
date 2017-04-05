@@ -6,13 +6,15 @@
     <meta charset="utf-8" />
     <title>Login</title>
     <link rel="stylesheet" href=".\stylesheets\main.css" />
+    <link rel="stylesheet" href=".\stylesheets\components\button.css" />
+    <link rel="stylesheet" href=".\stylesheets\components\input.css" />
     <script src="socket.io/socket.io.js"></script>
 
 
     <script>
         function login() {
             var socket = io.connect();
-            var data = document.getElementById("SelectName").value;
+            var data = document.getElementById("username").value;
             data += ":" + document.getElementById("passwordtext").value;
             socket.emit('login', { data: data });
             console.log(data + " tried to login");
@@ -35,7 +37,7 @@
 
         socket.on('loginRet', function (data) {
             console.log("login in browser called with ...");
-            var name = document.getElementById("SelectName").value;
+            var name = document.getElementById("username").value;
             console.log(name);
             var str = data.data;
             if (str.substring(0, 7) == "success") {
@@ -49,40 +51,37 @@
     </script>
     <div class="flex-title">
         <div>
-            <img alt="" src="images/logo.png" width="200" height="200" />
+            <img alt="" src="images/logo.png" width="150" height="150" />
         </div>
         <div>
-            <h1>Digital Notary</h1>
+            <h1 style="float:right">Euroclear Digital Notary</h1>
             <!--<h3>Login</h3>-->
         </div>
         <div>
             <h2 id="hLoggedInAs"></h2>
         </div>
     </div>
-    <div>
-        <hr />
-    </div>
     <div class="flex-containercentre">
-        <div class="flex-containerredtitle">
-            <div class="flex-container5">
-                <h3>Login</h3>
+        <div class="flex-container4">
+            <div class="flex-containerredtitle">
+                <div class="flex-container5">
+                    <h3>Login</h3>
+                </div>
+                <div class="flex-containerlogin">
+                    <div class="flex-name-input">
+                        <div class="flex-name-input">
+                            <p class="flex-text">Username</p>
+                            <input type="text" id="username" value="Païvi"/>
+                        </div>
+                    </div>
+                    <div class="flex-name-input">
+                        <p class="flex-text">Password</p>
+                        <input type="password" id="passwordtext" />
+                    </div>
+                </div>
             </div>
-            <div class="flex-containerlogin">
-                <div>
-                    <div>Name</div>
-                    <select id="SelectName" name="D1" autofocus="autofocus">
-                        <option>- </option>
-                        <option>Païvi</option>
-                    </select>
-                </div>
-                <div>
-                    <div>Password</div>
-                    <input type="password" id="passwordtext" />
-                </div>
-                <div>
-                    &nbsp;
-            <button id="Button1" type="button" onclick="login()">Go</button>
-                </div>
+            <div style="float: right">
+                <button class="ui button" onclick="login()">Login</button>
             </div>
         </div>
     </div>

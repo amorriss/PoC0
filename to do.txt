@@ -1,0 +1,7 @@
+
+ - add del to Services screen
+ - add new screen after create New Service :
+
+
+	Service Name
+	List Available Rights
