@@ -5,6 +5,7 @@
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
     <Name>testNodeExpress</Name>
     <RootNamespace>testNodeExpress</RootNamespace>
+    <NameOfLastUsedPublishProfile>DNPOC - Web Deploy</NameOfLastUsedPublishProfile>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -74,8 +75,12 @@
     <Compile Include="public\stylesheets\components\transition.min.js" />
     <Compile Include="public\stylesheets\components\visibility.js" />
     <Compile Include="public\stylesheets\components\visibility.min.js" />
+    <None Include="DNPOC - Web Deploy.pubxml" />
     <Content Include="public\images\back_arrow.png" />
+    <Content Include="public\images\counterparty.png" />
+    <Content Include="public\images\down_arrow.png" />
     <Content Include="public\images\HC-background.jpg" />
+    <Content Include="public\images\lock.png" />
     <Content Include="public\stylesheets\components\accordion.css" />
     <Content Include="public\stylesheets\components\accordion.min.css" />
     <Content Include="public\stylesheets\components\ad.css" />

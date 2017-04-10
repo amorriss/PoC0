@@ -1,6 +1,8 @@
 /*@import "~semantic-ui/dist/semantic.css";
 @import "~angular2-busy/build/style/busy.css"; */
 
+/*<link rel='stylesheet prefetch' href='http://cdnjs.cloudflare.com/ajax/libs/semantic-ui/0.16.1/css/semantic.min.css' > 
+<link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.8/components/icon.min.css' >*/
 
 html {
 }
@@ -10,41 +12,81 @@ body {
     position: relative;
     height: 100vh;
     margin: 0;
-    background-color: white;
+    background-color: whitesmoke;
 }
 
+.flex-body {
+    /* Specifies that the contents will be laid out according to Flexbox rules. */
+    display: flex;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    align-self: center;
+    flex-direction:column;
+}
+
+.flex-loginbody {
+    /* Specifies that the contents will be laid out according to Flexbox rules. */
+    display: flex;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    align-self: center;
+    flex-direction: column;
+    /*border:1px solid;*/
+}
 
 .flex-containercentre {
     /* Specifies that the contents will be laid out according to Flexbox rules. */
     display: flex;
-    width: 100%;
-    height: 70%;
-    align-items:center;
+    width: 95%;
+    height: 50%;
+    align-items: center;
     justify-content: center;
+    background-color: whitesmoke;
+    align-self: center;
+    flex-direction: column;
+}
+
+.flex-containerrightalign {
+    display: flex;
+    align-items: flex-end;
+    flex-direction: column;
+    /*border:1px solid;*/
 }
 
 .flex-containerredtitle {
     /* Specifies that the contents will be laid out according to Flexbox rules. */
+    width:inherit;
     display: flex;
-    width: 700px;
-    height: 300px;
     align-items: flex-start;
-    -ms-flex-align: start;
-    justify-content: flex-start;
+    /*-ms-flex-align: start;*/
+    justify-content: space-around;
     flex-direction: column;
     font-family: 'Helvetica Neue', Arial, Helvetica, sans-serif;
     font-size:15px;
+    /*border:1px solid;*/
 }
 
-.flex-containerredhightitle {
+.flex-containerrights {
     /* Specifies that the contents will be laid out according to Flexbox rules. */
     display: flex;
-    width: 500px;
-    height: 500px;
-    align-items: flex-start;
-    -ms-flex-align: start;
-    justify-content: flex-start;
+    width: 700px;
+    height: 300px;
+    background-color: #E0E1E2;
+    justify-content: space-between;
     flex-direction: row;
+    flex-wrap:wrap;
+    overflow:auto;
+    align-content:flex-start;
+    align-items:flex-start;
+    padding: 50px;
+    border-bottom-left-radius: 0.28571429rem;
+    border-bottom-right-radius: 0.28571429rem;
+    border-top-right-radius: 0.28571429rem;
+    /*border:1px solid;*/
 }
 
 
@@ -52,7 +94,7 @@ body {
     display: flex;
     width: 255px;
     height:80px;
-    background-color: lightgray;
+    /*background-color: lightgray;*/
     flex-direction: row;
     flex:none;
     flex-wrap:wrap;
@@ -79,15 +121,57 @@ body {
 
 .flex-container3 {
     display: flex;
-    width: 700px;
-    height: 200px;
-    background-color: lightgray;
+    width: inherit;
+    background-color: #E0E1E2;
     overflow: auto;
-    justify-content: center;
+    justify-content:flex-start;
     flex-direction: row;
     flex-wrap: wrap;
     flex: none;
-    align-items:center;
+    align-items: center;
+    padding: 50px;
+    border-bottom-left-radius: 0.28571429rem;
+    border-bottom-right-radius: 0.28571429rem;
+    border-top-right-radius: 0.28571429rem;
+    /*border: 1px solid;*/
+}
+
+.flex-container4 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: inherit;
+    /*border:1px solid;*/
+}
+
+.flex-container5 {
+    display: flex;
+    width: 30%;
+    height: 15%;
+    background-color: rgb(209, 0,33);
+    overflow: auto;
+    justify-content: center;
+    flex-direction: row;
+    border-top-left-radius: 0.28571429rem;
+    border-top-right-radius: 0.28571429rem;
+}
+
+.flex-container6 {
+    display: flex;
+    width: inherit;
+    background-color: #E0E1E2;
+    overflow: auto;
+    justify-content: space-around;
+    flex-direction: row;
+    flex-wrap: wrap;
+    flex: none;
+    align-items: center;
+    padding: 50px;
+    border-bottom-left-radius: 0.28571429rem;
+    border-bottom-right-radius: 0.28571429rem;
+    border-top-right-radius: 0.28571429rem;
+    /*border: 1px solid;*/
 }
 
 .flex-containerlogin {
@@ -98,22 +182,25 @@ body {
     overflow: auto;
     justify-content: center;
     flex-direction: column;
-    align-items: flex-start;
-    padding: 30px;
+    align-items: center;
+    padding-top:10px;
+    padding-bottom:30px;
+    padding-left:30px;
+    padding-right:30px;
     border-bottom-left-radius: 0.28571429rem;
     border-bottom-right-radius: 0.28571429rem;
     border-top-right-radius: 0.28571429rem;
+    border-top-left-radius: 0.28571429rem;
+    /*border:1px solid;*/
 }
 
-.flex-container4 {
+.flex-containerloginalign {
     display: flex;
-    width: 340px;
-    height: 400px;
     justify-content: center;
-    align-items: flex-start;
+    align-items: flex-end;
     flex-direction: column;
+    /*border: 1px solid;*/
 }
-
 .flex-containerbuttons {
     display: flex;
     width: 140px;
@@ -136,22 +223,27 @@ body {
     justify-content: center;
 }
 
-.flex-container5 {
+
+
+.flex-menu {
     display: flex;
-    width: 30%;
-    height: 15%;
-    background-color: rgb(209, 0,33);
-    overflow: auto;
+    /*width: 30%;
+    height: 15%;*/
+    /*background-color: rgb(209, 0,33);*/
+    /*overflow: auto;*/
     justify-content: center;
-    flex-direction: column;
-    border-top-left-radius: 0.28571429rem;
-    border-top-right-radius: 0.28571429rem;
+    align-items: center;
+    flex-direction: row;
+    padding-right: 100px;
+    /*border-top-left-radius: 0.28571429rem;
+    border-top-right-radius: 0.28571429rem;*/
 }
+
 .flex-title {
     display: flex;
     width: 100%;
-    height: 150px;
-    background-color: #E0E1E2;
+    height: 100px;
+    background-color: #E0E1E2; /*#ECECEC;*/
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
@@ -161,6 +253,7 @@ body {
     display: flex;    
     justify-content:space-around;
     flex-direction:column;
+    /*background-image:url(images/counterparty.png);*/
 }
 
 .flex-text {
@@ -170,56 +263,78 @@ body {
     font-weight: bold;
 }
 
-table, th, td {
+.flex-date-header {
+    display: flex;
     font-family: 'Helvetica Neue', Arial, Helvetica, sans-serif;
-    font-weight: lighter;
-    border: 1px solid;
-    border-style: solid;
-    border-collapse: collapse;
+    font-weight: normal;
+    color: white;
+    background-color: darkgrey;
+    height: 60px;
+    width: 100%;
+    font-size: 15px;
+    justify-content: flex-start;
+    align-items: center;
+    padding-left:5px;
 }
 
-/*table tr:hover {
-    background-color: azure;
-}*/
-
-
-/*tr:nth-child(odd) {
-    background-color: gainsboro;
-}*/
 
 h1 {
     font-family: 'Helvetica Neue', Arial, Helvetica, sans-serif;
     font-weight: normal;
-    color: rgba(0, 0, 0, 0.6);
+    color: white;
     font-size: 30px;
     justify-content: flex-start;
     #background-color:darkgray;
 }
 
+.hpagefunction {
+    font-family: 'Helvetica Neue', Arial, Helvetica, sans-serif;
+    font-size: 20px;
+    font-weight:bold;
+    height: 100px;
+    width: 1000px;
+    background-color: #E0E1E2;
+    color: #898989;
+    display: flex;
+    flex-direction:column;
+    align-items: flex-start;
+    align-self:flex-start;
+    justify-content: center;
+    padding-left:30px;
+}
+
 h2 {
     font-family: 'Helvetica Neue', Arial, Helvetica, sans-serif;
-    font-size:20px;
-    height: 150px;
+    font-size: 20px;
+    height: 100px;
     width: 320px;
-    background-color: rgba(0, 0, 0, 0.4);
-    color: white;
+    background-color: #E0E1E2;
+    color: #898989;
     display: flex;
     align-items: center;
-    flex-wrap: wrap;
+    /*flex-wrap: wrap;*/
     justify-content: center;
 }
 
 h3 {
     font-family: 'Helvetica Neue', Arial, Helvetica, sans-serif;
-    font-weight: lighter;
+    font-weight: normal;
     align-self:center;
     color:white;
     font-size:20px;
 }
 
-h4, h5 {
+h4 {
+    font-family: 'Helvetica Neue', Arial, Helvetica, sans-serif;
+    font-weight: normal;
+    font-size:20px;
+    color: #898989;
+}
+
+h5 {
     font-family: 'Helvetica Neue', Arial, Helvetica, sans-serif;
     font-weight: lighter;
+    color: #898989;
 }
 
 button {
@@ -235,7 +350,33 @@ text {
     flex:none;
 }
 
-input {
+.input-username {
+    font-family: 'Helvetica Neue', Arial, Helvetica, sans-serif;
+    width: 220px;
+    height: 30px;
+    border: 1px solid;
+    border-radius: 0.28571429rem;
+    padding-left: 40px;
+    font-size: 15px;
+    background-image: url(../images/counterparty.png);
+    background-position: 7px 7px;
+    background-repeat: no-repeat;
+}
+
+.input-password {
+    font-family: 'Helvetica Neue', Arial, Helvetica, sans-serif;
+    width: 220px;
+    height: 30px;
+    border: 1px solid;
+    border-radius: 0.28571429rem;
+    padding-left: 40px;
+    font-size: 15px;
+    background-image: url(../images/lock.png);
+    background-position: 7px 7px;
+    background-repeat: no-repeat;
+}
+
+.input-field {
     font-family: 'Helvetica Neue', Arial, Helvetica, sans-serif;
     width: 220px;
     height: 30px;
@@ -243,13 +384,20 @@ input {
     border-radius: 0.28571429rem;
     padding-left: 20px;
     font-size: 15px;
+    /*background-image: url(../images/lock.png);
+    background-position: 7px 7px;
+    background-repeat: no-repeat;*/
 }
 
 select {
-    width: 250px;
-    height: 30px;
+    width: 230px;
+    height: 35px;
     border: 1px solid;
-    border-radius: 8px;
+    border-radius: 0.28571429rem;
+    padding-left: 20px;
+    font-family: 'Helvetica Neue', Arial, Helvetica, sans-serif;
+    font-size: 15px;
+    
 }
 
 .checkbox {
@@ -283,7 +431,54 @@ select {
 }
 
 .selectedrow {
-    background-color:blanchedalmond;
+    background-color: darkgrey;
 }
 
+.dropbtn {
+    background-color: #E0E1E2;
+    color: darkgrey;
+    padding: 10px;
+    font-family: sans-serif;
+    font-size: 20px;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    background-image: url(../images/down_arrow.png);
+    background-position: 20px 10px;
+    background-repeat: no-repeat;
+}
 
+    .dropbtn:hover, .dropbtn:focus {
+        background-color: #E0E1E2;
+    }
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #E0E1E2;
+    min-width: 160px;
+    overflow: auto;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    border-radius:8px;
+}
+
+    .dropdown-content a {
+        color: #898989;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+    }
+
+.dropdown a:hover {
+    background-color: #E0E1D0;
+}
+
+.show {
+    display: block;
+}

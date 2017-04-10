@@ -1,6 +1,16 @@
 ﻿
 var socketIo = require('socket.io');
 
+var mySocket;
+
+function myTimer() {
+    var d = new Date();
+    // document.getElementById("demo").innerHTML = d.toLocaleTimeString();
+    //console.log("time is " + d.toDateString());
+    var formatDateTime = d.toDateString() + " " + d.getHours().toString() + ":" + d.getMinutes().toString();
+    mySocket.emit('timesignal', { 'data': formatDateTime  });
+}
+
 module.exports = {
     startService: function (server) {
         var io = socketIo(server);
@@ -9,6 +19,11 @@ module.exports = {
 
             socket.emit('message', { 'message': 'This is Project X' });
             console.log("connection server function called from browser");
+
+            // send time to client
+            // timer used to send time to client via an emit
+            mySocket = socket;
+            var myVar = setInterval(myTimer, 1000);
 
             socket.on('speak', function (data) {
                 console.log(data);
@@ -71,9 +86,6 @@ module.exports = {
             });
 
         });
-
-
-       
         return io;
     }
 };
@@ -83,7 +95,7 @@ function validatelogin(data: string) {
     var loggedIn: boolean = false;
     var credentials = data.split(":");
 
-    if ((credentials[0] == "") && (credentials[1] == "secret")) {
+    if ((credentials[0] == "Païvi") && (credentials[1] == "secret")) {
         loggedIn = true;
     } 
     else if ((credentials[0] == "Tommi") && (credentials[1] == "password")) {

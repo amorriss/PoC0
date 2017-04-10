@@ -5,6 +5,8 @@
     <meta charset="utf-8" />
     <title>Project X</title>
     <link rel="stylesheet" href=".\stylesheets\main.css" />
+    <link rel="stylesheet" href=".\stylesheets\components\button.css" />
+    <link rel="stylesheet" href=".\stylesheets\components\table.min.css" />
     <script src="socket.io/socket.io.js"></script>
 
     <script>
@@ -26,15 +28,19 @@
             console.log(strData);
 
             if (selected[0]) selected[0].className = '';   // clear previous selection
+            e.target.parentNode.className = 'selectedrow';
 
             if (strData == "Tommi") {   // Create button
-              //  document.getElementById("createButton").innerText = "Create";
-                e.target.parentNode.className = 'selectedrow';
                 // enable Create button. It gets disabled only if top title row selected 
                 document.getElementById("createButton").removeAttribute("disabled");
             } else {  // title row so disable Create button
                 document.getElementById("createButton").setAttribute('disabled', 'disabled');
             }
+        };
+
+        /* When the user clicks on the button toggle between hiding and showing the dropdown content */
+        function ddShow() {
+            document.getElementById("myDropdown").classList.toggle("show");
         };
 
     </script>
@@ -49,7 +55,7 @@
             document.getElementById("hLoggedInAs").innerText = "Welcome " + sessionStorage.getItem("name"); // + " on " + ts;
 
             // get service created
-           // document.getElementById("servicetext").innerText = sessionStorage.getItem("servicename");
+            // document.getElementById("servicetext").innerText = sessionStorage.getItem("servicename");
 
             // set up table for selection
             var table = document.getElementById("userstable");
@@ -58,6 +64,11 @@
         };
 
         var socket = io.connect();
+
+        socket.on('timesignal', function (data) {
+            // console.log(data.data);
+            document.getElementById("servertime").innerHTML = data.data;
+        });
 
         socket.on('logoutRet', function (data) {
             console.log("logout in browser called ...");
@@ -80,84 +91,77 @@
             window.history.back();
         };
 
+        // Close the dropdown if the user clicks outside of it
+        window.onclick = function (e) {
+            console.log("window.onclick called " + e.target.className);
+            if (e.target.className != 'dropbtn') {
+
+                var dropdowns = document.getElementsByClassName("dropdown-content");
+                var i;
+                for (i = 0; i < dropdowns.length; i++) {
+                    var openDropdown = dropdowns[i];
+                    if (openDropdown.classList.contains('show')) {
+                        openDropdown.classList.remove('show');
+                    }
+                }
+            }
+        }
+
     </script>
 
     <div class="flex-title">
         <div>
-            <img alt="no logo" src="images/logo.png" width="200" height="200" />
+            <img id="logoImg" alt="no logo" src="images/logo.png" width="104" height="104" />
         </div>
-        <div>
-            <h1>Digital Notary</h1>
-            <h3>New Service</h3>
-        </div>
-        <div>
-            <h2 id="hLoggedInAs">Welcome </h2>
-        </div>
-    </div>
-    <div>
-        <hr />
-    </div>
-     <div>
-         <span style="padding-left:80px; "></span>
-        <img alt="no logo" src="images/back_arrow.png" width="30" height="30" style="background-color:rgb(181, 27, 69);" onclick="goBack()"/>
-    </div>
-    <div class="flex-containercentre">
-        <div class="flex-containerredtitle">
-            <div class="flex-container5">
-                <h3>Create Service</h3>
+        <div class="hpagefunction">Services : new service</div>
+        <div class="flex-menu">
+            <h2 id="hLoggedInAs">Welcome</h2>
+            <img id="userimage" src="images/avatars/debbie.jpg" width="50" height="50" style="border-radius: 100%" />
+            <div class="dropdown">
+                <button onclick="ddShow()" class="dropbtn" id="userbutton"></button>
+                <div id="myDropdown" class="dropdown-content">
+                    <a href="#">Account</a>
+                    <a href="#" onclick="logout()">Logout</a>
+                </div>
             </div>
-            <div class="flex-container3">
-                <div>
-                    <div>
-                        <div>
+        </div>
+    </div>
+    <div id="servertime" class="flex-date-header"></div>
+    <div class="flex-body" style="height: 60%">
+        <div class="flex-containercentre">
+            <div class="flex-container4">
+                <div class="flex-containerrightalign" style="width: inherit">
+                    <div class="flex-containerredtitle">
+                        <div class="flex-container5">
+                            <h3>Create Service</h3>
+                        </div>
+                        <div class="flex-container6">
                             <div>
-                                <p></p>
-                                <input id="servicetext" type="text" />
+                                <h4>Service Name</h4>
+                                <input class="input-field" id="servicetext" type="text" />
                             </div>
-                            <br />
+                            
                             <div>
-                                <table id="userstable" style="width: 600px; background-color: white;">
+                                <h4>Eligible Users</h4>
+                                <table class="ui table" id="userstable" style="width: 800px; background-color: white; overflow-y: scroll">
                                     <tr>
-                                        <td>Eligible Users</td>
+                                        <td>Hugues</td>
                                     </tr>
                                     <tr>
-                                        <td>&nbsp;</td>
+                                        <td>Neil</td>
                                     </tr>
                                     <tr>
                                         <td>Tommi</td>
                                     </tr>
                                 </table>
                             </div>
-                            <!-- <br />
-                        <div>
-                            <table id="rights" style="width: 600px; background-color:white;">
-                                <tr>
-                                    <td>Rights</td>
-                                </tr>
-                                <tr>
-                                    <td>&nbsp;</td>
-                                </tr>
-                                <tr>
-                                    <td>Right to something or other</td>
-                                </tr>
-                            </table>
-                        </div> -->
                         </div>
                     </div>
+                    <div>&nbsp;</div>
+                    <div>
+                        <button class="ui button" id="createButton" type="button" onclick="createNewService()" disabled="disabled">Create</button>
+                    </div>
                 </div>
-            </div>
-        </div>
-        <div class="flex-containerbuttons">
-            <div>
-                &nbsp;
-            <button id="createButton" type="button" onclick="createNewService()" disabled="disabled">Create</button>
-            </div>
-            <br />
-            <br />
-            <br />
-            <div>
-                &nbsp;
-            <button id="logoutButton" type="button" onclick="logout()">Logout</button>
             </div>
         </div>
     </div>

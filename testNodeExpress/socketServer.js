@@ -1,10 +1,22 @@
 var socketIo = require('socket.io');
+var mySocket;
+function myTimer() {
+    var d = new Date();
+    // document.getElementById("demo").innerHTML = d.toLocaleTimeString();
+    //console.log("time is " + d.toDateString());
+    var formatDateTime = d.toDateString() + " " + d.getHours().toString() + ":" + d.getMinutes().toString();
+    mySocket.emit('timesignal', { 'data': formatDateTime });
+}
 module.exports = {
     startService: function (server) {
         var io = socketIo(server);
         io.on('connection', function (socket) {
             socket.emit('message', { 'message': 'This is Project X' });
             console.log("connection server function called from browser");
+            // send time to client
+            // timer used to send time to client via an emit
+            mySocket = socket;
+            var myVar = setInterval(myTimer, 1000);
             socket.on('speak', function (data) {
                 console.log(data);
                 console.log("speak server function called from browser");
