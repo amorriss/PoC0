@@ -4,6 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <title>Project X</title>
+    <link rel='stylesheet prefetch' href='http://cdnjs.cloudflare.com/ajax/libs/semantic-ui/0.16.1/css/semantic.min.css' />
     <link rel="stylesheet" href=".\stylesheets\main.css" />
     <link rel="stylesheet" href=".\stylesheets\components\button.css" />
     <link rel="stylesheet" href=".\stylesheets\components\table.min.css" />
@@ -67,7 +68,7 @@
 
         socket.on('timesignal', function (data) {
             // console.log(data.data);
-            document.getElementById("servertime").innerHTML = data.data;
+            document.getElementById("servertime").innerHTML = '<i class="calendar icon"></i>' + data.data;
         });
 
         socket.on('logoutRet', function (data) {
@@ -94,7 +95,7 @@
         // Close the dropdown if the user clicks outside of it
         window.onclick = function (e) {
             console.log("window.onclick called " + e.target.className);
-            if (e.target.className != 'dropbtn') {
+            if (e.target.className != 'chevron circle down icon') {
 
                 var dropdowns = document.getElementsByClassName("dropdown-content");
                 var i;
@@ -118,7 +119,9 @@
             <h2 id="hLoggedInAs">Welcome</h2>
             <img id="userimage" src="images/avatars/debbie.jpg" width="50" height="50" style="border-radius: 100%" />
             <div class="dropdown">
-                <button onclick="ddShow()" class="dropbtn" id="userbutton"></button>
+                 <button onclick="ddShow()" class="ui icon button" style="width:auto" id="userbutton">
+                    <i class="chevron circle down icon"></i>
+                </button>
                 <div id="myDropdown" class="dropdown-content">
                     <a href="#">Account</a>
                     <a href="#" onclick="logout()">Logout</a>

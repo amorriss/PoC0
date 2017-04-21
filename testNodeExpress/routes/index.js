@@ -40,7 +40,7 @@ router.get('/createservice', function (req, res) {
 });
 router.get('/services', function (req, res) {
     //res.render('index', { title: 'Testing ....' });
-    res.sendfile("views/services.html");
+    res.sendfile("views/services_grid.html");
 });
 router.get('/loginfail', function (req, res) {
     //read form data

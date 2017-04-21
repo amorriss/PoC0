@@ -4,9 +4,14 @@
 <head>
     <meta charset="utf-8" />
     <title>Project X</title>
+    <link rel='stylesheet prefetch' href='http://cdnjs.cloudflare.com/ajax/libs/semantic-ui/0.16.1/css/semantic.min.css' />
+    <link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.8/components/transition.min.css' />
     <link rel="stylesheet" href=".\stylesheets\main.css" />
     <link rel="stylesheet" href=".\stylesheets\components\button.css" />
     <link rel="stylesheet" href=".\stylesheets\components\list.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-alpha1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.8/semantic.min.js"></script>
+
     <script src="socket.io/socket.io.js"></script>
 
 
@@ -33,24 +38,29 @@
         };
 
         function enableID(value) {
-            console.log(document.getElementById(value).getAttribute("disabled"));
-            if (document.getElementById(value).getAttribute("disabled") == null) {
-                document.getElementById(value).setAttribute('disabled', 'disabled');
+            console.log(value);
+            if (value == 'DDclass') {
+                var currentClass = document.getElementById("DDclass").getAttribute('class');
+                if (currentClass == "ui selection dropdown") {
+                    document.getElementById("DDclass").setAttribute('class', 'ui disabled selection dropdown');
+                } else if (currentClass == "ui disabled selection dropdown") {
+                    document.getElementById("DDclass").setAttribute('class', 'ui selection dropdown');
+                }
             } else {
-                document.getElementById(value).removeAttribute("disabled");
+                if (document.getElementById(value).getAttribute('disabled') == null) {
+                    document.getElementById(value).setAttribute('disabled', 'disabled');
+                    console.log(' --- 1');
+                } else if (document.getElementById(value).getAttribute('disabled').toString() == 'disabled') {
+                    document.getElementById(value).removeAttribute('disabled');
+                    console.log(' --- 2');
+                }
             }
         };
 
         /* When the user clicks on the button toggle between hiding and showing the dropdown content */
-        function ddShow(clickSource) {
-            //console.log(obj);
-            if (clickSource == "userbutton") {
-                document.getElementById("myDropdown").classList.toggle("show");
-            } else if (clickSource == "IDDDbutton") {
-                document.getElementById("IDDropdown").classList.toggle("show");
-            }
+        function ddShow() {
+            document.getElementById("myDropdown").classList.toggle("show");
         };
-
     </script>
 
 </head>
@@ -64,13 +74,17 @@
             var ts = new Date().toLocaleString();
             document.getElementById("hLoggedInAs").innerText = "Welcome " + sessionStorage.getItem("name"); // + " on " + ts;
             document.getElementById("pagetitle").innerText = "Services : " + sessionStorage.getItem("servicename");
+
+            $('.ui.dropdown')
+                .dropdown()
+                ;
         };
 
         var socket = io.connect();
 
         socket.on('timesignal', function (data) {
             // console.log(data.data);
-            document.getElementById("servertime").innerHTML = data.data;
+            document.getElementById("servertime").innerHTML = '<i class="calendar icon"></i>' + data.data;
         });
 
         socket.on('message', function (data) {
@@ -101,7 +115,7 @@
         // Close the dropdown if the user clicks outside of it
         window.onclick = function (e) {
             console.log("window.onclick called " + e.target.className);
-            if (e.target.className != 'dropbtn') {
+            if (e.target.className != 'chevron circle down icon') {
 
                 var dropdowns = document.getElementsByClassName("dropdown-content");
                 var i;
@@ -124,7 +138,9 @@
             <h2 id="hLoggedInAs">Welcome</h2>
             <img id="userimage" src="images/avatars/debbie.jpg" width="50" height="50" style="border-radius: 100%" />
             <div class="dropdown">
-                <button onclick="ddShow(this.id)" class="dropbtn" id="userbutton"></button>
+                <button onclick="ddShow()" class="ui icon button" style="width: auto" id="userbutton">
+                    <i class="chevron circle down icon"></i>
+                </button>
                 <div id="myDropdown" class="dropdown-content">
                     <a href="#">Account</a>
                     <a href="#" onclick="logout()">Logout</a>
@@ -133,7 +149,7 @@
         </div>
     </div>
     <div id="servertime" class="flex-date-header"></div>
-    <div class="flex-body" style="height:80%">
+    <div class="flex-body" style="height: 80%">
         <div class="flex-containercentre">
             <div class="flex-containerrightalign">
                 <div class="flex-containertitle">
@@ -148,23 +164,18 @@
                         <div>
                             <div class="flex-container1">
                                 <h4>Identity Verification</h4>
-                                <input class="checkbox" id="IDrequired" type="checkbox" onclick="enableID('selectID')" />
+                                <input class="checkbox" id="IDrequired" type="checkbox" onclick="enableID('DDclass')" />
                             </div>
-
-                            <!--<div class="dropdown">
-                                <button onclick="ddShow(this.id)" class="dropbtn" id="IDDDbutton"></button>
-                                <div id="IDDropdown" class="dropdown-content">
-                                    <a href="#">Belgian Identity Service</a>
-                                    <a href="#">Finnish Identity Service</a>
-                                    <a href="#">UK Identity Service</a>
+                            <div class="ui disabled selection dropdown" id="DDclass">
+                                <input name="D2" id="IDinput" type="hidden"/>
+                                <i class="dropdown icon"></i>
+                                <div class="default text">Identity Verification</div>
+                                <div class="menu">
+                                    <div class="item" data-value="0">Belgian Identity Service</div>
+                                    <div class="item" data-value="1">Finnish Identity Service</div>
+                                    <div class="item" data-value="2">UK Identity Service</div>
                                 </div>
-                            </div>-->
-
-                            <select id="selectID" name="D2" disabled="disabled">
-                                <option>Belgian Identity Service</option>
-                                <option>Finnish Identity Service</option>
-                                <option>UK Identity Service</option>
-                            </select>
+                            </div>
                         </div>
                         <div>
                             <div class="flex-container1">
@@ -182,11 +193,11 @@
                         </div>
                         <div class="flex-container1">
                             <h4>Divisibility</h4>
-                            <input class="checkbox" id="Divisibilityrequired" type="checkbox" onclick="enableID('Divisibilitytext')" />
+                            <input class="checkbox" id="Divisibilityrequired" type="checkbox" />
                         </div>
                         <div class="flex-container1">
                             <h4>Tax</h4>
-                            <input class="checkbox" id="Taxrequired" type="checkbox" onclick="enableID('Taxtext')" />
+                            <input class="checkbox" id="Taxrequired" type="checkbox" />
                         </div>
                     </div>
                 </div>

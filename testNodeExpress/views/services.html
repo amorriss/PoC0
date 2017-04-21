@@ -4,16 +4,25 @@
 <head>
     <meta charset="utf-8" />
     <title>Project X</title>
+    <link rel='stylesheet prefetch' href='http://cdnjs.cloudflare.com/ajax/libs/semantic-ui/0.16.1/css/semantic.min.css' />
+
+    <!--<link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.8/semantic.min.css" rel="stylesheet" />-->
+   <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.8/semantic.min.js"></script-->
+
     <link rel="stylesheet" href=".\stylesheets\main.css" />
-    <link rel="stylesheet" href=".\stylesheets\components\button.css" />
-    <link rel="stylesheet" href=".\stylesheets\components\table.css" />
+    <!--<link rel="stylesheet" href=".\stylesheets\components\button.css" />
+    <link rel="stylesheet" href=".\stylesheets\components\table.css" />-->
     <!-- <link rel="stylesheet" href=".\stylesheets\components\dropdown.css" />
-    <link rel="stylesheet" href=".\stylesheets\components\menu.css" />
+    <link rel="stylesheet" href=".\stylesheets\components\menu.css" /> 
     <link rel="stylesheet" href=".\stylesheets\components\item.css" />
     <link rel="stylesheet" href=".\stylesheets\components\icon.css" />-->
     <script src="socket.io/socket.io.js"></script>
 
     <script>
+
+        var selected;
+
         function logout() {
             var socket = io.connect();
             socket.emit('logout', { data: 'You clicked the logout button' });
@@ -36,12 +45,16 @@
             socket.emit('createService', { data: data[0].innerText });
         };
 
+        function selectRowFunc() {
+
+        };
+
         function highlight(e) {
 
             var strData = e.target.innerText;
-            console.log(strData);
+            console.log('highlight ' + strData);
 
-            if (selected[0]) selected[0].className = '';   // clear previous selection
+            //  if (selected[0]) selected[0].className = '';   // clear previous selection
 
             //if (strData == "<New Service>") {   // enable Create button and disable amend button
             //    document.getElementById("createButton").removeAttribute("disabled");
@@ -77,16 +90,16 @@
             //document.getElementById("userbutton").innerHTML = sessionStorage.getItem("name");
 
             // set up list for selection
-            var list = document.getElementById("servicetable");
-            selected = list.getElementsByClassName("selectedrow");
-            list.onclick = highlight;
+            //var list = document.getElementById("servicetable");
+            //selected = list.getElementsByClassName("selectedrow");
+            //list.onclick = highlight;
         };
 
         var socket = io.connect();
 
         socket.on('timesignal', function (data) {
             // console.log(data.data);
-            document.getElementById("servertime").innerHTML = data.data;
+            document.getElementById("servertime").innerHTML = '<i class="calendar icon"></i>' + data.data;
         });
 
         socket.on('logoutRet', function (data) {
@@ -107,7 +120,7 @@
         // Close the dropdown if the user clicks outside of it
         window.onclick = function (e) {
             console.log("window.onclick called " + e.target.className);
-            if (e.target.className != 'dropbtn') {
+            if (e.target.className != 'chevron circle down icon') {
 
                 var dropdowns = document.getElementsByClassName("dropdown-content");
                 var i;
@@ -131,7 +144,9 @@
             <h2 id="hLoggedInAs">Welcome</h2>
             <img id="userimage" src="images/avatars/debbie.jpg" width="50" height="50" style="border-radius: 100%" />
             <div class="dropdown">
-                <button onclick="ddShow()" class="dropbtn" id="userbutton"></button>
+                <button onclick="ddShow()" class="ui icon button" style="width: auto" id="userbutton">
+                    <i class="chevron circle down icon"></i>
+                </button>
                 <div id="myDropdown" class="dropdown-content">
                     <a href="#">Account</a>
                     <a href="#" onclick="logout()">Logout</a>
@@ -139,16 +154,16 @@
             </div>
         </div>
     </div>
-    <div id="servertime" class="flex-date-header">April 5, 2017</div>
+    <div id="servertime" class="flex-date-header"><i class="calendar icon"></i>April 5, 2017</div>
     <div>
         <!-- moves screen down same amount as back arrow on other screens. Invisible cos we don't want to use it to logout -->
         <img alt="no logo" src="images/back_arrow.png" width="30" height="30" style="background-color: rgb(181, 27, 69); visibility: hidden" />
     </div>
-    <div class="flex-body" style="height:60%">
+    <div class="flex-body" style="height: 60%">
         <div class="flex-containercentre">
             <!-- <img alt="no back arrow" src="images/back_arrow.png" width="25" height="25" /> -->
             <div class="flex-container4">
-                <div class="flex-containerrightalign" style="width:inherit">
+                <div class="flex-containerrightalign" style="width: inherit">
                     <div class="flex-containerredtitle">
                         <div class="flex-container5">
                             <h3>Services</h3>
@@ -165,19 +180,27 @@
                                   <option>&lt;New Service&gt;</option>
                             </select>-->
 
-                            <table class="ui table" id="servicetable">
-                                <tr>
-                                    <td id="tabletitle">Passport Application</td>
-                                </tr>
-                                <tr>
-                                    <td>Land Registry</td>
-                                </tr>
-                                <tr>
-                                    <td>Car Registry</td>
-                                </tr>
-                                <tr>
-                                    <td>Ship Registry</td>
-                                </tr>
+                            <table class="ui selectable celled table" style="background-color:white" >
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Passport Application</td>
+                                        <td>Approved</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Land Registry</td>
+                                        <td>Selected</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Something else</td>
+                                        <td>Approved</td>
+                                    </tr>
+                                </tbody>
                             </table>
                             <!-- </div>-->
                             <!--<br />-->

@@ -1,0 +1,202 @@
+﻿<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Project X</title>
+    <!--<link rel='stylesheet prefetch' href='http://cdnjs.cloudflare.com/ajax/libs/semantic-ui/0.16.1/css/semantic.min.css' />-->
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.8/semantic.min.css" rel="stylesheet" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.8/semantic.min.js"></script>
+
+    <link rel="stylesheet" href=".\stylesheets\main.css" />
+    <!--<link rel="stylesheet" href=".\stylesheets\components\button.css" />
+    <link rel="stylesheet" href=".\stylesheets\components\table.css" />-->
+    <!-- <link rel="stylesheet" href=".\stylesheets\components\dropdown.css" />
+    <link rel="stylesheet" href=".\stylesheets\components\menu.css" /> 
+    <link rel="stylesheet" href=".\stylesheets\components\item.css" />
+    <link rel="stylesheet" href=".\stylesheets\components\icon.css" />-->
+    <script src="socket.io/socket.io.js"></script>
+
+    <script>
+
+        var currentTableRow;
+
+        function logout() {
+            var socket = io.connect();
+            socket.emit('logout', { data: 'You clicked the logout button' });
+            console.log("logout button clicked");
+        };
+
+        function createService() {
+            createNew = true;
+            console.log("create button clicked");
+            //var data = document.getElementsByClassName("selectedrow");
+            var socket = io.connect();
+            socket.emit('createService', { data: "" });
+        };
+
+        function amendService() {
+            createNew = false;
+            console.log("amend button clicked");
+            var data = document.getElementsByClassName("selectedrow");
+            var socket = io.connect();
+            socket.emit('createService', { data: data[0].innerText });
+        };
+
+        function highlight(e) {
+
+            var strData = e.target.innerText;
+            console.log('highlight ' + strData);
+
+            //  if (selected[0]) selected[0].className = '';   // clear previous selection
+
+            //if (strData == "<New Service>") {   // enable Create button and disable amend button
+            //    document.getElementById("createButton").removeAttribute("disabled");
+            //    document.getElementById("amendButton").setAttribute('disabled', 'disabled');
+            //} else {  // and vice versa
+            if (strData.length > 0) {
+                e.target.parentNode.className = 'selectedrow';
+                // document.getElementById("createButton").setAttribute('disabled', 'disabled');
+                document.getElementById("amendButton").removeAttribute("disabled");
+            }
+        };
+
+        function rowClick(value) {
+            // deselect all rows
+            for (i = 1; i < 4; i++) {
+                var IDstr = "srvTableRow" + i;
+                document.getElementById(IDstr).removeAttribute("class");
+            }
+            var IDstr = "srvTableRow" + value;
+            if (currentTableRow == value) {  // deselect row as previously selected
+                document.getElementById(IDstr).removeAttribute("class");
+                document.getElementById("amendButton").removeAttribute("disabled");
+            } else { // select row
+                document.getElementById(IDstr).setAttribute("class", "positive");
+                document.getElementById("amendButton").removeAttribute("disabled");
+            }
+            currentTableRow = value;
+        };
+
+        /* When the user clicks on the button toggle between hiding and showing the dropdown content */
+        function ddShow() {
+            document.getElementById("myDropdown").classList.toggle("show");
+        };
+
+
+    </script>
+
+</head>
+<body>
+
+    <script>
+
+        var createNew = false;
+
+        window.onload = function () {
+            console.log("onload called : " + sessionStorage.getItem("name"));
+            var ts = new Date();
+            document.getElementById("hLoggedInAs").innerHTML = "<h1 class=\"ui right aligned header\">Welcome " + sessionStorage.getItem("name") + "</h1>"; // + "<br/>" + ts.toString('dddd, MMMM') ;
+        };
+
+        var socket = io.connect();
+
+        socket.on('timesignal', function (data) {
+            document.getElementById("servertime").innerHTML = '<i class="calendar icon"></i>' + data.data;
+        });
+
+        socket.on('logoutRet', function (data) {
+            console.log("logout in browser called ...");
+            window.location("/");
+        });
+
+        socket.on('createServiceRet', function (data) {
+            console.log("Create service in browser called ...");
+            sessionStorage.setItem("servicename", data.data);
+            if (createNew) {
+                window.location("createservice");
+            } else {
+                window.location("createright");
+            }
+        });
+
+        $(function () {
+            $('.ui.dropdown').dropdown();
+        });
+
+    </script>
+
+    <div class="ui equal width middle aligned padded grid">
+
+        <div class="grey row">
+            <div class="column">
+                <img class="ui small image" style="border-radius: 5%" src="images/logo.png" />
+            </div>
+            <div class="column">
+                <h1 class="ui left aligned header">Services</h1>
+            </div>
+            <div class="column"></div>
+            <div class="column"></div>
+            <div class="column" id="hLoggedInAs">
+                <h1 class="ui right aligned header">Welcome</h1>
+            </div>
+
+            <div class="column">
+                <div class="ui right aligned dropdown">
+                    <img class="ui avatar image" src="images/avatars/debbie.jpg" />
+                    <i class="dropdown icon"></i>
+                    <div class="menu">
+                        <div class="item" onclick="logout()">
+                            <i class="sign out icon"></i>
+                            Logout
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="servertime" class="flex-date-header"><i class="calendar icon"></i>April 5, 2017</div>
+
+    <div class="ui hidden divider"></div>
+
+    <div class="ui padded grid" style="padding-top:7%; padding-left:20%; padding-right:20%">
+        <div class="ui right aligned column">
+            <div class="flex-containerredtitle">
+                <div class="flex-container5">
+                    <h3>Services</h3>
+                </div>
+                <div class="flex-container3">
+                    <!--<h4>Available Services</h4>-->
+                    <table class="ui selectable celled table" style="background-color: white">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr id="srvTableRow1" onclick="rowClick(this.rowIndex)">
+                                <td>Passport Application</td>
+                                <td>Approved</td>
+                            </tr>
+                            <tr id="srvTableRow2" onclick="rowClick(this.rowIndex)">
+                                <td>Land Registry</td>
+                                <td>Selected</td>
+                            </tr>
+                            <tr id="srvTableRow3" onclick="rowClick(this.rowIndex)">
+                                <td>Something else</td>
+                                <td>Approved</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="ui hidden divider"></div>
+             <button class="ui button" id="amendButton" type="button" onclick="amendService()" disabled="disabled">Amend</button>
+            <button class="ui button" id="createButton" type="button" onclick="createService()">Create</button>
+        </div>
+    </div>
+</body>
+</html>

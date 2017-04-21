@@ -4,7 +4,7 @@ function myTimer() {
     var d = new Date();
     // document.getElementById("demo").innerHTML = d.toLocaleTimeString();
     //console.log("time is " + d.toDateString());
-    var formatDateTime = d.toDateString() + " " + d.getHours().toString() + ":" + d.getMinutes().toString();
+    var formatDateTime = d.toDateString() + " " + d.getHours().toPrecision(2).toString() + ":" + d.getMinutes().toPrecision(2).toString();
     mySocket.emit('timesignal', { 'data': formatDateTime });
 }
 module.exports = {

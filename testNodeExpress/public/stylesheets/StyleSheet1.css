@@ -33,14 +33,14 @@ img {
     border:1px solid white;
 }
 
-table {
+/*table {
     width:800px;
     border:1px solid white;
     background-color:rgb(66,66,66);
     color:white;
     display:flex;
     justify-content:center;
-}
+}*/
 
 .flex-containercentre {
     /* Specifies that the contents will be laid out according to Flexbox rules. */
