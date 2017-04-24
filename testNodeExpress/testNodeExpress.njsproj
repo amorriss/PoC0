@@ -75,6 +75,12 @@
     <Compile Include="public\stylesheets\components\transition.min.js" />
     <Compile Include="public\stylesheets\components\visibility.js" />
     <Compile Include="public\stylesheets\components\visibility.min.js" />
+    <Content Include="views\createright_grid.html">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="views\createservice_grid.html">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="views\services_grid.html">
       <SubType>Code</SubType>
     </Content>

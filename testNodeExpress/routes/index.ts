@@ -41,12 +41,12 @@ router.get('/', (req: express.Request, res: express.Response) => {
 
 router.get('/createright', (req: express.Request, res: express.Response) => {
     //res.render('index', { title: 'Testing ....' });
-    res.sendfile("views/createright.html");
+    res.sendfile("views/createright_grid.html");
 });
 
 router.get('/createservice', (req: express.Request, res: express.Response) => {
     //res.render('index', { title: 'Testing ....' });
-    res.sendfile("views/createservice.html");
+    res.sendfile("views/createservice_grid.html");
 });
   router.get('/services', (req: express.Request, res: express.Response) => {
     //res.render('index', { title: 'Testing ....' });

@@ -39,10 +39,12 @@
 
         function amendService() {
             createNew = false;
-            console.log("amend button clicked");
-            var data = document.getElementsByClassName("selectedrow");
+            var IDstr = "srvTableRow" + currentTableRow;
+            var row = document.getElementById(IDstr);
+            var cells = row.getElementsByTagName('td');
+            var data = cells[0].innerText;
             var socket = io.connect();
-            socket.emit('createService', { data: data[0].innerText });
+            socket.emit('createService', { data: data });
         };
 
         function highlight(e) {

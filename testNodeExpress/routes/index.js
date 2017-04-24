@@ -32,11 +32,11 @@ router.get('/', function (req, res) {
 });
 router.get('/createright', function (req, res) {
     //res.render('index', { title: 'Testing ....' });
-    res.sendfile("views/createright.html");
+    res.sendfile("views/createright_grid.html");
 });
 router.get('/createservice', function (req, res) {
     //res.render('index', { title: 'Testing ....' });
-    res.sendfile("views/createservice.html");
+    res.sendfile("views/createservice_grid.html");
 });
 router.get('/services', function (req, res) {
     //res.render('index', { title: 'Testing ....' });
