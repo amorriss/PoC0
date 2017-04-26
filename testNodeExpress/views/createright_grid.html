@@ -73,6 +73,7 @@
         window.onload = function () {
             console.log("onload called : " + sessionStorage.getItem("name"));
             document.getElementById("hLoggedInAs").innerHTML = "<h1 class=\"ui right aligned header\">Welcome " + sessionStorage.getItem("name") + "</h1>";
+            document.getElementById("pagetitle").innerText = "Rights : " + sessionStorage.getItem("servicename");
         };
 
         var socket = io.connect();
@@ -119,7 +120,7 @@
                 <img class="ui small image" style="border-radius: 5%" src="images/logo.png" />
             </div>
             <div class="column">
-                <h1 class="ui left aligned header" style="color: white">New Right</h1>
+                <h1 class="ui left aligned header" id="pagetitle" style="color: white">Rights</h1>
             </div>
             <div class="column"></div>
             <div class="column"></div>
@@ -151,55 +152,79 @@
                 <div class="flex-container5">
                     <h3>Create Service</h3>
                 </div>-->
-    <div class="ui equal width middle aligned padded grid">
+    <div class="ui four column padded grid" style="padding-top: 7%; padding-left: 10%; padding-right: 10%">
 
-        <div class="two column row">
-            <div class="ui labeled input">
-                <div class="ui label">
-                    Service Name
+        <div class="four column centered row">
+
+            <div class="column">
+                <div class="ui labeled input">
+                    <div class="ui label">
+                        Right Name
+                    </div>
+                    <input type="text" id="righttext" placeholder="" />
                 </div>
-                <input type="text" id="servicetext" placeholder="" />
             </div>
-
-            <div class="ui compact menu">
-                <div class="ui simple dropdown item">
-                    Dropdown
-                                      <i class="dropdown icon"></i>
-                    <div class="menu">
-                        <div class="item">Choice 1</div>
-                        <div class="item">Choice 2</div>
-                        <div class="item">Choice 3</div>
+            <div class="column">  <!--ui left floated compact segment-->
+                <div class="ui fitted toggle checkbox">
+                    <input type="checkbox" />
+                    <label></label>
+                </div>
+            </div>
+            <div class="left floated column">
+                <div class="ui compact menu">
+                    <div class="ui simple dropdown item">
+                        Identity Verification
+                        <i class="dropdown icon"></i>
+                        <div class="menu">
+                            <div class="item">Belgian Identity Service</div>
+                            <div class="item">Finnish Identity Service</div>
+                            <div class="item">UK Identity Service</div>
+                        </div>
                     </div>
                 </div>
             </div>
+
         </div>
-        <div class="two column row">
-            <div class="ui checkbox">
-                <input name="example" type="checkbox" />
-                <label>Make my profile visible</label>
+        <div class="four column centered row">
+            <div class="column">
+                <div class="ui toggle checkbox">
+                    <input name="example" type="checkbox" />
+                    <!--<label></label>-->
+                </div>
             </div>
-            <div class="ui checkbox">
-                <input name="example" type="checkbox" />
-                <label>Make my profile visible</label>
+            <div class="column">
+                <div class="ui labeled input" style="float: left">
+                    <div class="ui label">
+                        Value Limit
+                    </div>
+                    <input type="text" id="limittext" placeholder="" />
+                </div>
+            </div>
+            <div class="column">
+                <div class="ui checkbox">
+                    <input name="example" type="checkbox" />
+                    <label>Make my profile visible</label>
+                </div>
             </div>
         </div>
-        <div class="two column row">
-            <div class="ui checkbox">
-                <input name="example" type="checkbox" />
-                <label>Make my profile visible</label>
+        <div class="four column centered row">
+            <div class="column">
+                <div class="ui checkbox">
+                    <input name="example" type="checkbox" />
+                    <label>Make my profile visible</label>
+                </div>
             </div>
-            <div class="ui checkbox">
-                <input name="example" type="checkbox" />
-                <label>Make my profile visible</label>
+            <div class="column">
+                <div class="ui checkbox">
+                    <input name="example" type="checkbox" />
+                    <label>Make my profile visible</label>
+                </div>
             </div>
         </div>
     </div>
 
-    <!--</div>-->
     <div class="ui hidden divider"></div>
     <button class="ui button" id="createNewButton" type="button" onclick="createNewService()" disabled="disabled">Create</button>
-    <!--</div>
 
-    </div>-->
 </body>
 </html>
