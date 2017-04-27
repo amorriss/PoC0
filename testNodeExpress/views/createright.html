@@ -157,9 +157,11 @@
                         <h3>Create Right</h3>
                     </div>
                     <div class="flex-containerrights">
-                        <div>
-                            <h4>Name of Right</h4>
-                            <input class="input-field" id="RightText" type="text" />
+                        <div class="ui labeled input">
+                            <div class="ui label">
+                                Right Name
+                            </div>
+                            <input type="text" id="righttext" placeholder="" />
                         </div>
                         <div>
                             <div class="flex-container1">
@@ -182,7 +184,12 @@
                                 <h4>Value Limit</h4>
                                 <input class="checkbox" id="Limitrequired" type="checkbox" onclick="enableID('Limittext')" />
                             </div>
-                            <input class="input-field" id="Limittext" type="number" value="0" disabled="disabled" />
+                            <div class="ui labeled input">
+                            <div class="ui label">
+                                Value Limit
+                            </div>
+                            <input type="text" id="limittext" placeholder="" />
+                        </div>
                         </div>
                         <div>
                             <div class="flex-container1">

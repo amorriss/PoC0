@@ -59,16 +59,16 @@ module.exports = {
                 socket.broadcast.emit('createRightRet', { 'message': 'Created Right' });
             });
 
-            socket.on('createService', function (data) {
+            socket.on('amendService', function (data) {
                 console.log(data);
-                console.log("Create service server function called from browser");
-                socket.broadcast.emit('createServiceRet', { data: data.data });
+                console.log("Amend service server function called from browser");
+                socket.broadcast.emit('amendServiceRet', { data: data.data });
             });
 
-            socket.on('createNewService', function (data) {
+            socket.on('createService', function (data) {
                 console.log(data);
                 console.log("Create new service server function called from browser");
-                socket.broadcast.emit('createNewServiceRet', { 'message': 'Created New Service' });
+                socket.broadcast.emit('createServiceRet', { data: data.data });
             });
 
             socket.on('logout', function (data) {

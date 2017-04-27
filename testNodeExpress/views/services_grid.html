@@ -34,7 +34,7 @@
             console.log("create button clicked");
             //var data = document.getElementsByClassName("selectedrow");
             var socket = io.connect();
-            socket.emit('createService', { data: "" });
+            socket.emit('createService', { data: "new" });
         };
 
         function amendService() {
@@ -44,7 +44,7 @@
             var cells = row.getElementsByTagName('td');
             var data = cells[0].innerText;
             var socket = io.connect();
-            socket.emit('createService', { data: data });
+            socket.emit('amendService', { data: data });
         };
 
         function highlight(e) {
@@ -100,7 +100,7 @@
         window.onload = function () {
             console.log("onload called : " + sessionStorage.getItem("name"));
             var ts = new Date();
-            document.getElementById("hLoggedInAs").innerHTML = "<h1 class=\"ui right aligned header\">Welcome " + sessionStorage.getItem("name") + "</h1>"; // + "<br/>" + ts.toString('dddd, MMMM') ;
+            document.getElementById("hLoggedInAs").innerHTML = "<h1 class=\"ui right aligned header\" style=\"color: white\">Welcome " + sessionStorage.getItem("name") + "</h1>"; // + "<br/>" + ts.toString('dddd, MMMM') ;
         };
 
         var socket = io.connect();
@@ -114,15 +114,31 @@
             window.location("/");
         });
 
+        socket.on('amendServiceRet', function (data) {
+            console.log("Amend service in browser called ...");
+            sessionStorage.setItem("servicename", data.data);
+            window.location("createservice");
+            //if (createNew) {
+            //    window.location("createservice");
+            //} else {
+            //    window.location("createright");
+            //}
+        });
+
         socket.on('createServiceRet', function (data) {
             console.log("Create service in browser called ...");
             sessionStorage.setItem("servicename", data.data);
-            if (createNew) {
-                window.location("createservice");
-            } else {
-                window.location("createright");
-            }
+            window.location("createservice");
+            //if (createNew) {
+            //    window.location("createservice");
+            //} else {
+            //    window.location("createright");
+            //}
         });
+
+        function goBack() {
+            window.history.back();
+        };
 
         $(function () {
             $('.ui.dropdown').dropdown();
@@ -137,12 +153,12 @@
                 <img class="ui small image" style="border-radius: 5%" src="images/logo.png" />
             </div>
             <div class="column">
-                <h1 class="ui left aligned header">Services</h1>
+                <h1 class="ui left aligned header" style="color: white">Services</h1>
             </div>
             <div class="column"></div>
             <div class="column"></div>
             <div class="column" id="hLoggedInAs">
-                <h1 class="ui right aligned header">Welcome</h1>
+                <h1 class="ui right aligned header" style="color: white">Welcome</h1>
             </div>
 
             <div class="column">
@@ -157,13 +173,16 @@
                     </div>
                 </div>
             </div>
+            <div class="right aligned column">
+                <i class="arrow circle left huge icon" title="Back" style="cursor: pointer" onclick="goBack()"></i>
+            </div>
         </div>
     </div>
     <div id="servertime" class="flex-date-header"><i class="calendar icon"></i>April 5, 2017</div>
 
     <div class="ui hidden divider"></div>
 
-    <div class="ui padded grid" style="padding-top:7%; padding-left:20%; padding-right:20%">
+    <div class="ui padded grid" style="padding-top: 7%; padding-left: 20%; padding-right: 20%">
         <div class="ui right aligned column">
             <div class="flex-containerredtitle">
                 <div class="flex-container5">
@@ -196,7 +215,7 @@
                 </div>
             </div>
             <div class="ui hidden divider"></div>
-             <button class="ui button" id="amendButton" type="button" onclick="amendService()" disabled="disabled">Amend</button>
+            <button class="ui button" id="amendButton" type="button" onclick="amendService()" disabled="disabled">Amend</button>
             <button class="ui button" id="createButton" type="button" onclick="createService()">Create</button>
         </div>
     </div>

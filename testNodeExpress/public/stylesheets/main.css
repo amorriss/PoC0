@@ -99,7 +99,7 @@ body {
     flex:none;
     flex-wrap:wrap;
     align-items:center;
-    justify-content:space-between;  
+    justify-content:space-around;  
 }
 
 .flex-container2 {
@@ -138,12 +138,29 @@ body {
 
 .flex-container4 {
     display: flex;
+    width: inherit;
+    background-color: #E0E1E2;
+    overflow: auto;
+    justify-content: space-around;
+    flex-direction: row;
+    flex-wrap: wrap;
+    flex: none;
+    align-items:;
+    padding: 50px;
+    border-bottom-left-radius: 0.28571429rem;
+    border-bottom-right-radius: 0.28571429rem;
+    border-top-right-radius: 0.28571429rem;
+    /*border: 1px solid;*/
+}
+
+/*.flex-container4 {
+    display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
     width: inherit;
-    /*border:1px solid;*/
-}
+    
+}*/
 
 .flex-container5 {
     display: flex;
@@ -314,6 +331,7 @@ h2 {
     align-items: center;
     /*flex-wrap: wrap;*/
     justify-content: center;
+    color: white;
 }
 
 h3 {
@@ -327,14 +345,16 @@ h3 {
 h4 {
     font-family: 'Helvetica Neue', Arial, Helvetica, sans-serif;
     font-weight: normal;
-    font-size:20px;
+    font-size: 15px;
     color: #898989;
+    color: white;
 }
 
 h5 {
     font-family: 'Helvetica Neue', Arial, Helvetica, sans-serif;
     font-weight: lighter;
     color: #898989;
+    color: white;
 }
 
 button {

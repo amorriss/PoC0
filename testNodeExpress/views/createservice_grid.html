@@ -17,6 +17,7 @@
     <script>
 
         var currentTableRow;
+        var amendData;
 
         function logout() {
             var socket = io.connect();
@@ -25,24 +26,38 @@
         };
 
         function createNewService() {
-            var socket = io.connect();
-            socket.emit('createNewService', { data: 'You clicked the create button' });
+            //var socket = io.connect();
+            //socket.emit('createNewService', { data: 'You clicked the create button' });
+            var svrName = document.getElementById("servicetext").value;
+            if (amendData) {
+                alert("Service " + svrName + " amended");
+            } else {
+                alert("New Service " + svrName + " created");
+            };
+
             console.log("create button clicked");
         };
 
+        function createNewRight() {
+
+            // sessionStorage.setItem("servicename", data.data);
+            window.location("createright");
+            console.log("New Right button clicked");
+        };
+
         function rowClick(value) {
+            console.log("rowClick value is " + value.id.substring(0, value.id.length - 1));
             // deselect all rows
             for (i = 1; i < 3; i++) {
-                var IDstr = "userTableRow" + i;
+                var IDstr = value.id.substring(0, value.id.length - 1) + i;
                 document.getElementById(IDstr).removeAttribute("class");
             }
-            var IDstr = "userTableRow" + value;
-            if (currentTableRow == value) {  // deselect row as previously selected
-                document.getElementById(IDstr).removeAttribute("class");
-                document.getElementById("createNewButton").removeAttribute("disabled");
+            if (currentTableRow == value.rowIndex) {  // deselect row as previously selected
+                document.getElementById(value.id).removeAttribute("class");
+                document.getElementById("createButton").removeAttribute("disabled");
             } else { // select row
-                document.getElementById(IDstr).setAttribute("class", "positive");
-                document.getElementById("createNewButton").removeAttribute("disabled");
+                document.getElementById(value.id).setAttribute("class", "positive");
+                document.getElementById("createButton").removeAttribute("disabled");
             }
             currentTableRow = value;
         };
@@ -54,9 +69,20 @@
     <script>
 
         window.onload = function () {
-            console.log("onload called : " + sessionStorage.getItem("name"));
-            document.getElementById("hLoggedInAs").innerHTML = "<h1 class=\"ui right aligned header\">Welcome " + sessionStorage.getItem("name") + "</h1>";
+            document.getElementById("hLoggedInAs").innerHTML = "<h1 class=\"ui right aligned header\" style=\"color: white\">Welcome " + sessionStorage.getItem("name") + "</h1>";
 
+            console.log(sessionStorage.getItem("servicename"));
+
+            // check if new or amend
+            if (sessionStorage.getItem("servicename") == "new") {
+                document.getElementById("mainTitle").innerText = "Service - new";
+                amendData = false;
+            } else {
+                document.getElementById("mainTitle").innerText = "Service - amend";
+                document.getElementById("servicetext").innerText = sessionStorage.getItem("servicename");
+                document.getElementById("createButton").innerText = "Amend";
+                amendData = true;
+            };
         };
 
         var socket = io.connect();
@@ -71,12 +97,12 @@
             window.location("/");
         });
 
-        socket.on('createNewServiceRet', function (data) {
-            console.log("Create new service in browser called ...");
-            var sname = document.getElementById("servicetext").value;
-            sessionStorage.setItem("servicename", sname);
-            window.location("createright");
-        });
+        //socket.on('createNewServiceRet', function (data) {
+        //    console.log("Create new service in browser called ...");
+        //    var sname = document.getElementById("servicetext").value;
+        //    sessionStorage.setItem("servicename", sname);
+        //    window.location("createright");
+        //});
 
         function enableButton() {
             console.log("enableButton called");
@@ -99,12 +125,12 @@
                 <img class="ui small image" style="border-radius: 5%" src="images/logo.png" />
             </div>
             <div class="column">
-                <h1 class="ui left aligned header" style="color:white">New Service</h1>
+                <h1 class="ui left aligned header" id="mainTitle" style="color: white">Service</h1>
             </div>
             <div class="column"></div>
             <div class="column"></div>
             <div class="column" id="hLoggedInAs">
-                <h1 class="ui right aligned header">Welcome</h1>
+                <h1 class="ui right aligned header" style="color: white">Welcome</h1>
             </div>
 
             <div class="column">
@@ -119,9 +145,16 @@
                     </div>
                 </div>
             </div>
+            <div class="right aligned column">
+                <i class="arrow circle left huge icon" title="Back" style="cursor: pointer" onclick="goBack()"></i>
+            </div>
         </div>
     </div>
-    <div id="servertime" class="flex-date-header"><i class="calendar icon"></i>April 5, 2017</div>
+    <div id="servertime" class="flex-date-header">
+        <i class="calendar icon"></i>
+        April 5, 2017
+    </div>
+
 
     <div class="ui hidden divider"></div>
 
@@ -129,34 +162,88 @@
         <div class="ui right aligned column">
             <div class="flex-containerredtitle">
                 <div class="flex-container5">
-                    <h3>Create Service</h3>
+                    <h3>Service</h3>
                 </div>
                 <div class="flex-container3">
-                    <div class="ui labeled input">
-                        <div class="ui label">
-                            Service Name
+
+                    <div class="ui form">
+                        <div class="fields">
+                            <div class="field">
+                                <div class="ui labeled input">
+                                    <div class="ui label">
+                                        Service Name
+                                    </div>
+                                    <input type="text" id="servicetext" placeholder="" />
+                                </div>
+                            </div>
+
+                            <div class="field"></div>
+                            <div class="field"></div>
+
+                            <div class="field">
+                                <table class="ui selectable celled table" style="background-color: white; width: 220px">
+                                    <thead>
+                                        <tr>
+                                            <th>Available Rights</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr id="rightTableRow1" onclick="rowClick(this)">
+                                            <td>Right of Ownership</td>
+                                        </tr>
+                                        <tr id="rightTableRow2" onclick="rowClick(this)">
+                                            <td>Mining Rights</td>
+                                        </tr>
+                                    </tbody>
+
+                                    <tfoot class="full-width">
+                                        <tr>
+                                            <th colspan="1">
+                                                <div class="ui right floated small primary labeled icon button" onclick="createNewRight()">
+                                                    <i class="file text outline icon"></i>Add Right
+                                                </div>
+                                            </th>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+
+                            <div class="field"></div>
+                            <div class="field"></div>
+
+                            <div class="field">
+                                <table class="ui selectable celled table" style="background-color: white; width: 220px">
+                                    <thead>
+                                        <tr>
+                                            <th>Eligible Users</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr id="userTableRow1" onclick="rowClick(this)">
+                                            <td>Hugue</td>
+                                        </tr>
+                                        <tr id="userTableRow2" onclick="rowClick(this)">
+                                            <td>Tommi</td>
+                                        </tr>
+                                    </tbody>
+                                    <tfoot class="full-width">
+                                        <tr>
+                                            <th colspan="1">
+                                                <div class="ui right floated small secondary labeled icon button">
+                                                    <i class="user icon"></i>Add User
+                                                </div>
+
+                                            </th>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
                         </div>
-                        <input type="text" id="servicetext" placeholder="" />
                     </div>
-                    <table class="ui selectable celled table" style="background-color: white">
-                        <thead>
-                            <tr>
-                                <th>Eligible Users</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr id="userTableRow1" onclick="rowClick(this.rowIndex)">
-                                <td>Hugue</td>
-                            </tr>
-                            <tr id="userTableRow2" onclick="rowClick(this.rowIndex)">
-                                <td>Tommi</td>
-                            </tr>
-                        </tbody>
-                    </table>
                 </div>
             </div>
             <div class="ui hidden divider"></div>
-            <button class="ui button" id="createNewButton" type="button" onclick="createNewService()" disabled="disabled">Create</button>
+            <button class="ui button" id="createButton" type="button" onclick="createNewService()" disabled="disabled">Create</button>
         </div>
     </div>
 
