@@ -15,12 +15,12 @@ router.get('/HC', (req: express.Request, res: express.Response) => {
 
 router.get('/createhouse', (req: express.Request, res: express.Response) => {
     //res.render('index', { title: 'Testing ....' });
-    res.sendfile("views/createhouse.html");
+    res.sendfile("views/HCcreatehouse.html");
 });
 
 router.get('/houses', (req: express.Request, res: express.Response) => {
     //res.render('index', { title: 'Testing ....' });
-    res.sendfile("views/houses.html");
+    res.sendfile("views/HChouses.html");
 });
 
 router.get('/HCloginfail', (req: express.Request, res: express.Response) => {

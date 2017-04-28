@@ -33,6 +33,7 @@
             var options = { weekday: "long", year: "numeric", month: "short", day: "numeric" };
 
             document.getElementById("hLoggedInAs").innerHTML = ts.toLocaleDateString("en-uk", options);   //toLocaleTimeString("en-uk", options);
+            sessionStorage.clear();
         };
 
         var socket = io.connect();

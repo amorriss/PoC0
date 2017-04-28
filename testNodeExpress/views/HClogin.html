@@ -5,14 +5,18 @@
 <head>
     <meta charset="utf-8" />
     <title>Login</title>
+    <link rel='stylesheet prefetch' href='http://cdnjs.cloudflare.com/ajax/libs/semantic-ui/0.16.1/css/semantic.min.css' />
+     <link rel="stylesheet" href=".\stylesheets\components\button.css" />
+    <link rel="stylesheet" href=".\stylesheets\components\input.css" />
     <link rel="stylesheet" href=".\stylesheets\HC.css" />
     <script src="socket.io/socket.io.js"></script>
 
 
-    <script>
+    <script>        
+
         function login() {
             var socket = io.connect();
-            var data = document.getElementById("SelectName").value;
+            var data = document.getElementById("username").value;
             data += ":" + document.getElementById("passwordtext").value;
             socket.emit('login', { data: data });
             console.log(data + " tried to login");
@@ -23,10 +27,10 @@
 <body>
     <script>
         var socket = io.connect();
-
+        
         socket.on('loginRet', function (data) {
-            console.log("login in browser called with ...");
-            var name = document.getElementById("SelectName").value;
+            console.log("HC login in browser called with ...");
+            var name = document.getElementById("username").value;
             console.log(name);
             var str = data.data;
             if (str.substring(0, 7) == "success") {
@@ -34,9 +38,11 @@
                 window.location("houses");
             } else {
                 window.alert("Login Failed for " + name);
-                window.location("HCloginfail?name=" + name);
+                //window.location("HCloginfail?name=" + name);
             }
         });
+
+
     </script>
     <div class="flex-title">
         <div>
@@ -51,7 +57,7 @@
     <div>
         <hr />
     </div>
-    <div class="flex-containercentre">
+    <!--<div class="flex-containercentre">
         <div class="flex-containerlogin">
             <div>
                 <div>Name</div>
@@ -67,6 +73,35 @@
             <div>
                 &nbsp;
             <button id="Button1" type="button" onclick="login()">Login</button>
+            </div>
+        </div>
+    </div>-->
+
+    <div class="flex-containercentre">
+        <div class="flex-loginbody">
+            <div class="flex-containerrightalign">
+                <div class="flex-containerlogin">
+                    <div class="inline icon field">
+                        <label>Username</label>
+                        <div class="ui left icon input">
+                            <i class="user icon"></i>
+                            <input class="input-username" value="Tommi" type="text" id="username" />
+                        </div>
+                    </div>
+                    <div>&nbsp;</div>
+                    <div class="inline icon field">
+                        <label>Password</label>
+                        <div class="ui left icon input">
+                            <i class="lock icon"></i>
+                            <input class="input-password" placeholder="Pwd..." type="password" id="passwordtext" />
+                        </div>
+                    </div>
+                </div>
+                <div>&nbsp;</div>
+                <div>
+                    &nbsp;
+                <button class="ui button" onclick="login()">Login</button>
+                </div>
             </div>
         </div>
     </div>

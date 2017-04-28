@@ -67,20 +67,20 @@
                 }
             }
         };
-
-
     </script>
 
 </head>
-
+     
 <body>
-
     <script>
-
         window.onload = function () {
             console.log("onload called : " + sessionStorage.getItem("name"));
             document.getElementById("hLoggedInAs").innerHTML = "<h1 class=\"ui right aligned header\" style=\"color: white\">Welcome " + sessionStorage.getItem("name") + "</h1>";
             document.getElementById("pagetitle").innerText = "Rights : " + sessionStorage.getItem("servicename");
+            if (sessionStorage.getItem("right") != null) {
+                document.getElementById("righttext").innerText = sessionStorage.getItem("right");
+                document.getElementById("createRightButton").removeAttribute("disabled");
+            }
         };
 
         var socket = io.connect();
@@ -142,7 +142,7 @@
 
             <div class="column">
                 <div class="ui right aligned dropdown">
-                    <img class="ui avatar image" src="images/avatars/debbie.jpg" />
+                    <img class="ui tiny avatar image" src="images/avatars/debbie.jpg" />
                     <i class="dropdown icon"></i>
                     <div class="menu">
                         <div class="item" onclick="logout()">
@@ -229,7 +229,7 @@
                                 </div>
                             </div>
                             <div class="field">
-                                <input type="date" id="timelimit" disabled="disabled" style="position: absolute; left: 300px; top: 65px; width: 180px; height: 35px" />
+                                <input type="date" id="timelimit" disabled="disabled" style="position: absolute; left: 300px; top: 65px; width: 180px; height: 38px" />
                             </div>
                             <div class="three wide field">
                                 <div class="ui toggle checkbox" style="position: absolute; left: 650px; top: 76px;">

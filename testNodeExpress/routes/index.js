@@ -12,11 +12,11 @@ router.get('/HC', function (req, res) {
 });
 router.get('/createhouse', function (req, res) {
     //res.render('index', { title: 'Testing ....' });
-    res.sendfile("views/createhouse.html");
+    res.sendfile("views/HCcreatehouse.html");
 });
 router.get('/houses', function (req, res) {
     //res.render('index', { title: 'Testing ....' });
-    res.sendfile("views/houses.html");
+    res.sendfile("views/HChouses.html");
 });
 router.get('/HCloginfail', function (req, res) {
     //read form data

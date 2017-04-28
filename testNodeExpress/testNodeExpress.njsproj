@@ -187,7 +187,7 @@
       <SubType>Code</SubType>
     </Content>
     <Content Include="semantic.json" />
-    <Content Include="views\createhouse.html">
+    <Content Include="views\HCcreatehouse.html">
       <SubType>Code</SubType>
     </Content>
     <Content Include="views\createservice.html">
@@ -202,7 +202,7 @@
     <Content Include="views\HCloginfail.pug">
       <SubType>Code</SubType>
     </Content>
-    <Content Include="views\houses.html">
+    <Content Include="views\HChouses.html">
       <SubType>Code</SubType>
     </Content>
     <Content Include="views\services.html">

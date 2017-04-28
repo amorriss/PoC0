@@ -69,17 +69,20 @@
             // deselect all rows
             for (i = 1; i < 4; i++) {
                 var IDstr = "srvTableRow" + i;
+                console.log("id is " + IDstr);
                 document.getElementById(IDstr).removeAttribute("class");
             }
             var IDstr = "srvTableRow" + value;
             if (currentTableRow == value) {  // deselect row as previously selected
                 document.getElementById(IDstr).removeAttribute("class");
                 document.getElementById("amendButton").removeAttribute("disabled");
+                currentTableRow = 0;
             } else { // select row
                 document.getElementById(IDstr).setAttribute("class", "positive");
                 document.getElementById("amendButton").removeAttribute("disabled");
+                currentTableRow = value;
             }
-            currentTableRow = value;
+            
         };
 
         /* When the user clicks on the button toggle between hiding and showing the dropdown content */
@@ -163,7 +166,7 @@
 
             <div class="column">
                 <div class="ui right aligned dropdown">
-                    <img class="ui avatar image" src="images/avatars/debbie.jpg" />
+                    <img class="ui tiny avatar image" src="images/avatars/debbie.jpg" />
                     <i class="dropdown icon"></i>
                     <div class="menu">
                         <div class="item" onclick="logout()">
