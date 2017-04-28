@@ -41,7 +41,7 @@ router.get('/', (req: express.Request, res: express.Response) => {
 
 router.get('/createright', (req: express.Request, res: express.Response) => {
     //res.render('index', { title: 'Testing ....' });
-    res.sendfile("views/createright_grid.html");
+    res.sendfile("views/createright.html");
 });
 
 router.get('/createservice', (req: express.Request, res: express.Response) => {

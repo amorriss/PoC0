@@ -4,25 +4,36 @@
 <head>
     <meta charset="utf-8" />
     <title>Project X</title>
-    <link rel='stylesheet prefetch' href='http://cdnjs.cloudflare.com/ajax/libs/semantic-ui/0.16.1/css/semantic.min.css' />
+    <!--   <link rel='stylesheet prefetch' href='http://cdnjs.cloudflare.com/ajax/libs/semantic-ui/0.16.1/css/semantic.min.css' />
     <link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.8/components/transition.min.css' />
-    <link rel="stylesheet" href=".\stylesheets\main.css" />
+    
     <link rel="stylesheet" href=".\stylesheets\components\button.css" />
     <link rel="stylesheet" href=".\stylesheets\components\list.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-alpha1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.8/semantic.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.8/semantic.min.js"></script>-->
 
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.8/semantic.min.css" rel="stylesheet" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.8/semantic.min.js"></script>
+    <link rel="stylesheet" href=".\stylesheets\main.css" />
     <script src="socket.io/socket.io.js"></script>
 
 
     <script>
 
-        function dropdownSelection() {
-            var socket = io.connect();
-            var data = document.getElementById("selectRight").value;
-            //document.getElementById("Text2").value = data;
-            socket.emit('ddselect', { data: data });
-            console.log("drop down name selected");
+        //function dropdownSelection(value) {
+        //    console.log("drop down name selected " + document.getElementById("DDclass").innerText);
+        //    document.getElementById("DDclass").innerText = value.innerText;
+        //};
+
+        //function pulseicon() {
+        //    console.log("pulse icon");
+        //    document.getElementById("gobackicon").setAttribute("style:color", "red");
+        //};
+
+        function rightnamechange() {
+            console.log("rightnamechange clicked");
+            document.getElementById("createRightButton").removeAttribute("disabled");
         };
 
         function createRight() {
@@ -57,10 +68,7 @@
             }
         };
 
-        /* When the user clicks on the button toggle between hiding and showing the dropdown content */
-        function ddShow() {
-            document.getElementById("myDropdown").classList.toggle("show");
-        };
+
     </script>
 
 </head>
@@ -71,13 +79,8 @@
 
         window.onload = function () {
             console.log("onload called : " + sessionStorage.getItem("name"));
-            var ts = new Date().toLocaleString();
-            document.getElementById("hLoggedInAs").innerText = "Welcome " + sessionStorage.getItem("name"); // + " on " + ts;
-            document.getElementById("pagetitle").innerText = "Services : " + sessionStorage.getItem("servicename");
-
-            $('.ui.dropdown')
-                .dropdown()
-                ;
+            document.getElementById("hLoggedInAs").innerHTML = "<h1 class=\"ui right aligned header\" style=\"color: white\">Welcome " + sessionStorage.getItem("name") + "</h1>";
+            document.getElementById("pagetitle").innerText = "Rights : " + sessionStorage.getItem("servicename");
         };
 
         var socket = io.connect();
@@ -108,112 +111,141 @@
             alert("Right created");
         });
 
+
         function goBack() {
             window.history.back();
         };
 
-        // Close the dropdown if the user clicks outside of it
-        window.onclick = function (e) {
-            console.log("window.onclick called " + e.target.className);
-            if (e.target.className != 'chevron circle down icon') {
+        $(function () {
+            $('.ui.dropdown').dropdown();
+        });
 
-                var dropdowns = document.getElementsByClassName("dropdown-content");
-                var i;
-                for (i = 0; i < dropdowns.length; i++) {
-                    var openDropdown = dropdowns[i];
-                    if (openDropdown.classList.contains('show')) {
-                        openDropdown.classList.remove('show');
-                    }
-                }
-            }
-        };
+        $('.ui.checkbox')
+            .checkbox();
+
     </script>
 
-    <div class="flex-title">
-        <div>
-            <img id="logoImg" alt="no logo" src="images/logo.png" width="104" height="104" />
-        </div>
-        <div class="hpagefunction" id="pagetitle">Services</div>
-        <div class="flex-menu">
-            <h2 id="hLoggedInAs">Welcome</h2>
-            <img id="userimage" src="images/avatars/debbie.jpg" width="50" height="50" style="border-radius: 100%" />
-            <div class="dropdown">
-                <button onclick="ddShow()" class="ui icon button" style="width: auto" id="userbutton">
-                    <i class="chevron circle down icon"></i>
-                </button>
-                <div id="myDropdown" class="dropdown-content">
-                    <a href="#">Account</a>
-                    <a href="#" onclick="logout()">Logout</a>
+    <div class="ui equal width middle aligned padded grid">
+
+        <div class="grey row">
+            <div class="column">
+                <img class="ui small image" style="border-radius: 5%" src="images/logo.png" />
+            </div>
+            <div class="column">
+                <h1 class="ui left aligned header" id="pagetitle" style="color: white">Rights</h1>
+            </div>
+            <div class="column"></div>
+            <!--<div class="column"></div>-->
+            <div class="column" id="hLoggedInAs">
+                <h1 class="ui right aligned header" style="color: white">Welcome</h1>
+            </div>
+
+            <div class="column">
+                <div class="ui right aligned dropdown">
+                    <img class="ui avatar image" src="images/avatars/debbie.jpg" />
+                    <i class="dropdown icon"></i>
+                    <div class="menu">
+                        <div class="item" onclick="logout()">
+                            <i class="sign out icon"></i>
+                            Logout
+                        </div>
+                    </div>
                 </div>
+            </div>
+            <div class="right aligned column">
+                <i class="arrow circle left huge icon" id="gobackicon" style="cursor: pointer;" onclick="goBack()"></i>
             </div>
         </div>
     </div>
-    <div id="servertime" class="flex-date-header"></div>
-    <div class="flex-body" style="height: 80%">
-        <div class="flex-containercentre">
-            <div class="flex-containerrightalign">
-                <div class="flex-containertitle">
-                    <div class="flex-container5">
-                        <h3>Create Right</h3>
-                    </div>
-                    <div class="flex-containerrights">
-                        <div class="ui labeled input">
-                            <div class="ui label">
-                                Right Name
+    <div id="servertime" class="flex-date-header"><i class="calendar icon"></i>April 5, 2017</div>
+
+    <div class="ui hidden divider"></div>
+
+    <div class="ui padded grid" style="padding-top: 7%; padding-left: 20%; padding-right: 20%">
+        <div class="ui right aligned column">
+            <div class="flex-containerredtitle">
+                <div class="flex-container5">
+                    <h3>Right</h3>
+                </div>
+                <div class="flex-container3" style="height: 220px; padding-top: 0px">
+                    <div class="ui form" style="width: inherit; justify-content: center">
+                        <div class="inline fields">
+                            <div class="field">
+                                <div class="ui labeled input" style="position: absolute; left: 0px; top: 0px;">
+                                    <div class="ui label">
+                                        Right Name
+                                    </div>
+                                    <input type="text" id="righttext" placeholder="" onchange="rightnamechange()" />
+                                </div>
                             </div>
-                            <input type="text" id="righttext" placeholder="" />
+                            <div class="four wide field">
+
+                                <div class="ui disabled selection dropdown" id="DDclass" style="position: absolute; left: 300px; top: 0px; width: 200px; height: 30px">
+                                    <input name="" type="hidden"/>
+                                    <i class="dropdown icon"></i>
+                                    <div class="default text">ID Verification</div>
+                                    <div class="menu">
+                                        <div class="item" data-value="0">Belgian Identity Service</div>
+                                        <div class="item" data-value="1">Finnish Identity Service</div>
+                                        <div class="item" data-value="3">UK Identity Service</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="three wide field">
+                                <div class="ui toggle checkbox" style="position: absolute; left: 530px; top: 11px;">
+                                    <input type="checkbox" onclick="enableID('DDclass')" />
+                                    <label>ID</label>
+                                </div>
+                            </div>
+                            <div class="three wide field">
+                                <div class="ui toggle checkbox" style="position: absolute; left: 650px; top: 11px;">
+                                    <input name="example" type="checkbox" />
+                                    <label>Divisibility</label>
+                                </div>
+                            </div>
+
                         </div>
-                        <div>
-                            <div class="flex-container1">
-                                <h4>Identity Verification</h4>
-                                <input class="checkbox" id="IDrequired" type="checkbox" onclick="enableID('DDclass')" />
+                        <div class="inline fields">
+                            <div class="six wide field">
+                                <div class="ui labeled input" style="position: absolute; left: 0px; top: 65px; width: 200px">
+                                    <div class="ui label">
+                                        Value Limit
+                                    </div>
+                                    <input type="text" id="valuelimittext" placeholder="" disabled="disabled" />
+                                </div>
                             </div>
-                            <div class="ui disabled selection dropdown" id="DDclass">
-                                <input name="D2" id="IDinput" type="hidden"/>
-                                <i class="dropdown icon"></i>
-                                <div class="default text">Identity Verification</div>
-                                <div class="menu">
-                                    <div class="item" data-value="0">Belgian Identity Service</div>
-                                    <div class="item" data-value="1">Finnish Identity Service</div>
-                                    <div class="item" data-value="2">UK Identity Service</div>
+
+                            <div class="three wide field">
+                                <div class="ui toggle checkbox" style="position: absolute; left: 230px; top: 76px;">
+                                    <input name="valuelimitcb" type="checkbox" onchange="enableID('valuelimittext')" />
+                                    <label></label>
+                                </div>
+                            </div>
+
+                            <div class="three wide field" style="position: absolute; left: 530px; top: 76px;">
+                                <div class="ui toggle checkbox">
+                                    <input name="example" type="checkbox" onchange="enableID('timelimit')" />
+                                    <label>Time Limit</label>
+                                </div>
+                            </div>
+                            <div class="field">
+                                <input type="date" id="timelimit" disabled="disabled" style="position: absolute; left: 300px; top: 65px; width: 180px; height: 35px" />
+                            </div>
+                            <div class="three wide field">
+                                <div class="ui toggle checkbox" style="position: absolute; left: 650px; top: 76px;">
+                                    <input name="example" type="checkbox" />
+                                    <label>Tax</label>
                                 </div>
                             </div>
                         </div>
-                        <div>
-                            <div class="flex-container1">
-                                <h4>Value Limit</h4>
-                                <input class="checkbox" id="Limitrequired" type="checkbox" onclick="enableID('Limittext')" />
-                            </div>
-                            <div class="ui labeled input">
-                            <div class="ui label">
-                                Value Limit
-                            </div>
-                            <input type="text" id="limittext" placeholder="" />
-                        </div>
-                        </div>
-                        <div>
-                            <div class="flex-container1">
-                                <h4>Time Limit</h4>
-                                <input class="checkbox" id="Timerequired" type="checkbox" onclick="enableID('Timetext')" />
-                            </div>
-                            <input class="input-field" id="Timetext" type="date" disabled="disabled" />
-                        </div>
-                        <div class="flex-container1">
-                            <h4>Divisibility</h4>
-                            <input class="checkbox" id="Divisibilityrequired" type="checkbox" />
-                        </div>
-                        <div class="flex-container1">
-                            <h4>Tax</h4>
-                            <input class="checkbox" id="Taxrequired" type="checkbox" />
-                        </div>
                     </div>
                 </div>
-                <div>&nbsp;</div>
-                <div>
-                    <button class="ui button" id="createButton" type="button" onclick="createRight()">Create</button>
-                </div>
             </div>
+            <div class="ui hidden divider"></div>
+            <button class="ui button" id="createRightButton" type="button" onclick="createRight()" disabled="disabled">Create</button>
         </div>
     </div>
+
+
 </body>
 </html>

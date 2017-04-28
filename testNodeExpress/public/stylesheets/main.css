@@ -505,3 +505,7 @@ select {
 .show {
     display: block;
 }
+
+#gobackicon:hover {
+    color:lightgray;
+}
