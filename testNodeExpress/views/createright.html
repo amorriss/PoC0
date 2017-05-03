@@ -76,7 +76,7 @@
         window.onload = function () {
             console.log("onload called : " + sessionStorage.getItem("name"));
             document.getElementById("hLoggedInAs").innerHTML = "<h1 class=\"ui right aligned header\" style=\"color: white\">Welcome " + sessionStorage.getItem("name") + "</h1>";
-            document.getElementById("pagetitle").innerText = "Rights : " + sessionStorage.getItem("servicename");
+            document.getElementById("pagetitle").innerText = "Right Types : " + sessionStorage.getItem("servicename");
             if (sessionStorage.getItem("right") != null) {
                 document.getElementById("righttext").innerText = sessionStorage.getItem("right");
                 document.getElementById("createRightButton").removeAttribute("disabled");
@@ -132,7 +132,7 @@
                 <img class="ui small image" style="border-radius: 5%" src="images/logo.png" />
             </div>
             <div class="column">
-                <h1 class="ui left aligned header" id="pagetitle" style="color: white">Rights</h1>
+                <h1 class="ui left aligned header" id="pagetitle" style="color: white">Right Types</h1>
             </div>
             <div class="column"></div>
             <!--<div class="column"></div>-->
@@ -165,7 +165,7 @@
         <div class="ui right aligned column">
             <div class="flex-containerredtitle">
                 <div class="flex-container5">
-                    <h3>Right</h3>
+                    <h3>Right Type</h3>
                 </div>
                 <div class="flex-container3" style="height: 220px; padding-top: 0px">
                     <div class="ui form" style="width: inherit; justify-content: center">
@@ -173,7 +173,7 @@
                             <div class="field">
                                 <div class="ui labeled input" style="position: absolute; left: 0px; top: 0px;">
                                     <div class="ui label">
-                                        Right Name
+                                        Right Type
                                     </div>
                                     <input type="text" id="righttext" placeholder="" onchange="rightnamechange()" />
                                 </div>

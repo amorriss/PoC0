@@ -9,10 +9,13 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.8/semantic.min.js"></script>
 
-    <link rel="stylesheet" href=".\stylesheets\HC.css" />
+    <link rel="stylesheet" href=".\stylesheets\hc.css" />
     <script src="socket.io/socket.io.js"></script>
 
     <script>
+
+        var currentTableRow;
+
         function logout() {
             var socket = io.connect();
             socket.emit('logout', { data: 'You clicked the logout button' });
@@ -26,27 +29,47 @@
             socket.emit('createHouse', { data: data[0].innerText });
         };
 
-        function highlight(e) {
+        //function highlight(e) {
 
-            var strData = e.target.innerText;
-            console.log(strData);
+        //    var strData = e.target.innerText;
+        //    console.log(strData);
 
-            if (selected[0]) selected[0].className = '';   // clear previous selection
+        //    if (selected[0]) selected[0].className = '';   // clear previous selection
 
-            // enable Create button. It gets disabled only if top title row selected 
-            document.getElementById("createButton").removeAttribute("disabled");
+        //    // enable Create button. It gets disabled only if top title row selected 
+        //    document.getElementById("createButton").removeAttribute("disabled");
 
-            if (strData == "<New Service>") {   // Create button
-                document.getElementById("createButton").innerText = "Create";
-                createNew = true;
-                e.target.parentNode.className = 'selectedrow';
-            } else if (strData != "Housing Service") {   // Amend button & ignore title row
-                document.getElementById("createButton").innerText = "Amend";
-                createNew = false;
-                e.target.parentNode.className = 'selectedrow';
-            } else {  // title row so disable Create button
-                document.getElementById("createButton").setAttribute('disabled', 'disabled');
+        //    if (strData == "<New Service>") {   // Create button
+        //        document.getElementById("createButton").innerText = "Create";
+        //        createNew = true;
+        //        e.target.parentNode.className = 'selectedrow';
+        //    } else if (strData != "Housing Service") {   // Amend button & ignore title row
+        //        document.getElementById("createButton").innerText = "Amend";
+        //        createNew = false;
+        //        e.target.parentNode.className = 'selectedrow';
+        //    } else {  // title row so disable Create button
+        //        document.getElementById("createButton").setAttribute('disabled', 'disabled');
+        //    }
+        //};
+
+        function rowClick(value) {
+            // deselect all rows
+            for (i = 1; i < 4; i++) {
+                var IDstr = "houseTableRow" + i;
+                console.log("id is " + IDstr);
+                document.getElementById(IDstr).removeAttribute("class");
             }
+            var IDstr = "houseTableRow" + value;
+            if (currentTableRow == value) {  // deselect row as previously selected
+                document.getElementById(IDstr).removeAttribute("class");
+              //  document.getElementById("amendButton").removeAttribute("disabled");
+                currentTableRow = 0;
+            } else { // select row
+                document.getElementById(IDstr).setAttribute("class", "positive");
+              //  document.getElementById("amendButton").removeAttribute("disabled");
+                currentTableRow = value;
+            }
+
         };
     </script>
 
@@ -60,11 +83,11 @@
         window.onload = function () {
             console.log("onload called : " + sessionStorage.getItem("name"));
             var ts = new Date();
-            document.getElementById("hLoggedInAs").innerHTML = "Welcome " + sessionStorage.getItem("name"); // + "<br/>" + ts.toString('dddd, MMMM') ;
+           // document.getElementById("hLoggedInAs").innerHTML = "Welcome " + sessionStorage.getItem("name"); // + "<br/>" + ts.toString('dddd, MMMM') ;
 
-            var table = document.getElementById("servicetable");
-            selected = table.getElementsByClassName("selectedrow");
-            table.onclick = highlight;
+            //var table = document.getElementById("servicetable");
+            //selected = table.getElementsByClassName("selectedrow");
+            //table.onclick = highlight;
         };
 
         var socket = io.connect();
@@ -100,13 +123,15 @@
         <hr />
     </div>
 
-    <div class="flex-containercentre">
+    <div class="ui hidden divider"></div>
+
+    <!--<div class="flex-containercentre">-->
         <div class="ui padded grid" style="padding-top: 7%; padding-left: 20%; padding-right: 20%">
             <div class="ui right aligned column">
-                <div class="flex-containerredtitle">
+               <!-- <div class="flex-containerredtitle">
                     <div class="flex-container5">
                         <h3>Houses</h3>
-                    </div>
+                    </div>-->
                     <div class="flex-container3">
                         <table class="ui selectable celled table" style="background-color: white">
                             <thead>
@@ -116,28 +141,28 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr id="srvTableRow1" onclick="rowClick(this.rowIndex)">
+                                <tr id="houseTableRow1" onclick="rowClick(this.rowIndex)">
                                     <td>Big House</td>
                                     <td>Alice</td>
                                 </tr>
-                                <tr id="srvTableRow2" onclick="rowClick(this.rowIndex)">
+                                <tr id="houseTableRow2" onclick="rowClick(this.rowIndex)">
                                     <td>Small House</td>
                                     <td>Bob</td>
                                 </tr>
-                                <tr id="srvTableRow3" onclick="rowClick(this.rowIndex)">
+                                <tr id="houseTableRow3" onclick="rowClick(this.rowIndex)">
                                     <td>Shed</td>
                                     <td>The Cat </td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
-                </div>
+                <!--</div>-->
                 <div class="ui hidden divider"></div>
                 <button class="ui button" id="logoutButton" type="button" onclick="logout()" disabled="disabled">Logout</button>
                 <button class="ui button" id="createButton" type="button" onclick="createService()">Create</button>
             </div>
         </div>
-    </div>
+    <!--</div>-->
 
 </body>
 </html>

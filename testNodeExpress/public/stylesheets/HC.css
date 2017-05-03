@@ -43,7 +43,7 @@ body {
     flex-direction: column;
     font-family: 'Helvetica Neue', Arial, Helvetica, sans-serif;
     font-size: 15px;
-    /*border:1px solid;*/
+    border:1px solid;
 }
 
 
@@ -81,7 +81,7 @@ body {
 .flex-container3 {
     display: flex;
     width: inherit;
-    background-color: #E0E1E2;
+    background-color:white;
     overflow: auto;
     justify-content: flex-start;
     flex-direction: row;
@@ -92,8 +92,9 @@ body {
     border-bottom-left-radius: 0.28571429rem;
     border-bottom-right-radius: 0.28571429rem;
     border-top-right-radius: 0.28571429rem;
-    /*border: 1px solid;*/
+    border: 3px solid black;
 }
+
 
 .flex-container4 {
     display: flex;
@@ -125,13 +126,14 @@ body {
     display: flex;
     width: 30%;
     height: 15%;
-    background-color: rgb(209, 0,33);
+    background-color:deepskyblue;
     overflow: auto;
     justify-content: center;
     flex-direction: row;
     border-top-left-radius: 0.28571429rem;
     border-top-right-radius: 0.28571429rem;
 }
+
 
 .flex-container6 {
     display: flex;
@@ -184,17 +186,6 @@ body {
     justify-content: center;
 }
 
-.flex-container5 {
-    display: flex;
-    width: 500px;
-    height: 450px;
-    background-color: white;
-    overflow: auto;
-    flex-direction: column;
-    border: 1px solid;
-    align-items: center;
-    align-content: center;
-}
 
 .flex-title {
     display: flex;
@@ -249,11 +240,19 @@ h2 {
     justify-content: center;
 }
 
-h3 {
+/*h3 {
     font-family: Castellar, Helvetica, sans-serif;
     font-weight: lighter;
     align-self: center;
     color: white;
+}*/
+
+h3 {
+    font-family: 'Helvetica Neue', Arial, Helvetica, sans-serif;
+    font-weight: normal;
+    align-self: center;
+    color: white;
+    font-size: 20px;
 }
 
 h4, h5 {
