@@ -6,11 +6,15 @@
     <meta charset="utf-8" />
     <title>Login</title>
 
-     <link rel='stylesheet prefetch' href='http://cdnjs.cloudflare.com/ajax/libs/semantic-ui/0.16.1/css/semantic.min.css' />
+    <!--<link rel='stylesheet prefetch' href='http://cdnjs.cloudflare.com/ajax/libs/semantic-ui/0.16.1/css/semantic.min.css' />-->
+
+     <link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.8/semantic.min.css" rel="stylesheet" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.8/semantic.min.js"></script>
 
     <link rel="stylesheet" href=".\stylesheets\hc.css" />
-    <link rel="stylesheet" href=".\stylesheets\components\button.css" />
-    <link rel="stylesheet" href=".\stylesheets\components\input.css" />
+  <!--  <link rel="stylesheet" href=".\stylesheets\components\button.css" />
+    <link rel="stylesheet" href=".\stylesheets\components\input.css" />-->
 
     <script src="socket.io/socket.io.js"></script>
 
@@ -29,7 +33,7 @@
 <body>
     <script>
         var socket = io.connect();
-        
+
         socket.on('loginRet', function (data) {
             console.log("HC login in browser called with ...");
             var name = document.getElementById("username").value;
@@ -53,16 +57,14 @@
     </script>
     <div class="flex-title">
         <div>
-            <img alt="no logo" src="images/HC.png" width="200" height="150" style="position:absolute; left:0px; top:0px" />
+            <img alt="no logo" src="images/HC.png" width="200" height="150" style="position: absolute; left: 0px; top: 0px" />
         </div>
         <div>
             <h1>Finnish Home Service</h1>
         </div>
-        
+
     </div>
-    <div>
-        <hr />
-    </div>
+
     <!--<div class="flex-containercentre">
         <div class="flex-containerlogin">
             <div>
@@ -85,32 +87,40 @@
 
 
     <!--<div class="flex-containercentre">-->
-        <div class="flex-loginbody">
-            <div class="flex-containerrightalign">
-                <div class="flex-containerlogin">
-                    <div class="inline icon field">
-                        <label>Username</label>
-                        <div class="ui left icon input">
-                            <i class="user icon"></i>
-                            <input class="input-username" value="Tommi" type="text" id="username" />
-                        </div>
-                    </div>
-                    <div>&nbsp;</div>
-                    <div class="inline icon field">
-                        <label>Password</label>
-                        <div class="ui left icon input">
-                            <i class="lock icon"></i>
-                            <input class="input-password" placeholder="Pwd..." type="password" id="passwordtext" autofocus="autofocus"/>
-                        </div>
-                    </div>
-                </div>
+    <div class="flex-loginbody">
+        <div class="flex-containerrightalign">
+            <div class="flex-containerlogin">
+                <!--<div class="inline icon field">
+                    <label>Username</label>-->
                 <div>&nbsp;</div>
-                <div>
-                    &nbsp;
-                <button class="ui button" onclick="login()">Login</button>
+                <div class="ui right icon input">
+                    <i class="user large icon"></i>
+                    <input class="input-username" value="Tommi" type="text" id="username" />
                 </div>
+                <!--</div>-->
+                <div>&nbsp;</div>
+                <div>&nbsp;</div>
+                <!--<div class="inline icon field">
+                    <label>Password</label>-->
+                <!--   <div class="ui right icon action input">
+                        <input class="input-password" placeholder="Pwd..." type="password" id="passwordtext" autofocus="autofocus" />
+                        <button class="ui icon button" onclick="login()" style="background-color: white"><i class="sign in large icon"></i></button>
+                    </div>-->
+
+                <div class="ui icon input">
+                    <input class="input-password" type="password" id="passwordtext" placeholder="pwd..." autofocus="autofocus" />
+                    <i class="sign in large link icon" onclick="login()"></i>
+                </div>
+
+                <!--</div>-->
+            </div>
+            <div>&nbsp;</div>
+            <div>
+                &nbsp;
+                
             </div>
         </div>
+    </div>
     <!--</div>-->
 </body>
 </html>
