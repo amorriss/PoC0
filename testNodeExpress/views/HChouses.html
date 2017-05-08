@@ -15,62 +15,111 @@
     <script>
 
         var currentTableRow;
-
+        var tableData = new Array();
+        
         function logout() {
             var socket = io.connect();
             socket.emit('logout', { data: 'You clicked the logout button' });
             console.log("logout button clicked");
         };
 
-        function createService() {
-            console.log("create button clicked");
-            var data = document.getElementsByClassName("selectedrow");
+        function newHouse(createnew) {
+            if (createnew) {
+                // set storage to pass to next screen
+                sessionStorage.setItem("property", "");
+                sessionStorage.setItem("propertyid", "");
+                sessionStorage.setItem("owner", "");
+                sessionStorage.setItem("regdate", "");
+                // clear current row so we can add a new row
+                sessionStorage.setItem("currenthouserow", "");
+            } else {
+
+                // pass current row so we can amend rather than add a new row
+                sessionStorage.setItem("currenthouserow", currentTableRow);
+            };
+
+            console.log("new house button clicked");
             var socket = io.connect();
-            socket.emit('createHouse', { data: data[0].innerText });
+            socket.emit('createHouse', { data: "new house" });
         };
 
-        //function highlight(e) {
-
-        //    var strData = e.target.innerText;
-        //    console.log(strData);
-
-        //    if (selected[0]) selected[0].className = '';   // clear previous selection
-
-        //    // enable Create button. It gets disabled only if top title row selected 
-        //    document.getElementById("createButton").removeAttribute("disabled");
-
-        //    if (strData == "<New Service>") {   // Create button
-        //        document.getElementById("createButton").innerText = "Create";
-        //        createNew = true;
-        //        e.target.parentNode.className = 'selectedrow';
-        //    } else if (strData != "Housing Service") {   // Amend button & ignore title row
-        //        document.getElementById("createButton").innerText = "Amend";
-        //        createNew = false;
-        //        e.target.parentNode.className = 'selectedrow';
-        //    } else {  // title row so disable Create button
-        //        document.getElementById("createButton").setAttribute('disabled', 'disabled');
-        //    }
-        //};
-
+       
         function rowClick(value) {
             // deselect all rows
-            for (i = 1; i < 4; i++) {
+            var tableRef = document.getElementById('housetable').getElementsByTagName('tbody')[0];
+            var numrows = tableRef.rows.length;
+
+            for (i = 1; i < numrows + 1; i++) {
                 var IDstr = "houseTableRow" + i;
-                console.log("id is " + IDstr);
+                //console.log("id is " + IDstr);
                 document.getElementById(IDstr).removeAttribute("class");
             }
             var IDstr = "houseTableRow" + value;
             if (currentTableRow == value) {  // deselect row as previously selected
                 document.getElementById(IDstr).removeAttribute("class");
-              //  document.getElementById("amendButton").removeAttribute("disabled");
+                //  document.getElementById("amendButton").removeAttribute("disabled");
                 currentTableRow = 0;
             } else { // select row
                 document.getElementById(IDstr).setAttribute("class", "positive");
-              //  document.getElementById("amendButton").removeAttribute("disabled");
+                //  document.getElementById("amendButton").removeAttribute("disabled");
                 currentTableRow = value;
             }
 
         };
+
+        function rowDblClick(row) {
+            //console.log("dblclick " + row);
+            property = row.getElementsByTagName("td")[0].childNodes[0].data;
+            propertyid = row.getElementsByTagName("td")[1].childNodes[0].data;
+            owner = row.getElementsByTagName("td")[2].childNodes[0].data;
+            regDate = row.getElementsByTagName("td")[3].childNodes[0].data;
+
+            sessionStorage.setItem("property", property);
+            sessionStorage.setItem("propertyid", propertyid);
+            sessionStorage.setItem("owner", owner);
+            sessionStorage.setItem("regdate", regDate);
+
+            newHouse(false);
+        };
+
+
+        function loadHouseTable(dataarray) {
+            // load table data
+            var tableRef = document.getElementById('housetable').getElementsByTagName('tbody')[0];
+            var arrayLen = dataarray.length;
+
+            if (arrayLen > 0) {
+                var cellCount = 4;
+
+                for (counter = 0; counter < arrayLen; counter++) {
+                    
+                    if (cellCount == 4) {
+                        var numrows = tableRef.rows.length;
+                        var row = tableRef.insertRow(numrows);
+                        var newRowId = "houseTableRow" + (numrows + 1);
+                        //console.log("new row is " + newRowId);
+                        row.setAttribute("id", newRowId);
+                        row.setAttribute("onclick", "rowClick(this.rowIndex)");
+                        row.setAttribute("ondblclick", "rowDblClick(this)");
+
+                        // Insert new cells (<td> elements) at the 1st and 2nd position of the "new" <tr> element:
+                        var propertyCell = row.insertCell(0);
+                        var idCell = row.insertCell(1);
+                        var ownerCell = row.insertCell(2);
+                        var regdateCell = row.insertCell(3);
+
+                        // Add some text to the new cells:
+                        propertyCell.innerHTML = dataarray[counter];
+                        idCell.innerHTML = dataarray[counter + 1];
+                        ownerCell.innerHTML = dataarray[counter + 2];
+                        regdateCell.innerHTML = dataarray[counter + 3];
+                    }
+                    cellCount--;
+                    if (cellCount == -1) { cellCount = 4; }
+                };
+            };
+        };
+
     </script>
 
 </head>
@@ -78,16 +127,18 @@
 
     <script>
 
-        var createNew = false;
-
         window.onload = function () {
             console.log("onload called : " + sessionStorage.getItem("name"));
             var ts = new Date();
-           // document.getElementById("hLoggedInAs").innerHTML = "Welcome " + sessionStorage.getItem("name"); // + "<br/>" + ts.toString('dddd, MMMM') ;
+            // document.getElementById("hLoggedInAs").innerHTML = "Welcome " + sessionStorage.getItem("name"); // + "<br/>" + ts.toString('dddd, MMMM') ;
 
-            //var table = document.getElementById("servicetable");
-            //selected = table.getElementsByClassName("selectedrow");
-            //table.onclick = highlight;
+            // load table data from local storage
+            tableData = JSON.parse(localStorage.getItem("tabledata"));
+            console.log("table data is " + tableData);
+            if (tableData != null) {
+                loadHouseTable(tableData);
+            };
+
         };
 
         var socket = io.connect();
@@ -100,21 +151,18 @@
         socket.on('createHouseRet', function (data) {
             console.log("Create service in browser called ...");
             sessionStorage.setItem("servicename", data.data);
-            if (createNew) {
-                window.location("createhouse");
-            } else {
-                //window.location("createright");
-            }
+            window.location("createhouse");
+
         });
 
     </script>
 
     <div class="flex-title">
         <div>
-            <img alt="no logo" src="images/HC.png" width="200" height="150" />
+            <img alt="no logo" src="images/HC.png" width="200" height="150" style="position:absolute; left:0px; top:0px"/>
         </div>
         <div>
-            <h1>Housing Companies - Houses</h1>
+            <h1>Finnish Home Service - Properties</h1>
         </div>
         <div>&nbsp;</div>
         <div>&nbsp;</div>
@@ -126,42 +174,64 @@
     <div class="ui hidden divider"></div>
 
     <!--<div class="flex-containercentre">-->
-        <div class="ui padded grid" style="padding-top: 7%; padding-left: 20%; padding-right: 20%">
-            <div class="ui right aligned column">
-               <!-- <div class="flex-containerredtitle">
+    <div class="ui padded grid" style="padding-top: 7%; padding-left: 15%; padding-right: 15%">
+        <div class="ui right aligned column">
+            <!-- <div class="flex-containerredtitle">
                     <div class="flex-container5">
                         <h3>Houses</h3>
                     </div>-->
-                    <div class="flex-container3">
-                        <table class="ui selectable celled table" style="background-color: white">
-                            <thead>
-                                <tr>
-                                    <th>Property</th>
-                                    <th>Owner</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr id="houseTableRow1" onclick="rowClick(this.rowIndex)">
-                                    <td>Big House</td>
-                                    <td>Alice</td>
-                                </tr>
-                                <tr id="houseTableRow2" onclick="rowClick(this.rowIndex)">
-                                    <td>Small House</td>
-                                    <td>Bob</td>
-                                </tr>
-                                <tr id="houseTableRow3" onclick="rowClick(this.rowIndex)">
-                                    <td>Shed</td>
-                                    <td>The Cat </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                <!--</div>-->
-                <div class="ui hidden divider"></div>
-                <button class="ui button" id="logoutButton" type="button" onclick="logout()" disabled="disabled">Logout</button>
-                <button class="ui button" id="createButton" type="button" onclick="createService()">Create</button>
+            <div class="flex-container3">
+                <table class="ui selectable striped celled table" style="background-color: white; overflow-y: scroll" id="housetable">
+                    <thead>
+                        <tr>
+                            <th>Property</th>
+                            <th>ID</th>
+                            <th>Owner</th>
+                            <th>Registration</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr id="houseTableRow1" onclick="rowClick(this.rowIndex)" ondblclick="rowDblClick(this)">
+                            <td>Computer Science building, Konemiehentie 2, 02150 Espoo</td>
+                            <td>123-456-789-000</td>
+                            <td>Linus Torvalds
+                                <!--<div class="ui right floated small primary labeled icon button" id="editButton" onclick="editHouse()">
+                                    <i class="file text outline icon"></i>Edit
+                                </div>-->
+                            </td>
+                            <td>17/09/1991</td>
+                        </tr>
+                        <tr id="houseTableRow2" onclick="rowClick(this.rowIndex)" ondblclick="rowDblClick(this)">
+                            <td>34 Angular Street </td>
+                            <td>489-293-23-583</td>
+                            <td>Miško Hevery</td>
+                            <td>14/09/2016</td>
+                        </tr>
+                        <tr id="houseTableRow3" onclick="rowClick(this.rowIndex)" ondblclick="rowDblClick(this)">
+                            <td>Bike Shed</td>
+                            <td>483-233-789-102</td>
+                            <td>Eddie Merckx</td>
+                            <td>17/06/1945</td>
+                        </tr>
+                    </tbody>
+                    <tfoot class="full-width">
+                        <tr>
+
+                            <th colspan="4">
+                                <div class="ui right floated small primary labeled icon button" id="newButton" onclick="newHouse(true)">
+                                    <i class="file text outline icon"></i>New
+                                </div>
+                            </th>
+                        </tr>
+                    </tfoot>
+                </table>
             </div>
+            <!--</div>-->
+           <!-- <div class="ui hidden divider"></div>
+            <button class="ui button" id="logoutButton" type="button" onclick="logout()" disabled="disabled">Logout</button>
+            <button class="ui button" id="createButton" type="button" onclick="createService()">Create</button>-->
         </div>
+    </div>
     <!--</div>-->
 
 </body>

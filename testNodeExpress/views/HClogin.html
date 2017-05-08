@@ -5,12 +5,14 @@
 <head>
     <meta charset="utf-8" />
     <title>Login</title>
-    <link rel='stylesheet prefetch' href='http://cdnjs.cloudflare.com/ajax/libs/semantic-ui/0.16.1/css/semantic.min.css' />
-     <link rel="stylesheet" href=".\stylesheets\components\button.css" />
-    <link rel="stylesheet" href=".\stylesheets\components\input.css" />
-    <link rel="stylesheet" href=".\stylesheets\hc.css" />
-    <script src="socket.io/socket.io.js"></script>
 
+     <link rel='stylesheet prefetch' href='http://cdnjs.cloudflare.com/ajax/libs/semantic-ui/0.16.1/css/semantic.min.css' />
+
+    <link rel="stylesheet" href=".\stylesheets\hc.css" />
+    <link rel="stylesheet" href=".\stylesheets\components\button.css" />
+    <link rel="stylesheet" href=".\stylesheets\components\input.css" />
+
+    <script src="socket.io/socket.io.js"></script>
 
     <script>        
 
@@ -33,7 +35,12 @@
             var name = document.getElementById("username").value;
             console.log(name);
             var str = data.data;
+
             if (str.substring(0, 7) == "success") {
+                // clear storage (house table data)
+                localStorage.clear();
+                // and re-load from JSON file
+
                 sessionStorage.setItem("name", name);
                 window.location("houses");
             } else {
@@ -46,13 +53,12 @@
     </script>
     <div class="flex-title">
         <div>
-            <img alt="no logo" src="images/HC.png" width="200" height="150" />
+            <img alt="no logo" src="images/HC.png" width="200" height="150" style="position:absolute; left:0px; top:0px" />
         </div>
         <div>
-            <h1>Housing Companies - Login</h1>
+            <h1>Finnish Home Service</h1>
         </div>
-        <div>&nbsp;</div>
-        <div>&nbsp;</div>
+        
     </div>
     <div>
         <hr />
@@ -77,7 +83,8 @@
         </div>
     </div>-->
 
-    <div class="flex-containercentre">
+
+    <!--<div class="flex-containercentre">-->
         <div class="flex-loginbody">
             <div class="flex-containerrightalign">
                 <div class="flex-containerlogin">
@@ -93,7 +100,7 @@
                         <label>Password</label>
                         <div class="ui left icon input">
                             <i class="lock icon"></i>
-                            <input class="input-password" placeholder="Pwd..." type="password" id="passwordtext" />
+                            <input class="input-password" placeholder="Pwd..." type="password" id="passwordtext" autofocus="autofocus"/>
                         </div>
                     </div>
                 </div>
@@ -104,6 +111,6 @@
                 </div>
             </div>
         </div>
-    </div>
+    <!--</div>-->
 </body>
 </html>

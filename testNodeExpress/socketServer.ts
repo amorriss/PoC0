@@ -85,6 +85,12 @@ module.exports = {
                 socket.broadcast.emit('createHouseRet', { data: data.data });
             });
 
+            socket.on('saveHouse', function (data) {
+                console.log(data);
+                console.log("Save house server function called from browser");
+                socket.broadcast.emit('saveHouseRet', { data: data.data });
+            });
+
         });
         return io;
     }

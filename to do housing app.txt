@@ -1,0 +1,7 @@
+
+
+ - amend house func not working. tabledata null as not loaded for just hard coded rows
+
+ - alignment of checkbox on create house
+
+ - notify ownder func?
