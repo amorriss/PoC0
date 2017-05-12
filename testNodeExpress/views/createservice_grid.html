@@ -18,6 +18,8 @@
 
         var currentTableRow;
         var amendData;
+        var rightTotalRows;
+        var userTotalRows;
 
         function logout() {
             var socket = io.connect();
@@ -45,10 +47,44 @@
             console.log("New Right button clicked");
         };
 
+
+        function addUser(value) {
+            console.log("addUser " + value.innerText);
+           
+
+            var tableRef = document.getElementById('userTable').getElementsByTagName('tbody')[0];
+            var numrows = tableRef.rows.length;
+            var row = tableRef.insertRow(numrows);
+            userTotalRows = tableRef.rows.length;
+            var newRowId = "userTableRow" + (numrows + 1);
+            row.setAttribute("id", newRowId);
+            row.setAttribute("onclick", "rowClick(this)");
+
+            // Insert new cells (<td> elements) at the 1st and 2nd position of the "new" <tr> element:
+            var nameCell = row.insertCell(0);
+
+            // Add some text to the new cells:
+            nameCell.innerHTML = value.innerText;
+
+            // override semantic ui func which overwrites innertext with selected user    CURRENTLY NOT WORKING !!!!!
+            document.getElementById("userButtonText").innerHTML = "Add";
+        };
+
+
         function rowClick(value) {
-            
+
+            var totalRows = 0;
+
+            if (value.id.substring(0, 5) == "right") {
+                // this is the right table
+                totalRows = rightTotalRows;
+            } else {
+                // user table
+                totalRows = userTotalRows;
+            };
+
             // deselect all rows
-            for (i = 1; i < 3; i++) {
+            for (i = 1; i < totalRows + 1; i++) {
                 var IDstr = value.id.substring(0, value.id.length - 1) + i.toString();
                 console.log("rowClick value is " + IDstr);
                 document.getElementById(IDstr).removeAttribute("class");
@@ -59,7 +95,7 @@
                 document.getElementById(value.id).removeAttribute("class");
                 document.getElementById("createButton").removeAttribute("disabled");
                 currentTableRow = 0;
-                
+
                 if (value.id.substring(0, 5) == "right") {
                     // clear right 
                     sessionStorage.setItem("right", "");
@@ -75,7 +111,7 @@
                 currentTableRow = value.rowIndex;
                 // save current right
                 if (value.id.substring(0, 5) == "right") {
-                    sessionStorage.setItem("right",document.getElementById(value.id).innerText);
+                    sessionStorage.setItem("right", document.getElementById(value.id).innerText);
                     console.log("rowClick right is " + document.getElementById(value.id).innerText);
                     // change button text to Amend
                     var tempStr = document.getElementById("rightButton").innerHTML;
@@ -83,7 +119,7 @@
                     console.log(tempStr);
                     document.getElementById("rightButton").innerHTML = tempStr;
                 };
-            } 
+            }
         };
 
     </script>
@@ -110,6 +146,12 @@
                 document.getElementById("createButton").innerText = "Amend";
                 amendData = true;
             };
+
+            // get no. rows in each table. Used in rowClick()
+            var tableRef = document.getElementById('rightTable').getElementsByTagName('tbody')[0];
+            rightTotalRows = tableRef.rows.length;
+            tableRef = document.getElementById('userTable').getElementsByTagName('tbody')[0];
+            userTotalRows = tableRef.rows.length;
         };
 
         var socket = io.connect();
@@ -143,6 +185,7 @@
         $(function () {
             $('.ui.dropdown').dropdown();
         });
+
     </script>
 
     <div class="ui equal width middle aligned padded grid">
@@ -192,7 +235,6 @@
                     <h3>Service</h3>
                 </div>
                 <div class="flex-container3">
-
                     <div class="ui form">
                         <div class="fields">
                             <div class="field">
@@ -208,62 +250,76 @@
                             <div class="field"></div>
 
                             <div class="field">
-                                <table class="ui selectable celled table" style="background-color: white; width: 220px">
-                                    <thead>
-                                        <tr>
-                                            <th>Available Right Types</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr id="rightTableRow1" onclick="rowClick(this)">
-                                            <td>Right of Ownership</td>
-                                        </tr>
-                                        <tr id="rightTableRow2" onclick="rowClick(this)">
-                                            <td>Mining Rights</td>
-                                        </tr>
-                                    </tbody>
-
-                                    <tfoot class="full-width">
-                                        <tr>
-                                            <th colspan="1">
-                                                <div class="ui right floated small primary labeled icon button" id="rightButton" onclick="createNewRight()">
-                                                    <i class="file text outline icon"></i>Add
-                                                </div>
-                                            </th>
-                                        </tr>
-                                    </tfoot>
-                                </table>
+                                <div style="height: 180px; overflow-y: scroll; overflow-x: hidden; border: solid 1px">
+                                    <table class="ui selectable celled table" style="background-color: white; width: 220px" id="rightTable">
+                                        <thead>
+                                            <tr>
+                                                <th>Available Right Types</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                             <tr id="rightTableRow1" onclick="rowClick(this)">
+                                                <td>Car Rental</td>
+                                            </tr>
+                                            <tr id="rightTableRow2" onclick="rowClick(this)">
+                                                <td>Music Streaming Subscription</td>
+                                            </tr>
+                                            <tr id="rightTableRow3" onclick="rowClick(this)">
+                                                <td>Theatre Ticket</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="ui hidden divider"></div>
+                                <div class="ui small primary labeled icon button" id="rightButton" onclick="createNewRight()">
+                                    <i class="file text outline icon"></i>Add
+                                </div>
                             </div>
-
                             <div class="field"></div>
                             <div class="field"></div>
-
                             <div class="field">
-                                <table class="ui selectable celled table" style="background-color: white; width: 220px">
-                                    <thead>
-                                        <tr>
-                                            <th>Eligible Users</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr id="userTableRow1" onclick="rowClick(this)">
-                                            <td>Hugue</td>
-                                        </tr>
-                                        <tr id="userTableRow2" onclick="rowClick(this)">
-                                            <td>Tommi</td>
-                                        </tr>
-                                    </tbody>
-                                    <tfoot class="full-width">
-                                        <tr>
-                                            <th colspan="1">
-                                                <div class="ui right floated small secondary labeled icon button">
-                                                    <i class="user icon"></i>Add User
-                                                </div>
+                                <div style="height: 180px; overflow-y: scroll; overflow-x: hidden; border: solid 1px">
+                                    <table class="ui table" style="background-color: white; width: 220px;" id="userTable">
+                                        <thead>
+                                            <tr>
+                                                <th>Eligible Users</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr id="userTableRow1" onclick="rowClick(this)">
+                                                <td>Hugue</td>
+                                            </tr>
+                                            <tr id="userTableRow2" onclick="rowClick(this)">
+                                                <td>Janna</td>
+                                            </tr>
+                                            <tr id="userTableRow3" onclick="rowClick(this)">
+                                                <td>Tommi</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="ui hidden divider"></div>
+                                <div class="ui labeled icon top right floated small primary dropdown button">
+                                    <i class="user icon"></i>Add
+                                    <div class="menu">
 
-                                            </th>
-                                        </tr>
-                                    </tfoot>
-                                </table>
+                                        <div class="divider"></div>
+
+                                        <div class="item" onclick="addUser(this)">
+                                            <!--<div class="ui red empty circular label"></div>-->
+                                            Adam
+                                        </div>
+                                        <div class="item" onclick="addUser(this)">
+                                            <!--<div class="ui blue empty circular label"></div>-->
+                                            Helal
+                                        </div>
+                                        <div class="item" onclick="addUser(this)">
+                                            <!--<div class="ui black empty circular label"></div>-->
+                                            Neil
+                                        </div>
+                                        <div class="divider"></div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

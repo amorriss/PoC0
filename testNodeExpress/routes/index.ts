@@ -36,7 +36,7 @@ router.get('/HCloginfail', (req: express.Request, res: express.Response) => {
 
 router.get('/', (req: express.Request, res: express.Response) => {
   //  res.render('index', { title: 'Testing ....' });
-    res.sendfile("views/HClogin.html");
+    res.sendfile("views/login.html");
 });
 
 router.get('/createright', (req: express.Request, res: express.Response) => {

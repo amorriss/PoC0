@@ -28,7 +28,7 @@ router.get('/HCloginfail', function (req, res) {
 // ------------------- Housing reg routing --------------------
 router.get('/', function (req, res) {
     //  res.render('index', { title: 'Testing ....' });
-    res.sendfile("views/HClogin.html");
+    res.sendfile("views/login.html");
 });
 router.get('/createright', function (req, res) {
     //res.render('index', { title: 'Testing ....' });

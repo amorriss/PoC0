@@ -87,6 +87,7 @@
     <Content Include="views\services_grid.html">
       <SubType>Code</SubType>
     </Content>
+    <Content Include="Web.config" />
     <None Include="DNPOC - Web Deploy.pubxml" />
     <Content Include="public\images\back_arrow.png" />
     <Content Include="public\images\counterparty.png" />

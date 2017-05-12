@@ -51,19 +51,16 @@
                // window.location("loginfail?name=" + name);
             }
         });
+
+        function checkSubmit(e) {
+            // try login if Enter key hit
+            if (e && e.keyCode == 13) {
+                login();
+            }
+        }
+
     </script>
-    <!-- *** <div class="flex-title">
-        <div>
-            <img alt="" src="images/logo.png" width="150" height="150" />
-        </div>
-        <div>
-            <h1 style="float:right">Euroclear Digital Notary</h1> -->
-    <!--<h3>Login</h3>-->
-    <!--    </div>
-        <div>
-            <h2 id="hLoggedInAs"></h2>
-        </div>
-    </div>  -->
+    
     <div>
         <img alt="" src="images/logo.png" width="150" height="150" />
     </div>
@@ -82,7 +79,7 @@
                         <label>Password</label>
                         <div class="ui left icon input">
                             <i class="lock icon"></i>
-                            <input class="input-password" placeholder="Pwd..." type="password" id="passwordtext" autofocus="autofocus"/>
+                            <input class="input-password" placeholder="Pwd..." type="password" id="passwordtext" autofocus="autofocus" onkeypress="return checkSubmit(event)"/>
                         </div>
                     </div>
             </div>

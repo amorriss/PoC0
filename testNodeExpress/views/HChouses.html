@@ -43,6 +43,17 @@
             socket.emit('createHouse', { data: "new house" });
         };
 
+        function delHouse() {
+            if (currentTableRow > 0) {
+                // delete row from table
+                var tableRef = document.getElementById('housetable').getElementsByTagName('tbody')[0];
+                tableRef.deleteRow(currentTableRow);
+
+                // disable del button and set current row to 0
+                document.getElementById("delButton").setAttribute("class", "ui disabled right floated small red icon button");
+                currentTableRow = 0;
+            };
+        };
 
         function rowClick(value) {
             // deselect all rows
@@ -57,11 +68,11 @@
             var IDstr = "houseTableRow" + value;
             if (currentTableRow == value) {  // deselect row as previously selected
                 document.getElementById(IDstr).removeAttribute("class");
-                //  document.getElementById("amendButton").removeAttribute("disabled");
+                document.getElementById("delButton").setAttribute("class", "ui disabled right floated small red icon button");
                 currentTableRow = 0;
             } else { // select row
                 document.getElementById(IDstr).setAttribute("class", "positive");
-                //  document.getElementById("amendButton").removeAttribute("disabled");
+                document.getElementById("delButton").setAttribute("class", "ui right floated small red icon button");
                 currentTableRow = value;
             }
 
@@ -168,7 +179,7 @@
             <h1>Finnish Home Service - Properties</h1>
         </div>
         <div class="right aligned column">
-            <i class="sign out huge icon" title="logout" id="gobackicon" style="cursor: pointer; position: absolute; right: 0px; top: 50px" onclick="goBack()"></i>
+            <i class="sign out huge icon" title="logout" id="logouticon" style="cursor: pointer; position: absolute; right: 0px; top: 50px" onclick="logout()"></i>
         </div>
     </div>
 
@@ -178,15 +189,11 @@
     <!--<div class="flex-containercentre">-->
     <div class="ui padded grid" style="padding-top: 7%; padding-left: 15%; padding-right: 15%">
         <div class="ui right aligned column">
-            <!-- <div class="flex-containerredtitle">
-                    <div class="flex-container5">
-                        <h3>Houses</h3>
-                    </div>-->
             <div class="flex-container3">
                 <table class="ui selectable striped celled table" style="background-color: white; overflow-y: scroll" id="housetable">
                     <thead>
                         <tr>
-                            <th>Property</th>
+                            <th>Housing Certificate</th>
                             <th>ID</th>
                             <th>Owner</th>
                             <th>Registration</th>
@@ -197,9 +204,6 @@
                             <td>Computer Science building, Konemiehentie 2, 02150 Espoo</td>
                             <td>123-456-789-000</td>
                             <td>Linus Torvalds
-                                <!--<div class="ui right floated small primary labeled icon button" id="editButton" onclick="editHouse()">
-                                    <i class="file text outline icon"></i>Edit
-                                </div>-->
                             </td>
                             <td>17/09/1991</td>
                         </tr>
@@ -218,23 +222,20 @@
                     </tbody>
                     <tfoot class="full-width">
                         <tr>
-
                             <th colspan="4">
                                 <div class="ui right floated small primary labeled icon button" id="newButton" onclick="newHouse(true)">
                                     <i class="file text outline icon"></i>New
+                                </div>
+                                <div class="ui disabled right floated small red icon button" id="delButton" onclick="delHouse()" >
+                                    <i class="trash outline icon"></i>
                                 </div>
                             </th>
                         </tr>
                     </tfoot>
                 </table>
             </div>
-            <!--</div>-->
-            <!-- <div class="ui hidden divider"></div>
-            <button class="ui button" id="logoutButton" type="button" onclick="logout()" disabled="disabled">Logout</button>
-            <button class="ui button" id="createButton" type="button" onclick="createService()">Create</button>-->
         </div>
     </div>
-    <!--</div>-->
 
 </body>
 </html>

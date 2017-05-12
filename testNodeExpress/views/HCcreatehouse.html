@@ -19,9 +19,27 @@
 
         function saveHouse() {
             var socket = io.connect();
-            socket.emit('saveHouse', { data: 'You clicked the create button' });
-            console.log("create button clicked");
+            socket.emit('saveHouse', { data: 'You clicked the save button' });
+            console.log("save button clicked");
         };
+
+        function sendHouse() {
+            console.log("sendHouse to DN");
+            alert("Sent to DN");
+
+            var socket = io.connect();
+            socket.emit('sendHouse', { data: 'You clicked the send button' });
+            console.log("send button clicked");
+        };
+
+        function setAuthDate(elm) {
+            
+            // set authentication date for owner
+            var myVar = $(elm).attr('data-value');
+            document.getElementById("authenticationdate").innerText = myVar;
+
+        };
+
     </script>
 </head>
 <body>
@@ -97,6 +115,55 @@
             window.location("/houses");
         });
 
+
+        socket.on('sendHouseRet', function (data) {
+            console.log("Send new house in browser called ...");
+            // also save in local storage array for loading table when this screen loads
+            var dataArray = new Array();
+
+            // set array to current local storage data then add new data or amend
+            if (JSON.parse(localStorage.getItem("tabledata")) != null) {
+                dataArray = JSON.parse(localStorage.getItem("tabledata"));
+                console.log("array is " + dataArray);
+
+                // clear local storage and then set it again with updated data
+                // this stops duplicates
+                localStorage.clear();
+
+                if (sessionStorage.getItem("currenthouserow") != "") {
+                    // loop through tabledata up to the current row ( / 4)
+
+                    var cellCount = 4;
+                    var rowCounter = 0;
+                    var currentHouseRow = sessionStorage.getItem("currenthouserow");
+                    console.log("currentHouseRow is " + currentHouseRow);
+                    for (counter = 0; counter < dataArray.length; counter++) {
+                        if (rowCounter == currentHouseRow) {
+                            // amend data
+                            dataArray[counter] = document.getElementById("propertyname").value;
+                            dataArray[counter + 1] = document.getElementById("propertyid").value;
+                            dataArray[counter + 2] = document.getElementById("owner").value;
+                            dataArray[counter + 3] = document.getElementById("regdate").valueAsDate;
+                        }
+                        if (cellCount == 4) {
+                            rowCounter++;
+                        }
+                        cellCount--;
+                        if (cellCount == -1) { cellCount = 4; }
+                    };
+                } else {
+                    dataArray.push(document.getElementById("propertyname").value);
+                    dataArray.push(document.getElementById("propertyid").value);
+                    dataArray.push(document.getElementById("owner").value);
+                    console.log("date is " + document.getElementById("regdate").valueAsDate);
+                    dataArray.push(document.getElementById("regdate").valueAsDate);
+                }
+                localStorage.setItem("tabledata", JSON.stringify(dataArray));
+                console.log("data saved " + JSON.stringify(dataArray));
+            }
+            window.location("/houses");
+        });
+
         function enableButton() {
             console.log("enableButton called");
             document.getElementById("createButton").removeAttribute("disabled");
@@ -110,6 +177,11 @@
             window.history.back();
         };
 
+        $(function () {
+            $('.ui.dropdown').dropdown();
+        });
+
+        
     </script>
 
     <div class="flex-title">
@@ -119,9 +191,9 @@
         <div>
             <h1>Finnish Home Service - Registration </h1>
         </div>
-        
+
         <div class="right aligned column">
-            <i class="sign out huge icon" title="logout" id="gobackicon" style="cursor: pointer; position: absolute; right: 0px; top: 50px" onclick="goBack()"></i>
+            <i class="sign out huge icon" title="logout" id="logouticon" style="cursor: pointer; position: absolute; right: 0px; top: 50px" onclick="logout()"></i>
         </div>
     </div>
 
@@ -154,9 +226,30 @@
                     </div>
                     <div class="field">
                         <div class="fields">
-                            <div class="twelve wide field">
+                            <!-- <div class="twelve wide field">
                                 <label>Owner</label>
                                 <input id="owner" name="owner" type="text" placeholder="Owner" />
+                            </div>-->
+
+                            <div class="eight wide field">
+                                <label>Owner</label>
+                                <div class="ui fluid search selection dropdown">
+                                    <input name="owner" id="owner" type="hidden" />
+                                    <i class="dropdown icon"></i>
+                                    <div class="default text">Select Owner</div>
+                                    <div class="menu" >
+                                        <div class="item" data-value="10/05/2017" onclick="setAuthDate(this)"><i class="check circle green icon"></i>Adam Morriss </div>
+                                        <div class="item" data-value="23/08/2011" onclick="setAuthDate(this)"><i class="check circle green icon"></i>Helal Miah</div>
+                                        <div class="item" data-value="00/00/0000" onclick="setAuthDate(this)"><i class="minus circle red icon"></i>Hugues Flament</div>
+                                        <div class="item" data-value="11/02/2012" onclick="setAuthDate(this)"><i class="check circle green icon"></i>Neil Rapley </div>
+                                        <div class="item" data-value="00/00/0000" onclick="setAuthDate(this)"><i class="minus circle red icon"></i>Sai Rajagopalan </div>
+                                    </div>
+                                </div>
+                                 
+                            </div>
+                            <div class="four wide field">
+                                <label>Authentication Date</label>
+                                <input id="authenticationdate" name="authenticationdate" type="date"  />
                             </div>
                             <div class="four wide field">
                                 <label>Registration Date</label>
@@ -186,6 +279,7 @@
 
                     <div tabindex="0" class="ui button" onclick="goBack()">Cancel</div>
                     <div tabindex="1" class="ui button" onclick="saveHouse()">Save</div>
+                    <div tabindex="2" class="ui button" onclick="sendHouse()">Send DN</div>
                 </form>
             </div>
         </div>

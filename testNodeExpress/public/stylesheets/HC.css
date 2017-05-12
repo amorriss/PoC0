@@ -166,7 +166,7 @@ body {
     display: flex;
     width: 300px;
     height: 200px;
-    background-color:white;
+    background-color: white;
     overflow: auto;
     justify-content: center;
     flex-direction: column;
@@ -179,7 +179,7 @@ body {
     border-bottom-right-radius: 0.28571429rem;
     border-top-right-radius: 0.28571429rem;
     border-top-left-radius: 0.28571429rem;
-    /*border:1px solid;*/
+    border: 3px solid black;
 }
 
 .flex-containerloginalign {

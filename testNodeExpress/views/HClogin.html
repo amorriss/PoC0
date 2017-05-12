@@ -53,8 +53,15 @@
             }
         });
 
+        function checkSubmit(e) {
+            // try login if Enter key hit
+            if (e && e.keyCode == 13) {
+                login();
+            }
+        }
 
     </script>
+      
     <div class="flex-title">
         <div>
             <img alt="no logo" src="images/HC.png" width="200" height="150" style="position: absolute; left: 0px; top: 0px" />
@@ -65,62 +72,22 @@
 
     </div>
 
-    <!--<div class="flex-containercentre">
-        <div class="flex-containerlogin">
-            <div>
-                <div>Name</div>
-                <select id="SelectName" name="D1" autofocus="autofocus">
-                    <option>- </option>
-                    <option>Tommi</option>
-                </select>
-            </div>
-            <div>
-                <div>Password</div>
-                <input type="password" id="passwordtext" />
-            </div>
-            <div>
-                &nbsp;
-            <button id="Button1" type="button" onclick="login()">Login</button>
-            </div>
-        </div>
-    </div>-->
-
-
-    <!--<div class="flex-containercentre">-->
     <div class="flex-loginbody">
         <div class="flex-containerrightalign">
             <div class="flex-containerlogin">
-                <!--<div class="inline icon field">
-                    <label>Username</label>-->
                 <div>&nbsp;</div>
                 <div class="ui right icon input">
                     <i class="user large icon"></i>
                     <input class="input-username" value="Tommi" type="text" id="username" />
                 </div>
-                <!--</div>-->
                 <div>&nbsp;</div>
                 <div>&nbsp;</div>
-                <!--<div class="inline icon field">
-                    <label>Password</label>-->
-                <!--   <div class="ui right icon action input">
-                        <input class="input-password" placeholder="Pwd..." type="password" id="passwordtext" autofocus="autofocus" />
-                        <button class="ui icon button" onclick="login()" style="background-color: white"><i class="sign in large icon"></i></button>
-                    </div>-->
-
                 <div class="ui icon input">
-                    <input class="input-password" type="password" id="passwordtext" placeholder="pwd..." autofocus="autofocus" />
-                    <i class="sign in large link icon" onclick="login()"></i>
+                    <input class="input-password" type="password" id="passwordtext" placeholder="pwd..." autofocus="autofocus" onkeypress="return checkSubmit(event)"/>
+                    <i class="sign in large link icon" onclick="login()" ></i>
                 </div>
-
-                <!--</div>-->
-            </div>
-            <div>&nbsp;</div>
-            <div>
-                &nbsp;
-                
             </div>
         </div>
     </div>
-    <!--</div>-->
 </body>
 </html>

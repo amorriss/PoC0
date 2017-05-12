@@ -91,6 +91,12 @@ module.exports = {
                 socket.broadcast.emit('saveHouseRet', { data: data.data });
             });
 
+            socket.on('sendHouse', function (data) {
+                console.log(data);
+                console.log("Send house server function called from browser");
+                socket.broadcast.emit('sendHouseRet', { data: data.data });
+            });
+
         });
         return io;
     }

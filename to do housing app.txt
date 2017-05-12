@@ -1,7 +1,17 @@
 
+Housing app
 
- - amend house func not working. tabledata null as not loaded for just hard coded rows
+ - ddl of owners with validation date by Finnish auth (some not valid). DONE
 
- - alignment of checkbox on create house
+ - delete property DONE
 
- - notify ownder func?
+ - write to DN when creating/amending house cert
+
+
+
+
+DN app
+
+Create right - go back on Create  DONE
+
+Add user - ddl list. DONE
