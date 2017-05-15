@@ -16,7 +16,8 @@
 
     <script>
 
-        var currentTableRow;
+        var currentRightTableRow;
+        var currentUserTableRow;
         var amendData;
         var rightTotalRows;
         var userTotalRows;
@@ -50,7 +51,6 @@
 
         function addUser(value) {
             console.log("addUser " + value.innerText);
-           
 
             var tableRef = document.getElementById('userTable').getElementsByTagName('tbody')[0];
             var numrows = tableRef.rows.length;
@@ -70,6 +70,34 @@
             document.getElementById("userButtonText").innerHTML = "Add";
         };
 
+        function deleteUser(value) {
+            console.log("deleteUser ");
+
+            // deselect then delete row
+            if (currentUserTableRow > 0) {
+                console.log("deleting user row " + currentUserTableRow);
+                var IDstr = "userTableRow" + currentUserTableRow.toString();
+                document.getElementById(IDstr).removeAttribute("class");
+                document.getElementById('userTable').deleteRow(currentUserTableRow);
+                currentUserTableRow = 0;
+                userTotalRows--;
+            }
+        };
+
+        function deleteRight() {
+            console.log("deleteRight ");
+
+            // deselect then delete row
+            if (currentRightTableRow > 0) {
+                console.log("deleting right row " + currentRightTableRow);
+                var IDstr = "rightTableRow" + currentRightTableRow.toString();
+                document.getElementById(IDstr).removeAttribute("class");
+                document.getElementById('rightTable').deleteRow(currentRightTableRow);
+                currentRightTableRow = 0;
+                rightTotalRows--;
+            }
+        };
+
 
         function rowClick(value) {
 
@@ -83,43 +111,106 @@
                 totalRows = userTotalRows;
             };
 
-            // deselect all rows
-            for (i = 1; i < totalRows + 1; i++) {
-                var IDstr = value.id.substring(0, value.id.length - 1) + i.toString();
-                console.log("rowClick value is " + IDstr);
-                document.getElementById(IDstr).removeAttribute("class");
-            }
-            //var IDstr = value.id.substring(0, value.id.length - 1) + i.toString();
-            console.log("rowClick index is " + value.rowIndex);
-            if (currentTableRow == value.rowIndex) {  // deselect row as previously selected
-                document.getElementById(value.id).removeAttribute("class");
-                document.getElementById("createButton").removeAttribute("disabled");
-                currentTableRow = 0;
+            console.log("rowClick row value is " + value.rowIndex);
+            console.log("current row value is " + currentRightTableRow);
+            // check either user or right table
+            if (value.id.substring(0, 5) == "right") {
+                if (currentRightTableRow > 0) {
+                    console.log("1");
+                    // deselect previously selected row if another row clicked
+                    var IDstr = value.id.substring(0, value.id.length - 1) + currentRightTableRow.toString();
+                    document.getElementById(IDstr).removeAttribute("class");
+                    // previous row re-clicked so unselected
+                    if (currentRightTableRow == value.rowIndex) {
+                        console.log("3");
+                        //document.getElementById("rightButton").setAttribute("disabled", "disabled");
+                        //document.getElementById("rightDeleteButton").setAttribute("disabled", "disabled");
+                        currentRightTableRow = 0;
+                        // clear right 
+                        sessionStorage.setItem("right", "");
+                        // change button text to Add
+                        var tempStr = document.getElementById("rightButton").innerHTML;
+                        tempStr = tempStr.replace("Amend", "Add");//
+                        //console.log(tempStr);
+                        document.getElementById("rightButton").innerHTML = tempStr;
+                    } else {
+                        console.log("4");
+                        //document.getElementById("rightButton").removeAttribute("disabled");
+                        //document.getElementById("rightDeleteButton").removeAttribute("disabled");
+                        document.getElementById(value.id).setAttribute("class", "positive");
+                        currentRightTableRow = value.rowIndex;
+                        // set right 
+                        sessionStorage.setItem("right", document.getElementById(value.id).innerText);
+                        // change button text to Add
+                        var tempStr = document.getElementById("rightButton").innerHTML;
+                        tempStr = tempStr.replace("Add", "Amend");
+                        //console.log(tempStr);
+                        document.getElementById("rightButton").innerHTML = tempStr;
+                    }
 
-                if (value.id.substring(0, 5) == "right") {
-                    // clear right 
-                    sessionStorage.setItem("right", "");
+                } else if (currentRightTableRow == 0) {
+                    console.log("2");
+                    //document.getElementById("rightButton").removeAttribute("disabled");
+                    //document.getElementById("rightDeleteButton").removeAttribute("disabled");
+                    document.getElementById(value.id).setAttribute("class", "positive");
+                    currentRightTableRow = value.rowIndex;
+                    // set right 
+                    sessionStorage.setItem("right", document.getElementById(value.id).innerText);
                     // change button text to Add
                     var tempStr = document.getElementById("rightButton").innerHTML;
-                    tempStr = tempStr.replace("Amend", "Add");
-                    console.log(tempStr);
-                    document.getElementById("rightButton").innerHTML = tempStr;
-                };
-            } else { // select row
-                document.getElementById(value.id).setAttribute("class", "positive");
-                document.getElementById("createButton").removeAttribute("disabled");
-                currentTableRow = value.rowIndex;
-                // save current right
-                if (value.id.substring(0, 5) == "right") {
-                    sessionStorage.setItem("right", document.getElementById(value.id).innerText);
-                    console.log("rowClick right is " + document.getElementById(value.id).innerText);
-                    // change button text to Amend
-                    var tempStr = document.getElementById("rightButton").innerHTML;
                     tempStr = tempStr.replace("Add", "Amend");
-                    console.log(tempStr);
+                    //console.log(tempStr);
                     document.getElementById("rightButton").innerHTML = tempStr;
                 };
             }
+            if (value.id.substring(0, 4) == "user") {
+                if (currentUserTableRow > 0) {
+                    console.log("1");
+                    // deselect previously selected row if another row clicked
+                    var IDstr = value.id.substring(0, value.id.length - 1) + currentUserTableRow.toString();
+                    document.getElementById(IDstr).removeAttribute("class");
+                    // previous row re-clicked so unselected
+                    if (currentUserTableRow == value.rowIndex) {
+                        console.log("3");
+                        //document.getElementById("rightButton").setAttribute("disabled", "disabled");
+                        //document.getElementById("rightDeleteButton").setAttribute("disabled", "disabled");
+                        currentUserTableRow = 0;
+                        // clear right 
+                        sessionStorage.setItem("user", "");
+                        // change button text to Add
+                        var tempStr = document.getElementById("userButton").innerHTML;
+                        tempStr = tempStr.replace("Amend", "Add");//
+                        //console.log(tempStr);
+                        document.getElementById("userButton").innerHTML = tempStr;
+                    } else {
+                        console.log("4");
+                        //document.getElementById("rightButton").removeAttribute("disabled");
+                        //document.getElementById("rightDeleteButton").removeAttribute("disabled");
+                        document.getElementById(value.id).setAttribute("class", "positive");
+                        currentUserTableRow = value.rowIndex;
+                        // set right 
+                        sessionStorage.setItem("user", document.getElementById(value.id).innerText);
+                        // change button text to Add
+                        var tempStr = document.getElementById("userButton").innerHTML;
+                        tempStr = tempStr.replace("Add", "Amend");
+                        //console.log(tempStr);
+                        document.getElementById("userButton").innerHTML = tempStr;
+                    }
+                } else if (currentUserTableRow == 0) {
+                    console.log("2");
+                    //document.getElementById("rightButton").removeAttribute("disabled");
+                    //document.getElementById("rightDeleteButton").removeAttribute("disabled");
+                    document.getElementById(value.id).setAttribute("class", "positive");
+                    currentUserTableRow = value.rowIndex;
+                    // set right 
+                    sessionStorage.setItem("user", document.getElementById(value.id).innerText);
+                    // change button text to Add
+                    var tempStr = document.getElementById("userButton").innerHTML;
+                    tempStr = tempStr.replace("Add", "Amend");
+                    //console.log(tempStr);
+                    document.getElementById("userButton").innerHTML = tempStr;
+                };
+            };
         };
 
     </script>
@@ -147,11 +238,16 @@
                 amendData = true;
             };
 
+            //sessionStorage.setItem("right", null);
+
             // get no. rows in each table. Used in rowClick()
             var tableRef = document.getElementById('rightTable').getElementsByTagName('tbody')[0];
             rightTotalRows = tableRef.rows.length;
             tableRef = document.getElementById('userTable').getElementsByTagName('tbody')[0];
             userTotalRows = tableRef.rows.length;
+
+            currentRightTableRow = 0;
+            currentUserTableRow = 0;
         };
 
         var socket = io.connect();
@@ -198,7 +294,6 @@
                 <h1 class="ui left aligned header" id="mainTitle" style="color: white">Service</h1>
             </div>
             <div class="column"></div>
-            <!--<div class="column"></div>-->
             <div class="column" id="hLoggedInAs">
                 <h1 class="ui right aligned header" style="color: white">Welcome</h1>
             </div>
@@ -228,7 +323,7 @@
 
     <div class="ui hidden divider"></div>
 
-    <div class="ui padded grid" style="padding-top: 7%; padding-left: 20%; padding-right: 20%">
+    <div class="ui padded grid" style="padding-top: 5%; padding-left: 15%; padding-right: 20%">
         <div class="ui right aligned column">
             <div class="flex-containerredtitle">
                 <div class="flex-container5">
@@ -238,17 +333,19 @@
                     <div class="ui form">
                         <div class="fields">
                             <div class="field">
-                                <div class="ui labeled input">
-                                    <div class="ui label">
-                                        Service Name
-                                    </div>
+                                <div class="ui large label" style="float: left">
+                                    Service Name
+                                </div>
+                                <div class="ui hidden divider"></div>
+                                <div class="ui hidden divider"></div>
+                                <div class="ui input">
                                     <input type="text" id="servicetext" placeholder="" />
                                 </div>
                             </div>
 
                             <div class="field"></div>
                             <div class="field"></div>
-
+                            <div class="field"></div>
                             <div class="field">
                                 <div style="height: 180px; overflow-y: scroll; overflow-x: hidden; border: solid 1px">
                                     <table class="ui selectable celled table" style="background-color: white; width: 220px" id="rightTable">
@@ -258,7 +355,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                             <tr id="rightTableRow1" onclick="rowClick(this)">
+                                            <tr id="rightTableRow1" onclick="rowClick(this)">
                                                 <td>Car Rental</td>
                                             </tr>
                                             <tr id="rightTableRow2" onclick="rowClick(this)">
@@ -270,11 +367,21 @@
                                         </tbody>
                                     </table>
                                 </div>
+
                                 <div class="ui hidden divider"></div>
-                                <div class="ui small primary labeled icon button" id="rightButton" onclick="createNewRight()">
-                                    <i class="file text outline icon"></i>Add
+
+                                <div class="ui buttons">
+                                    <div class="ui grey button" id="rightButton" onclick="createNewRight()">
+                                        Add
+                                    </div>
+                                    <div class="or"></div>
+                                    <div class="ui grey button" id="rightDelButton" onclick="deleteRight()">
+                                        Del
+                                    </div>
                                 </div>
                             </div>
+                            <div class="field"></div>
+                            <div class="field"></div>
                             <div class="field"></div>
                             <div class="field"></div>
                             <div class="field">
@@ -299,8 +406,9 @@
                                     </table>
                                 </div>
                                 <div class="ui hidden divider"></div>
-                                <div class="ui labeled icon top right floated small primary dropdown button">
-                                    <i class="user icon"></i>Add
+                                <div class="ui buttons">
+                                    <div class="ui grey dropdown button">
+                                        Add
                                     <div class="menu">
 
                                         <div class="divider"></div>
@@ -318,6 +426,11 @@
                                             Neil
                                         </div>
                                         <div class="divider"></div>
+                                    </div>
+                                    </div>
+                                    <div class="or"></div>
+                                    <div class="ui grey button" id="userDelButton" onclick="deleteUser()">
+                                        Del
                                     </div>
                                 </div>
                             </div>
