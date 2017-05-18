@@ -77,7 +77,7 @@
             console.log("onload called : " + sessionStorage.getItem("name"));
             document.getElementById("hLoggedInAs").innerHTML = "<h1 class=\"ui right aligned header\" style=\"color: white\">Welcome " + sessionStorage.getItem("name") + "</h1>";
             document.getElementById("pagetitle").innerText = "Right Types : " + sessionStorage.getItem("servicename");
-            if (sessionStorage.getItem("right") != 'null') {
+            if (sessionStorage.getItem("right") != '') {
                 document.getElementById("righttext").innerText = sessionStorage.getItem("right");
                 document.getElementById("createRightButton").removeAttribute("disabled");
                 document.getElementById("createRightButton").innerText = "Amend";

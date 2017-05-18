@@ -39,6 +39,7 @@
             };
 
             console.log("create button clicked");
+            window.location("services");
         };
 
         function createNewRight() {
@@ -96,6 +97,13 @@
                 currentRightTableRow = 0;
                 rightTotalRows--;
             }
+
+            // re number ID's
+            var tableRef = document.getElementById('rightTable').getElementsByTagName('tbody')[0];
+            for (counter = 0; counter < rightTotalRows; counter++) {
+                var IDstr = "rightTableRow" + counter + 1;
+                tableRef.rows[counter].setAttribute("id", IDstr);
+            };
         };
 
 
@@ -115,43 +123,25 @@
             console.log("current row value is " + currentRightTableRow);
             // check either user or right table
             if (value.id.substring(0, 5) == "right") {
+                console.log("1");
+                // deselect previously selected row 
                 if (currentRightTableRow > 0) {
-                    console.log("1");
-                    // deselect previously selected row if another row clicked
                     var IDstr = value.id.substring(0, value.id.length - 1) + currentRightTableRow.toString();
                     document.getElementById(IDstr).removeAttribute("class");
-                    // previous row re-clicked so unselected
-                    if (currentRightTableRow == value.rowIndex) {
-                        console.log("3");
-                        //document.getElementById("rightButton").setAttribute("disabled", "disabled");
-                        //document.getElementById("rightDeleteButton").setAttribute("disabled", "disabled");
-                        currentRightTableRow = 0;
-                        // clear right 
-                        sessionStorage.setItem("right", "");
-                        // change button text to Add
-                        var tempStr = document.getElementById("rightButton").innerHTML;
-                        tempStr = tempStr.replace("Amend", "Add");//
-                        //console.log(tempStr);
-                        document.getElementById("rightButton").innerHTML = tempStr;
-                    } else {
-                        console.log("4");
-                        //document.getElementById("rightButton").removeAttribute("disabled");
-                        //document.getElementById("rightDeleteButton").removeAttribute("disabled");
-                        document.getElementById(value.id).setAttribute("class", "positive");
-                        currentRightTableRow = value.rowIndex;
-                        // set right 
-                        sessionStorage.setItem("right", document.getElementById(value.id).innerText);
-                        // change button text to Add
-                        var tempStr = document.getElementById("rightButton").innerHTML;
-                        tempStr = tempStr.replace("Add", "Amend");
-                        //console.log(tempStr);
-                        document.getElementById("rightButton").innerHTML = tempStr;
-                    }
-
-                } else if (currentRightTableRow == 0) {
-                    console.log("2");
-                    //document.getElementById("rightButton").removeAttribute("disabled");
-                    //document.getElementById("rightDeleteButton").removeAttribute("disabled");
+                }
+                // previous row re-clicked so unselected
+                if (currentRightTableRow == value.rowIndex) {
+                    console.log("3");
+                    document.getElementById("createButton").setAttribute("disabled", "disabled");
+                    currentRightTableRow = 0;
+                    // clear right 
+                    sessionStorage.setItem("right", "");
+                    // change button text to Add
+                    var tempStr = document.getElementById("rightButton").innerHTML;
+                    tempStr = tempStr.replace("Amend", "Add");//
+                    document.getElementById("rightButton").innerHTML = tempStr;
+                } else {
+                    console.log("4");
                     document.getElementById(value.id).setAttribute("class", "positive");
                     currentRightTableRow = value.rowIndex;
                     // set right 
@@ -159,58 +149,36 @@
                     // change button text to Add
                     var tempStr = document.getElementById("rightButton").innerHTML;
                     tempStr = tempStr.replace("Add", "Amend");
-                    //console.log(tempStr);
                     document.getElementById("rightButton").innerHTML = tempStr;
-                };
+                }
             }
             if (value.id.substring(0, 4) == "user") {
+                console.log("1");
+                // deselect previously selected row if another row clicked
                 if (currentUserTableRow > 0) {
-                    console.log("1");
-                    // deselect previously selected row if another row clicked
                     var IDstr = value.id.substring(0, value.id.length - 1) + currentUserTableRow.toString();
                     document.getElementById(IDstr).removeAttribute("class");
-                    // previous row re-clicked so unselected
-                    if (currentUserTableRow == value.rowIndex) {
-                        console.log("3");
-                        //document.getElementById("rightButton").setAttribute("disabled", "disabled");
-                        //document.getElementById("rightDeleteButton").setAttribute("disabled", "disabled");
-                        currentUserTableRow = 0;
-                        // clear right 
-                        sessionStorage.setItem("user", "");
-                        // change button text to Add
-                        var tempStr = document.getElementById("userButton").innerHTML;
-                        tempStr = tempStr.replace("Amend", "Add");//
-                        //console.log(tempStr);
-                        document.getElementById("userButton").innerHTML = tempStr;
-                    } else {
-                        console.log("4");
-                        //document.getElementById("rightButton").removeAttribute("disabled");
-                        //document.getElementById("rightDeleteButton").removeAttribute("disabled");
-                        document.getElementById(value.id).setAttribute("class", "positive");
-                        currentUserTableRow = value.rowIndex;
-                        // set right 
-                        sessionStorage.setItem("user", document.getElementById(value.id).innerText);
-                        // change button text to Add
-                        var tempStr = document.getElementById("userButton").innerHTML;
-                        tempStr = tempStr.replace("Add", "Amend");
-                        //console.log(tempStr);
-                        document.getElementById("userButton").innerHTML = tempStr;
-                    }
-                } else if (currentUserTableRow == 0) {
-                    console.log("2");
-                    //document.getElementById("rightButton").removeAttribute("disabled");
-                    //document.getElementById("rightDeleteButton").removeAttribute("disabled");
+                }
+                // previous row re-clicked so unselected
+                if (currentUserTableRow == value.rowIndex) {
+                    console.log("3");
+                    document.getElementById("createButton").setAttribute("disabled", "disabled");
+                    currentUserTableRow = 0;
+                    // clear right 
+                    sessionStorage.setItem("user", "");
+                } else {
+                    console.log("4");
                     document.getElementById(value.id).setAttribute("class", "positive");
                     currentUserTableRow = value.rowIndex;
                     // set right 
                     sessionStorage.setItem("user", document.getElementById(value.id).innerText);
-                    // change button text to Add
-                    var tempStr = document.getElementById("userButton").innerHTML;
-                    tempStr = tempStr.replace("Add", "Amend");
-                    //console.log(tempStr);
-                    document.getElementById("userButton").innerHTML = tempStr;
-                };
+                }
             };
+
+            // if right and user selected then enable main create/amend button
+            if ((currentRightTableRow > 0) && (currentUserTableRow > 0)) {
+                document.getElementById("createButton").removeAttribute("disabled");
+            }
         };
 
     </script>
@@ -323,29 +291,25 @@
 
     <div class="ui hidden divider"></div>
 
-    <div class="ui padded grid" style="padding-top: 5%; padding-left: 15%; padding-right: 20%">
+    <div class="ui padded grid" style="padding-top: 5%; padding-left: 20%; padding-right: 25%">
         <div class="ui right aligned column">
             <div class="flex-containerredtitle">
                 <div class="flex-container5">
                     <h3>Service</h3>
                 </div>
-                <div class="flex-container3">
+                <div class="flex-container4">
                     <div class="ui form">
-                        <div class="fields">
-                            <div class="field">
+                        <div class="field">
+                            <div class="ui input">
                                 <div class="ui large label" style="float: left">
                                     Service Name
                                 </div>
-                                <div class="ui hidden divider"></div>
-                                <div class="ui hidden divider"></div>
-                                <div class="ui input">
-                                    <input type="text" id="servicetext" placeholder="" />
-                                </div>
+                                <input type="text" id="servicetext" placeholder="" />
                             </div>
-
-                            <div class="field"></div>
-                            <div class="field"></div>
-                            <div class="field"></div>
+                        </div>
+                        <div class="ui hidden divider"></div>
+                        <div class="ui hidden divider"></div>
+                        <div class="fields">
                             <div class="field">
                                 <div style="height: 180px; overflow-y: scroll; overflow-x: hidden; border: solid 1px">
                                     <table class="ui selectable celled table" style="background-color: white; width: 220px" id="rightTable">
@@ -356,13 +320,10 @@
                                         </thead>
                                         <tbody>
                                             <tr id="rightTableRow1" onclick="rowClick(this)">
-                                                <td>Car Rental</td>
+                                                <td> </td>
                                             </tr>
                                             <tr id="rightTableRow2" onclick="rowClick(this)">
-                                                <td>Music Streaming Subscription</td>
-                                            </tr>
-                                            <tr id="rightTableRow3" onclick="rowClick(this)">
-                                                <td>Theatre Ticket</td>
+                                                <td> </td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -389,17 +350,14 @@
                                     <table class="ui table" style="background-color: white; width: 220px;" id="userTable">
                                         <thead>
                                             <tr>
-                                                <th>Eligible Users</th>
+                                                <th>Eligible Service Users</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr id="userTableRow1" onclick="rowClick(this)">
-                                                <td>Hugue</td>
-                                            </tr>
-                                            <tr id="userTableRow2" onclick="rowClick(this)">
                                                 <td>Janna</td>
                                             </tr>
-                                            <tr id="userTableRow3" onclick="rowClick(this)">
+                                            <tr id="userTableRow2" onclick="rowClick(this)">
                                                 <td>Tommi</td>
                                             </tr>
                                         </tbody>
@@ -407,7 +365,7 @@
                                 </div>
                                 <div class="ui hidden divider"></div>
                                 <div class="ui buttons">
-                                    <div class="ui grey dropdown button">
+                                    <div class="ui grey dropdown button" id="userButton">
                                         Add
                                     <div class="menu">
 

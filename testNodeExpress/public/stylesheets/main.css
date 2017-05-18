@@ -140,7 +140,7 @@ body {
     display: flex;
     width: inherit;
     background-color: #E0E1E2;
-    overflow: auto;
+    overflow: visible;
     justify-content: space-around;
     flex-direction: row;
     flex-wrap: wrap;

@@ -1,7 +1,12 @@
+HC app
 
- - add del to Services screen
- - add new screen after create New Service :
+remove send DN and change Save to Create
+
+Reg page - Create or Amend button 
 
 
-	Service Name
-	List Available Rights
+DN app
+
+Re-arrange Services screen (users relate to srvs not Rights)
+
+No right types on new service
