@@ -22,6 +22,7 @@
     <script>
 
         var currentTableRow;
+        var servicesDataArray = new Array();
 
         function logout() {
             var socket = io.connect();
@@ -34,6 +35,7 @@
             console.log("create button clicked");
             //var data = document.getElementsByClassName("selectedrow");
             var socket = io.connect();
+            sessionStorage.setItem("mode", "create");
             socket.emit('createService', { data: "new" });
         };
 
@@ -44,6 +46,7 @@
             var cells = row.getElementsByTagName('td');
             var data = cells[0].innerText;
             var socket = io.connect();
+            sessionStorage.setItem("mode", "amend");
             socket.emit('amendService', { data: data });
         };
 
@@ -67,7 +70,10 @@
 
         function rowClick(value) {
             // deselect all rows
-            for (i = 1; i < 4; i++) {
+            var tableRef = document.getElementById('servicestable').getElementsByTagName('tbody')[0];
+            var numrows = tableRef.rows.length;
+
+            for (i = 1; i < numrows + 1; i++) {
                 var IDstr = "srvTableRow" + i;
                 console.log("id is " + IDstr);
                 document.getElementById(IDstr).removeAttribute("class");
@@ -81,13 +87,52 @@
                 document.getElementById(IDstr).setAttribute("class", "positive");
                 document.getElementById("amendButton").removeAttribute("disabled");
                 currentTableRow = value;
+
+                // set session storage for passing to amend page if required
+                sessionStorage.setItem("servicename", servicesDataArray[currentTableRow - 1].serviceName);
+                sessionStorage.setItem("authorisedusers", servicesDataArray[currentTableRow - 1].authorisedUsers);
+                sessionStorage.setItem("righttypes", servicesDataArray[currentTableRow - 1].rightTypes);
+
             }
-            
+
         };
 
         /* When the user clicks on the button toggle between hiding and showing the dropdown content */
         function ddShow() {
             document.getElementById("myDropdown").classList.toggle("show");
+        };
+
+
+        function loadServicesTable(dataarray) {
+            // load table data
+            var tableRef = document.getElementById('servicestable').getElementsByTagName('tbody')[0];
+            var arrayLen = dataarray.length;
+            console.log("array size is " + arrayLen);
+
+            // set instance var to services data as this will get passed to amend service
+            servicesDataArray = dataarray;
+
+            if (arrayLen > 0) {
+
+                for (counter = 0; counter < arrayLen; counter++) {
+
+                    var numrows = tableRef.rows.length;
+                    var row = tableRef.insertRow(numrows);
+                    var newRowId = "srvTableRow" + (numrows + 1);
+                    //console.log("new row is " + newRowId);
+                    row.setAttribute("id", newRowId);
+                    row.setAttribute("onclick", "rowClick(this.rowIndex)");
+                    //row.setAttribute("ondblclick", "rowDblClick(this)");
+
+                    // Insert new cells (<td> elements) at the 1st and 2nd position of the "new" <tr> element:
+                    var serviceName = row.insertCell(0);
+                    var serviceStatus = row.insertCell(1);
+
+                    // Add some text to the new cells:
+                    serviceName.innerHTML = dataarray[counter].serviceName;
+                    serviceStatus.innerHTML = "Live";
+                };
+            };
         };
 
 
@@ -104,6 +149,9 @@
             console.log("onload called : " + sessionStorage.getItem("name"));
             var ts = new Date();
             document.getElementById("hLoggedInAs").innerHTML = "<h1 class=\"ui right aligned header\" style=\"color: white\">Welcome " + sessionStorage.getItem("name") + "</h1>"; // + "<br/>" + ts.toString('dddd, MMMM') ;
+
+            var socket = io.connect();
+            socket.emit('getServices', { data: "" });
         };
 
         var socket = io.connect();
@@ -119,13 +167,19 @@
 
         socket.on('amendServiceRet', function (data) {
             console.log("Amend service in browser called ...");
-            sessionStorage.setItem("servicename", data.data);
+            //sessionStorage.setItem("servicename", data.data);
             window.location("createservice");
             //if (createNew) {
             //    window.location("createservice");
             //} else {
             //    window.location("createright");
             //}
+        });
+
+        socket.on('getServicesRet', function (data) {
+            console.log("Get services in browser called ...");
+            // populate table data
+            loadServicesTable(data.data);
         });
 
         socket.on('createServiceRet', function (data) {
@@ -140,7 +194,8 @@
         });
 
         function goBack() {
-            window.history.back();
+            window.location("/");
+           // window.history.back();
         };
 
         $(function () {
@@ -193,7 +248,7 @@
                 </div>
                 <div class="flex-container3">
                     <!--<h4>Available Services</h4>-->
-                    <table class="ui selectable celled table" style="background-color: white">
+                    <table class="ui selectable celled table" style="background-color: white" id="servicestable">
                         <thead>
                             <tr>
                                 <th>Name</th>
@@ -201,18 +256,6 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr id="srvTableRow1" onclick="rowClick(this.rowIndex)">
-                                <td>Land Registry</td>
-                                <td>Live</td>
-                            </tr>
-                            <tr id="srvTableRow2" onclick="rowClick(this.rowIndex)">
-                                <td>Passport Application</td>
-                                <td>Live</td>
-                            </tr>
-                            <tr id="srvTableRow3" onclick="rowClick(this.rowIndex)">
-                                <td>Vehicle Licensing</td>
-                                <td>Submitted </td>
-                            </tr>
                         </tbody>
                     </table>
                 </div>

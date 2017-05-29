@@ -1,12 +1,10 @@
 HC app
 
-remove send DN and change Save to Create
-
-Reg page - Create or Amend button 
+Tax checkbox. distance between text and control too great
 
 
 DN app
 
-Re-arrange Services screen (users relate to srvs not Rights)
+Services page. Tidy / improve layout
 
-No right types on new service
+Pass data (right) back

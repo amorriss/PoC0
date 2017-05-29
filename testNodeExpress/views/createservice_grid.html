@@ -4,8 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <title>Project X</title>
-    <!-- <link rel='stylesheet prefetch' href='http://cdnjs.cloudflare.com/ajax/libs/semantic-ui/0.16.1/css/semantic.min.css' />-->
-
+ 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.8/semantic.min.css" rel="stylesheet" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.8/semantic.min.js"></script>
@@ -29,18 +28,29 @@
         };
 
         function createNewService() {
-            //var socket = io.connect();
-            //socket.emit('createNewService', { data: 'You clicked the create button' });
-            var svrName = document.getElementById("servicetext").value;
-            if (amendData) {
-                alert("Service " + svrName + " amended");
-            } else {
-                alert("New Service " + svrName + " created");
+            // create and build up data object
+            var serviceData = {
+                name: sessionStorage.getItem("servicename"),
+                users: sessionStorage.getItem("authorisedusers").split(","),
+                rights: sessionStorage.getItem("righttypes").split(",")
             };
 
-            console.log("create button clicked");
-            window.location("services");
+            console.log("serviceData is " + serviceData.name + " " + serviceData.rights);
+
+            var socket = io.connect();
+            if (amendData) {
+                socket.emit('amendService', { data: serviceData });
+                console.log("amend button clicked");
+            } else {
+                socket.emit('createNewService', { data: serviceData });
+                console.log("create button clicked");
+            }
         };
+
+        function setServiceName(value) {
+            sessionStorage.setItem("servicename", value);
+            amendData = true;
+        }
 
         function createNewRight() {
 
@@ -49,9 +59,56 @@
             console.log("New Right button clicked");
         };
 
+        function addRight(value) {
+            console.log("addRight " + value);
+
+            var tableRef = document.getElementById('rightTable').getElementsByTagName('tbody')[0];
+            var numrows = tableRef.rows.length;
+            var row = tableRef.insertRow(numrows);
+            userTotalRows = tableRef.rows.length;
+            var newRowId = "rightTableRow" + (numrows + 1);
+            row.setAttribute("id", newRowId);
+            row.setAttribute("onclick", "rowClick(this)");
+
+            // Insert new cells (<td> elements) at the 1st and 2nd position of the "new" <tr> element:
+            var nameCell = row.insertCell(0);
+
+            // Add some text to the new cells:
+            nameCell.innerHTML = value;
+        };
+
+        function deleteRight() {
+            console.log("deleteRight ");
+
+            // deselect then delete row
+            if (currentRightTableRow > 0) {
+                console.log("deleting right row " + currentRightTableRow);
+                var IDstr = "rightTableRow" + currentRightTableRow.toString();
+                document.getElementById(IDstr).removeAttribute("class");
+                // delete from session storage
+                sessionStorage.removeItem(document.getElementById(IDstr).innerText);
+                document.getElementById('rightTable').deleteRow(currentRightTableRow);
+                currentRightTableRow = 0;
+                rightTotalRows--;
+            }
+
+            // re number ID's
+            var tableRef = document.getElementById('rightTable').getElementsByTagName('tbody')[0];
+            for (counter = 0; counter < rightTotalRows; counter++) {
+                var IDstr = "rightTableRow" + counter + 1;
+                tableRef.rows[counter].setAttribute("id", IDstr);
+            };
+        };
 
         function addUser(value) {
-            console.log("addUser " + value.innerText);
+            // add to session storage 
+            sessionStorage.setItem("authorisedusers", sessionStorage.getItem("authorisedusers") + "," + value);
+            loadUser(value);
+        }
+
+
+        function loadUser(value) {
+            console.log("loadUser " + value);
 
             var tableRef = document.getElementById('userTable').getElementsByTagName('tbody')[0];
             var numrows = tableRef.rows.length;
@@ -65,10 +122,7 @@
             var nameCell = row.insertCell(0);
 
             // Add some text to the new cells:
-            nameCell.innerHTML = value.innerText;
-
-            // override semantic ui func which overwrites innertext with selected user    CURRENTLY NOT WORKING !!!!!
-            document.getElementById("userButtonText").innerHTML = "Add";
+            nameCell.innerHTML = value;
         };
 
         function deleteUser(value) {
@@ -83,27 +137,6 @@
                 currentUserTableRow = 0;
                 userTotalRows--;
             }
-        };
-
-        function deleteRight() {
-            console.log("deleteRight ");
-
-            // deselect then delete row
-            if (currentRightTableRow > 0) {
-                console.log("deleting right row " + currentRightTableRow);
-                var IDstr = "rightTableRow" + currentRightTableRow.toString();
-                document.getElementById(IDstr).removeAttribute("class");
-                document.getElementById('rightTable').deleteRow(currentRightTableRow);
-                currentRightTableRow = 0;
-                rightTotalRows--;
-            }
-
-            // re number ID's
-            var tableRef = document.getElementById('rightTable').getElementsByTagName('tbody')[0];
-            for (counter = 0; counter < rightTotalRows; counter++) {
-                var IDstr = "rightTableRow" + counter + 1;
-                tableRef.rows[counter].setAttribute("id", IDstr);
-            };
         };
 
 
@@ -196,17 +229,42 @@
             sessionStorage.setItem("right", "");
 
             // check if new or amend
-            if (sessionStorage.getItem("servicename") == "new") {
+            if (sessionStorage.getItem("mode") == "create") {
                 document.getElementById("mainTitle").innerText = "Service - new";
+                document.getElementById("servicetext").innerText = sessionStorage.getItem("servicename");
                 amendData = false;
-            } else {
+            } else if (sessionStorage.getItem("mode") == "amend") {
+                // add data passed from services page
                 document.getElementById("mainTitle").innerText = "Service - amend";
                 document.getElementById("servicetext").innerText = sessionStorage.getItem("servicename");
+
+                // scan through users and rights arrays 
+                // if they exist
+                if (sessionStorage.getItem("authorisedusers") != null) {
+                    var users = sessionStorage.getItem("authorisedusers").split(",");
+                    for (counter = 0; counter < users.length; counter++) {
+                        loadUser(users[counter]);
+                    }
+                }
+                if (sessionStorage.getItem("righttypes") != null) {
+                    var rights = sessionStorage.getItem("righttypes").split(",");
+                    for (counter = 0; counter < rights.length; counter++) {
+                        addRight(rights[counter]);
+                    }
+                }
+
                 document.getElementById("createButton").innerText = "Amend";
                 amendData = true;
             };
 
-            //sessionStorage.setItem("right", null);
+            // add new right if coming from createright page
+            var newRight = sessionStorage.getItem("newright");
+            console.log("new right " + newRight);
+            if (newRight != null) {
+                addRight(newRight);
+                sessionStorage.removeItem("newright");
+                sessionStorage.setItem("righttypes", sessionStorage.getItem("righttypes") + "," + newRight);
+            };
 
             // get no. rows in each table. Used in rowClick()
             var tableRef = document.getElementById('rightTable').getElementsByTagName('tbody')[0];
@@ -230,12 +288,19 @@
             window.location("/");
         });
 
-        //socket.on('createNewServiceRet', function (data) {
-        //    console.log("Create new service in browser called ...");
-        //    var sname = document.getElementById("servicetext").value;
-        //    sessionStorage.setItem("servicename", sname);
-        //    window.location("createright");
-        //});
+        socket.on('createNewServiceRet', function (data) {
+            console.log("Create new service in browser called ...");
+            //var sname = document.getElementById("servicetext").value;
+            //sessionStorage.setItem("servicename", sname);
+            window.location("services");
+        });
+
+        socket.on('amendServiceRet', function (data) {
+            console.log("Amend service in browser called ...");
+            //var sname = document.getElementById("servicetext").value;
+            //sessionStorage.setItem("servicename", sname);
+            window.location("services");
+        });
 
         function enableButton() {
             console.log("enableButton called");
@@ -243,7 +308,9 @@
         };
 
         function goBack() {
-            window.history.back();
+            console.log("goBack called");
+            window.location("services");
+            //window.history.back();
         };
 
         $(function () {
@@ -304,14 +371,14 @@
                                 <div class="ui large label" style="float: left">
                                     Service Name
                                 </div>
-                                <input type="text" id="servicetext" placeholder="" />
+                                <input type="text" id="servicetext" placeholder="" onchange="setServiceName(this.value)" />
                             </div>
                         </div>
                         <div class="ui hidden divider"></div>
                         <div class="ui hidden divider"></div>
                         <div class="fields">
                             <div class="field">
-                                <div style="height: 180px; overflow-y: scroll; overflow-x: hidden; border: solid 1px">
+                                <div style="height: 180px; overflow-y: scroll; overflow-x: hidden; border: solid 1px;">
                                     <table class="ui selectable celled table" style="background-color: white; width: 220px" id="rightTable">
                                         <thead>
                                             <tr>
@@ -319,12 +386,15 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr id="rightTableRow1" onclick="rowClick(this)">
-                                                <td> </td>
+                                            <!--<tr id="rightTableRow1" onclick="rowClick(this)">
+                                                <td> &nbsp; </td>
                                             </tr>
                                             <tr id="rightTableRow2" onclick="rowClick(this)">
-                                                <td> </td>
+                                                <td> &nbsp; </td>
                                             </tr>
+                                            <tr id="rightTableRow3" onclick="rowClick(this)">
+                                                <td> &nbsp; </td>
+                                            </tr>-->
                                         </tbody>
                                     </table>
                                 </div>
@@ -354,12 +424,12 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr id="userTableRow1" onclick="rowClick(this)">
+                                            <!-- <tr id="userTableRow1" onclick="rowClick(this)">
                                                 <td>Janna</td>
                                             </tr>
                                             <tr id="userTableRow2" onclick="rowClick(this)">
                                                 <td>Tommi</td>
-                                            </tr>
+                                            </tr>-->
                                         </tbody>
                                     </table>
                                 </div>
@@ -371,15 +441,15 @@
 
                                         <div class="divider"></div>
 
-                                        <div class="item" onclick="addUser(this)">
+                                        <div class="item" onclick="addUser(this.innerText)">
                                             <!--<div class="ui red empty circular label"></div>-->
                                             Adam
                                         </div>
-                                        <div class="item" onclick="addUser(this)">
+                                        <div class="item" onclick="addUser(this.innerText)">
                                             <!--<div class="ui blue empty circular label"></div>-->
                                             Helal
                                         </div>
-                                        <div class="item" onclick="addUser(this)">
+                                        <div class="item" onclick="addUser(this.innerText)">
                                             <!--<div class="ui black empty circular label"></div>-->
                                             Neil
                                         </div>
@@ -397,7 +467,7 @@
                 </div>
             </div>
             <div class="ui hidden divider"></div>
-            <button class="ui button" id="createButton" type="button" onclick="createNewService()" disabled="disabled">Create</button>
+            <button class="ui button" id="createButton" type="button" onclick="createNewService()">Create</button>
         </div>
     </div>
 

@@ -111,13 +111,14 @@
 
         socket.on('createRightRet', function (data) {
             console.log("Create right in browser called ...");
+            sessionStorage.setItem("newright", document.getElementById("righttext").value);
             window.location("createservice");
-            //alert("Right created");
         });
 
 
         function goBack() {
-            window.history.back();
+            window.location("createservice");
+            //window.history.back();
         };
 
         $(function () {
