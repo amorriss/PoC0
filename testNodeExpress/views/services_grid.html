@@ -39,7 +39,7 @@
             socket.emit('createService', { data: "new" });
         };
 
-        function amendService() {
+        function retrieveService() {
             createNew = false;
             var IDstr = "srvTableRow" + currentTableRow;
             var row = document.getElementById(IDstr);
@@ -47,7 +47,9 @@
             var data = cells[0].innerText;
             var socket = io.connect();
             sessionStorage.setItem("mode", "amend");
-            socket.emit('amendService', { data: data });
+            
+            console.log("calling retrieve service with " + servicesDataArray[currentTableRow - 1]);
+            socket.emit('retrieveService', { data: servicesDataArray[currentTableRow - 1] });
         };
 
         function highlight(e) {
@@ -89,6 +91,7 @@
                 currentTableRow = value;
 
                 // set session storage for passing to amend page if required
+                console.log("saving name " + servicesDataArray[currentTableRow - 1].serviceName);
                 sessionStorage.setItem("servicename", servicesDataArray[currentTableRow - 1].serviceName);
                 sessionStorage.setItem("authorisedusers", servicesDataArray[currentTableRow - 1].authorisedUsers);
                 sessionStorage.setItem("righttypes", servicesDataArray[currentTableRow - 1].rightTypes);
@@ -162,13 +165,13 @@
 
         socket.on('logoutRet', function (data) {
             console.log("logout in browser called ...");
-            window.location("/");
+            window.location.href = "/";
         });
 
-        socket.on('amendServiceRet', function (data) {
-            console.log("Amend service in browser called ...");
+        socket.on('retrieveServiceRet', function (data) {
+            console.log("Retrieve service in browser called ...");
             //sessionStorage.setItem("servicename", data.data);
-            window.location("createservice");
+            window.location.href = "createservice";
             //if (createNew) {
             //    window.location("createservice");
             //} else {
@@ -184,8 +187,8 @@
 
         socket.on('createServiceRet', function (data) {
             console.log("Create service in browser called ...");
-            sessionStorage.setItem("servicename", data.data);
-            window.location("createservice");
+           // sessionStorage.setItem("servicename", data.data);
+            window.location.href = "createservice";
             //if (createNew) {
             //    window.location("createservice");
             //} else {
@@ -194,7 +197,7 @@
         });
 
         function goBack() {
-            window.location("/");
+            window.location.href = "/";
            // window.history.back();
         };
 
@@ -261,7 +264,7 @@
                 </div>
             </div>
             <div class="ui hidden divider"></div>
-            <button class="ui button" id="amendButton" type="button" onclick="amendService()" disabled="disabled">Amend</button>
+            <button class="ui button" id="amendButton" type="button" onclick="retrieveService()" disabled="disabled">Amend</button>
             <button class="ui button" id="createButton" type="button" onclick="createService()">Create</button>
         </div>
     </div>

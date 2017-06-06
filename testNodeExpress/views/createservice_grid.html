@@ -55,7 +55,7 @@
         function createNewRight() {
 
             // sessionStorage.setItem("servicename", data.data);
-            window.location("createright");
+            window.location.href = "createright";
             console.log("New Right button clicked");
         };
 
@@ -223,7 +223,8 @@
         window.onload = function () {
             document.getElementById("hLoggedInAs").innerHTML = "<h1 class=\"ui right aligned header\" style=\"color: white\">Welcome " + sessionStorage.getItem("name") + "</h1>";
 
-            console.log(sessionStorage.getItem("servicename"));
+            var tmp = sessionStorage.getItem("servicename");
+            console.log(tmp[0]);
 
             // clear any stored rights
             sessionStorage.setItem("right", "");
@@ -243,13 +244,17 @@
                 if (sessionStorage.getItem("authorisedusers") != null) {
                     var users = sessionStorage.getItem("authorisedusers").split(",");
                     for (counter = 0; counter < users.length; counter++) {
-                        loadUser(users[counter]);
+                        if (users[counter] != 'null') {
+                            loadUser(users[counter]);
+                        }
                     }
                 }
                 if (sessionStorage.getItem("righttypes") != null) {
                     var rights = sessionStorage.getItem("righttypes").split(",");
                     for (counter = 0; counter < rights.length; counter++) {
-                        addRight(rights[counter]);
+                        if (rights[counter] != 'null') {
+                            addRight(rights[counter]);
+                        }
                     }
                 }
 
@@ -285,21 +290,21 @@
 
         socket.on('logoutRet', function (data) {
             console.log("logout in browser called ...");
-            window.location("/");
+            window.location.href = "/";
         });
 
         socket.on('createNewServiceRet', function (data) {
             console.log("Create new service in browser called ...");
             //var sname = document.getElementById("servicetext").value;
             //sessionStorage.setItem("servicename", sname);
-            window.location("services");
+            window.location.href = "services";
         });
 
         socket.on('amendServiceRet', function (data) {
             console.log("Amend service in browser called ...");
             //var sname = document.getElementById("servicetext").value;
             //sessionStorage.setItem("servicename", sname);
-            window.location("services");
+            window.location.href = "services";
         });
 
         function enableButton() {
@@ -309,7 +314,7 @@
 
         function goBack() {
             console.log("goBack called");
-            window.location("services");
+            window.location.href = "services";
             //window.history.back();
         };
 

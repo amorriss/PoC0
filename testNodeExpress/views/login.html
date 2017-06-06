@@ -28,7 +28,7 @@
     <script>
 
         window.onload = function () {
-            console.log("onload called : " + sessionStorage.getItem("name"));
+            console.log("login onload called : " + sessionStorage.getItem("name"));
             var ts = new Date();
             var options = { weekday: "long", year: "numeric", month: "short", day: "numeric" };
 
@@ -45,7 +45,7 @@
             var str = data.data;
             if (str.substring(0, 7) == "success") {
                 sessionStorage.setItem("name", name);
-                window.location("services");
+                window.location.href = "services";
             } else {
                 window.alert("Login Failed for " + name);
                // window.location("loginfail?name=" + name);

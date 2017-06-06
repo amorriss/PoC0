@@ -106,18 +106,18 @@
 
         socket.on('logoutRet', function (data) {
             console.log("logout in browser called ...");
-            window.location("/");
+            window.location.href = "/";
         });
 
         socket.on('createRightRet', function (data) {
             console.log("Create right in browser called ...");
             sessionStorage.setItem("newright", document.getElementById("righttext").value);
-            window.location("createservice");
+            window.location.href = "createservice";
         });
 
 
         function goBack() {
-            window.location("createservice");
+            window.location.href = "createservice";
             //window.history.back();
         };
 

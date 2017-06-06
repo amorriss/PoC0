@@ -107,8 +107,53 @@ module.exports = {
                 console.log("Create right server function called from browser");
                 socket.broadcast.emit('createRightRet', { 'message': 'Created Right' });
             });
+            //socket.on('retrieveService', function (dataObj) {
+            //    console.log(dataObj);
+            //    console.log("Retrieve service server function called from browser");
+            //    if (serverAvailable) {
+            //        // get passed data
+            //        console.log("service data " + dataObj.data);
+            //        var serviceData = {
+            //            name: dataObj.data,
+            //            users: [""],
+            //            rights: [""]
+            //        };
+            //        var request = require("request");
+            //        var options = {
+            //            method: 'PUT',
+            //            serviceName: dataObj.data,
+            //            url: 'http://bcserver.uksouth.cloudapp.azure.com:8080/api/services/' + dataObj.data,
+            //            headers:
+            //            { 
+            //                'cache-control': 'no-cache',
+            //                'content-type': 'application/json',
+            //                'x-access-token': loginToken
+            //            },
+            //            body:
+            //            {
+            //                serviceName: serviceData.name,
+            //                authorisedUsers: serviceData.users,
+            //                rightTypes: serviceData.rights
+            //            },
+            //            json: true
+            //        };
+            //        request(options, function (error, response, body) {
+            //            if (!error && response.statusCode == 200) {
+            //                console.log("Retrieved service " + response);
+            //                socket.broadcast.emit('retrieveerviceRet', { data: "success" });
+            //            } else {
+            //                console.log("Retrieve service error ..." + response.statusCode);
+            //                socket.broadcast.emit('retrieveServiceRet', { data: "Failed to retrieve service" });
+            //            };
+            //        });
+            //    } 
+            //});
+            socket.on('retrieveService', function (data) {
+                console.log(data);
+                console.log("Create new service server function called from browser");
+                socket.broadcast.emit('createServiceRet', { data: data.data });
+            });
             socket.on('amendService', function (dataObj) {
-                console.log(dataObj);
                 console.log("Amend service server function called from browser");
                 if (serverAvailable) {
                     // get passed data
@@ -116,9 +161,8 @@ module.exports = {
                     var serviceData = dataObj.data;
                     var request = require("request");
                     var options = {
-                        method: 'PUT',
-                        serviceName: serviceData.name,
-                        url: 'http://bcserver.uksouth.cloudapp.azure.com:8080/api/services/' + serviceData.name,
+                        method: 'POST',
+                        url: 'http://bcserver.uksouth.cloudapp.azure.com:8080/api/services/' + dataObj.data.name,
                         headers: {
                             'cache-control': 'no-cache',
                             'content-type': 'application/json',
@@ -137,8 +181,8 @@ module.exports = {
                             socket.broadcast.emit('amendServiceRet', { data: "success" });
                         }
                         else {
-                            console.log("Amend service error ..." + response.statusCode);
-                            socket.broadcast.emit('amendServiceRet', { data: "Failed to create service" });
+                            console.log("Amended service error ..." + response.statusCode);
+                            socket.broadcast.emit('amendServiceRet', { data: "Failed to amend service" });
                         }
                         ;
                     });
