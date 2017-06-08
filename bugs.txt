@@ -1,5 +1,12 @@
 BUGS
 
- - return to createservice loses name and user data when adding/ amending right
+ - return to createservice loses name and user data when adding/ amending right. DONE
 
- - 
+ - 1st element data arrays is null. DONE
+
+ - adding new right get Amended service error ... 500 (from bc server). DONE
+
+ - get right date value as Unix epoch
+
+ - get right ID DD value
+

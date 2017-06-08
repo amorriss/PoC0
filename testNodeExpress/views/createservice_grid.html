@@ -31,8 +31,8 @@
 
             var serviceData = {
                 name: "",
-                users: "",
-                rights: ""
+                users: [],
+                rights: []
             };
 
             // set service name
@@ -43,15 +43,26 @@
             for (counter = 0; counter < rightTotalRows; counter++) {
                 var IDstr = "rightTableRow" + (counter + 1);
                 console.log("set right for " + IDstr);
-                serviceData.rights = document.getElementById(IDstr).innerText;
+                serviceData.rights.push(document.getElementById(IDstr).innerText);
+                //serviceData.rights += document.getElementById(IDstr).innerText;
+                // // add trailling comma if required
+                //if (counter + 1 < rightTotalRows) {
+                //    serviceData.rights += ",";
+                //}
             };
+
 
             // set service users
             tableRef = document.getElementById('userTable').getElementsByTagName('tbody')[0];
             for (counter = 0; counter < userTotalRows; counter++) {
                 var IDstr = "userTableRow" + (counter + 1);
-                console.log("set user for " + IDstr);
-                serviceData.users = document.getElementById(IDstr).innerText;
+                console.log("add user " + document.getElementById(IDstr).innerText);
+                serviceData.users.push(document.getElementById(IDstr).innerText);
+                //serviceData.users += document.getElementById(IDstr).innerText;
+                //// add trailling comma if required
+                //if (counter + 1 < userTotalRows) {
+                //    serviceData.users += ",";
+                //}
             };
 
            // alert("serviceData is " + serviceData.name + " " + serviceData.rights);
@@ -283,7 +294,24 @@
                 // add data passed from services page
                 document.getElementById("mainTitle").innerText = "Service - amend";
                 document.getElementById("servicetext").innerText = sessionStorage.getItem("servicename");
-
+                // scan through users and rights arrays 
+                // if they exist
+                if (sessionStorage.getItem("authorisedusers") != null) {
+                    var users = sessionStorage.getItem("authorisedusers").split(",");
+                    for (counter = 0; counter < users.length; counter++) {
+                        if ((users[counter] != 'null') && (users[counter] != "")) {
+                            loadUser(users[counter]);
+                        }
+                    }
+                }
+                if (sessionStorage.getItem("righttypes") != null) {
+                    var rights = sessionStorage.getItem("righttypes").split(",");
+                    for (counter = 0; counter < rights.length; counter++) {
+                        if ((rights[counter] != 'null') && (rights[counter] != "")) {
+                            addRight(rights[counter]);
+                        }
+                    }
+                }
                 document.getElementById("createButton").innerText = "Amend";
                 amendData = true;
 

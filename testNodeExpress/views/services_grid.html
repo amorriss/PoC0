@@ -148,15 +148,16 @@
 
         var createNew = false;
 
+
         window.onload = function () {
             console.log("onload called : " + sessionStorage.getItem("name"));
             var ts = new Date();
             document.getElementById("hLoggedInAs").innerHTML = "<h1 class=\"ui right aligned header\" style=\"color: white\">Welcome " + sessionStorage.getItem("name") + "</h1>"; // + "<br/>" + ts.toString('dddd, MMMM') ;
 
-            if (pageLoaded != true) {
-                var socket = io.connect();
-                socket.emit('getServices', { data: "" });
-            }
+            //if (pageLoaded != true) {
+            var socket = io.connect();
+            socket.emit('getServices', { data: "" });
+            //}
         };
 
         var socket = io.connect();

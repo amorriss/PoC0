@@ -21,15 +21,7 @@
 
     <script>
 
-        //function dropdownSelection(value) {
-        //    console.log("drop down name selected " + document.getElementById("DDclass").innerText);
-        //    document.getElementById("DDclass").innerText = value.innerText;
-        //};
-
-        //function pulseicon() {
-        //    console.log("pulse icon");
-        //    document.getElementById("gobackicon").setAttribute("style:color", "red");
-        //};
+        var amendData;
 
         function rightnamechange() {
             console.log("rightnamechange clicked");
@@ -46,16 +38,42 @@
                 tax: false
             };
 
-           // rightData = getRightData();
+            rightData.rightTypeName = document.getElementById("righttext").value;
+            rightData.valueLimit = parseInt(document.getElementById("valuelimit").value);
+
+            //var IDdd = document.getElementById("DDinput");
+            //console.log(IDdd);
+            //rightData.idVerification = IDdd.options[IDdd.selectedIndex].text;
+
+            var dtmp = new Date(document.getElementById("timelimit").value);
+            console.log("dtmp is " + dtmp);
+            rightData.timeLimit = dtmp.getTime();
+
+            if (document.getElementById("divisibility").value == 'on') {
+                rightData.divisibility = true;
+            } else {
+                rightData.divisibility = false;
+            }
+            if (document.getElementById("tax").value == 'on') {
+                rightData.tax = true;
+            } else {
+                rightData.tax = false;
+            }
+
+            console.log("right data name " + rightData.rightTypeName);
+            console.log("right data valuelimit " + rightData.valueLimit);
+            console.log("right data timeLimit " + rightData.timeLimit);
+            console.log("right data div " + rightData.divisibility);
+            console.log("right data tax " + rightData.tax);
 
             var socket = io.connect();
-            //if (amendData) {
-            //    socket.emit('amendRight', { data: rightData });
-            //    console.log("amend button clicked");
-            //} else {
+            if (amendData) {
+                socket.emit('amendRight', { data: rightData });
+                console.log("amend button clicked");
+            } else {
                 socket.emit('createNewRight', { data: rightData });
                 console.log("create button clicked");
-           // }
+            }
 
             //var socket = io.connect();
             //socket.emit('createNewRight', { data: 'You clicked the create button' });
@@ -87,23 +105,54 @@
                 }
             }
         };
+
+        function loadRight(data) {
+
+            var rightData = data.data;
+            console.log("right data is " + rightData.timeLimit);
+            if (rightData.valueLimit != null) {
+                enableID('valuelimit');
+                document.getElementById("valuelimit").innerText = rightData.valueLimit;
+            };
+
+            document.getElementById("tax").checked = rightData.tax;
+            document.getElementById("divisibility").checked = rightData.divisibility;
+
+            if (rightData.timeLimit != null) {
+                document.getElementById("timelimitcb").checked = true;
+                enableID('timelimit');
+                document.getElementById("timelimit").innerText = new Date(rightData.timeLimit);
+            }
+
+        };
+
     </script>
 
 </head>
-     
+
 <body>
     <script>
+
+        
+
         window.onload = function () {
             console.log("onload called : " + sessionStorage.getItem("name"));
+
             document.getElementById("hLoggedInAs").innerHTML = "<h1 class=\"ui right aligned header\" style=\"color: white\">Welcome " + sessionStorage.getItem("name") + "</h1>";
             document.getElementById("pagetitle").innerText = "Right Types : " + sessionStorage.getItem("servicename");
-            if ((sessionStorage.getItem("right") != '') && (sessionStorage.getItem("right") != null)){
-                document.getElementById("righttext").innerText = sessionStorage.getItem("right");
+            if ((sessionStorage.getItem("right") != '') && (sessionStorage.getItem("right") != null)) {
+                var rightName = sessionStorage.getItem("right");
+                document.getElementById("righttext").innerText = rightName;
+                console.log("get right data for " + rightName);
                 document.getElementById("createRightButton").removeAttribute("disabled");
                 document.getElementById("createRightButton").innerText = "Amend";
+                var socket = io.connect();
+                socket.emit('getRight', { data: rightName });
+                amendData = true;
             } else {
                 document.getElementById("createRightButton").setAttribute("disabled", "disabled");
                 document.getElementById("createRightButton").innerText = "Create";
+                amendData = false;
             }
         };
 
@@ -132,10 +181,15 @@
         socket.on('createNewRightRet', function (data) {
             console.log("Create right in browser called ...");
             sessionStorage.setItem("newright", document.getElementById("righttext").value);
-          //  sessionStorage.setItem("mode", "amend");
+            //  sessionStorage.setItem("mode", "amend");
             window.location.href = "createservice";
         });
 
+        socket.on('getRightRet', function (data) {
+            console.log("Get right in browser called ...");
+            //sessionStorage.setItem("mode", "amend");
+            loadRight(data);
+        });
 
         function goBack() {
             window.location.href = "createservice";
@@ -148,6 +202,8 @@
 
         $('.ui.checkbox')
             .checkbox();
+
+       // $('#DDclass').dropdown('get value');
 
     </script>
 
@@ -207,10 +263,10 @@
                             <div class="four wide field">
 
                                 <div class="ui disabled selection dropdown" id="DDclass" style="position: absolute; left: 300px; top: 0px; width: 200px; height: 30px">
-                                    <input name="" type="hidden"/>
+                                    <input type="hidden" />
                                     <i class="dropdown icon"></i>
                                     <div class="default text">ID Verification</div>
-                                    <div class="menu">
+                                    <div class="menu" id="DDinput">
                                         <div class="item" data-value="0">Belgian Identity Service</div>
                                         <div class="item" data-value="1">Finnish Identity Service</div>
                                         <div class="item" data-value="3">UK Identity Service</div>
@@ -225,7 +281,7 @@
                             </div>
                             <div class="three wide field">
                                 <div class="ui toggle checkbox" style="position: absolute; left: 650px; top: 11px;">
-                                    <input name="example" type="checkbox" />
+                                    <input id="divisibility" type="checkbox" />
                                     <label>Divisibility</label>
                                 </div>
                             </div>
@@ -237,20 +293,20 @@
                                     <div class="ui label">
                                         Value Limit
                                     </div>
-                                    <input type="text" id="valuelimittext" placeholder="" disabled="disabled" />
+                                    <input type="text" id="valuelimit" placeholder="" disabled="disabled" />
                                 </div>
                             </div>
 
                             <div class="three wide field">
                                 <div class="ui toggle checkbox" style="position: absolute; left: 230px; top: 76px;">
-                                    <input name="valuelimitcb" type="checkbox" onchange="enableID('valuelimittext')" />
+                                    <input name="valuelimitcb" type="checkbox" onchange="enableID('valuelimit')" />
                                     <label></label>
                                 </div>
                             </div>
 
                             <div class="three wide field" style="position: absolute; left: 530px; top: 76px;">
                                 <div class="ui toggle checkbox">
-                                    <input name="example" type="checkbox" onchange="enableID('timelimit')" />
+                                    <input id="timelimitcb" type="checkbox" onchange="enableID('timelimit')" />
                                     <label>Time Limit</label>
                                 </div>
                             </div>
@@ -259,7 +315,7 @@
                             </div>
                             <div class="three wide field">
                                 <div class="ui toggle checkbox" style="position: absolute; left: 650px; top: 76px;">
-                                    <input name="example" type="checkbox" />
+                                    <input id="tax" type="checkbox" />
                                     <label>Tax</label>
                                 </div>
                             </div>

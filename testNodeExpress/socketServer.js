@@ -72,7 +72,7 @@ module.exports = {
                 console.log("Create new service server function called from browser");
                 if (serverAvailable) {
                     // get passed data
-                    console.log("service data " + dataObj.data.name);
+                    console.log("service data name" + dataObj.data.name);
                     var serviceData = dataObj.data;
                     var request = require("request");
                     var options = {
@@ -154,22 +154,23 @@ module.exports = {
             //    console.log("Create right server function called from browser");
             //    socket.broadcast.emit('createRightRet', { 'message': 'Created Right' });
             //});
-            socket.on('getRight', function (data) {
-                console.log(data);
+            socket.on('getRight', function (dataObj) {
+                console.log(dataObj.data);
                 console.log("Get right server function called from browser");
                 if (serverAvailable) {
+                    var rightName = dataObj.data;
                     var request = require('request');
                     var options = {
-                        url: serverURL + 'api/righttypes',
+                        url: serverURL + 'api/rightTypes/' + rightName,
                         headers: {
                             'x-access-token': loginToken
                         }
                     };
                     request.get(options, function (error, response, body) {
                         if (!error && response.statusCode == 200) {
-                            var services = JSON.parse(body);
+                            var right = JSON.parse(body);
                             console.log("right is " + body);
-                            socket.broadcast.emit('getRightRet', { data: services });
+                            socket.broadcast.emit('getRightRet', { data: right });
                         }
                         else {
                             console.log("get right error ...");
@@ -226,7 +227,7 @@ module.exports = {
                     var request = require("request");
                     var options = {
                         method: 'PUT',
-                        url: serverURL + 'api/righttypes/' + dataObj.data.name,
+                        url: serverURL + 'api/righttypes/' + rightData.rightTypeName,
                         headers: {
                             'cache-control': 'no-cache',
                             'content-type': 'application/json',
