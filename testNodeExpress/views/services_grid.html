@@ -23,6 +23,7 @@
 
         var currentTableRow;
         var servicesDataArray = new Array();
+        var pageLoaded = false;
 
         function logout() {
             var socket = io.connect();
@@ -47,7 +48,7 @@
             var data = cells[0].innerText;
             var socket = io.connect();
             sessionStorage.setItem("mode", "amend");
-            
+
             console.log("calling retrieve service with " + servicesDataArray[currentTableRow - 1]);
             socket.emit('retrieveService', { data: servicesDataArray[currentTableRow - 1] });
         };
@@ -138,7 +139,6 @@
             };
         };
 
-
     </script>
 
 </head>
@@ -153,8 +153,10 @@
             var ts = new Date();
             document.getElementById("hLoggedInAs").innerHTML = "<h1 class=\"ui right aligned header\" style=\"color: white\">Welcome " + sessionStorage.getItem("name") + "</h1>"; // + "<br/>" + ts.toString('dddd, MMMM') ;
 
-            var socket = io.connect();
-            socket.emit('getServices', { data: "" });
+            if (pageLoaded != true) {
+                var socket = io.connect();
+                socket.emit('getServices', { data: "" });
+            }
         };
 
         var socket = io.connect();
@@ -183,11 +185,12 @@
             console.log("Get services in browser called ...");
             // populate table data
             loadServicesTable(data.data);
+            pageLoaded = true;
         });
 
         socket.on('createServiceRet', function (data) {
             console.log("Create service in browser called ...");
-           // sessionStorage.setItem("servicename", data.data);
+            // sessionStorage.setItem("servicename", data.data);
             window.location.href = "createservice";
             //if (createNew) {
             //    window.location("createservice");
@@ -198,7 +201,7 @@
 
         function goBack() {
             window.location.href = "/";
-           // window.history.back();
+            // window.history.back();
         };
 
         $(function () {

@@ -1,0 +1,5 @@
+BUGS
+
+ - return to createservice loses name and user data when adding/ amending right
+
+ - 

@@ -2,7 +2,7 @@
 var socketIo = require('socket.io');
 var mySocket;
 var loginToken;
-let serverURL = "http://bcserver.uksouth.cloudapp.azure.com:8080/";    // http://rapley.ukwest.cloudapp.azure.com      // http://51.140.86.87:8080/   //bcserver.uksouth
+let serverURL = "http://bcserver.uksouth.cloudapp.azure.com:8080/";    // http://rapley.ukwest.cloudapp.azure.com:8080/      // http://bcserver.uksouth.cloudapp.azure.com:8080/   //https://dn-server.eu-gb.mybluemix.net/
 var serverAvailable = true;
 
 function myTimer() {
@@ -14,7 +14,7 @@ function myTimer() {
 }
 
 module.exports = {
-    startService: function (server) { 
+    startService: function (server) {
         var io = socketIo(server);
 
         io.on('connection', function (socket) {
@@ -47,6 +47,8 @@ module.exports = {
                 validatelogin(data.data, socket);
 
             });
+
+            // ----------------- services
 
             socket.on('getServices', function (data) {
                 console.log(data);
@@ -97,7 +99,7 @@ module.exports = {
 
                     var options = {
                         method: 'POST',
-                        url: 'http://bcserver.uksouth.cloudapp.azure.com:8080/api/services/',
+                        url: serverURL + 'api/services/',
                         headers:
                         {
                             'cache-control': 'no-cache',
@@ -112,7 +114,7 @@ module.exports = {
                         },
                         json: true
                     };
-                    
+
                     request(options, function (error, response, body) {
                         if (!error && response.statusCode == 200) {
 
@@ -123,64 +125,10 @@ module.exports = {
                             socket.broadcast.emit('createNewServiceRet', { data: "Failed to create service" });
                         };
                     });
-                } 
+                }
             });
 
 
-            socket.on('createRight', function (data) {
-                console.log(data);
-                console.log("Create right server function called from browser");
-                socket.broadcast.emit('createRightRet', { 'message': 'Created Right' });
-            });
-
-            //socket.on('retrieveService', function (dataObj) {
-            //    console.log(dataObj);
-            //    console.log("Retrieve service server function called from browser");
-
-            //    if (serverAvailable) {
-
-            //        // get passed data
-            //        console.log("service data " + dataObj.data);
-                    
-            //        var serviceData = {
-            //            name: dataObj.data,
-            //            users: [""],
-            //            rights: [""]
-            //        };
-
-            //        var request = require("request");
-
-            //        var options = {
-            //            method: 'PUT',
-            //            serviceName: dataObj.data,
-            //            url: 'http://bcserver.uksouth.cloudapp.azure.com:8080/api/services/' + dataObj.data,
-            //            headers:
-            //            { 
-            //                'cache-control': 'no-cache',
-            //                'content-type': 'application/json',
-            //                'x-access-token': loginToken
-            //            },
-            //            body:
-            //            {
-            //                serviceName: serviceData.name,
-            //                authorisedUsers: serviceData.users,
-            //                rightTypes: serviceData.rights
-            //            },
-            //            json: true
-            //        };
-
-            //        request(options, function (error, response, body) {
-            //            if (!error && response.statusCode == 200) {
-
-            //                console.log("Retrieved service " + response);
-            //                socket.broadcast.emit('retrieveerviceRet', { data: "success" });
-            //            } else {
-            //                console.log("Retrieve service error ..." + response.statusCode);
-            //                socket.broadcast.emit('retrieveServiceRet', { data: "Failed to retrieve service" });
-            //            };
-            //        });
-            //    } 
-            //});
 
             socket.on('retrieveService', function (data) {
                 console.log(data);
@@ -200,8 +148,8 @@ module.exports = {
                     var request = require("request");
 
                     var options = {
-                        method: 'POST',
-                        url: 'http://bcserver.uksouth.cloudapp.azure.com:8080/api/services/' + dataObj.data.name,
+                        method: 'PUT',
+                        url: serverURL + 'api/services/' + dataObj.data.name,
                         headers:
                         {
                             'cache-control': 'no-cache',
@@ -237,6 +185,135 @@ module.exports = {
                 socket.broadcast.emit('createServiceRet', { data: data.data });
             });
 
+            // --------------- rights 
+
+            //socket.on('createRight', function (data) {
+            //    console.log(data);
+            //    console.log("Create right server function called from browser");
+            //    socket.broadcast.emit('createRightRet', { 'message': 'Created Right' });
+            //});
+
+            socket.on('getRight', function (data) {
+                console.log(data);
+                console.log("Get right server function called from browser");
+
+                if (serverAvailable) {
+                    var request = require('request');
+                    var options = {
+                        url: serverURL + 'api/righttypes',
+                        headers: {
+                            'x-access-token': loginToken
+                        }
+                    };
+
+                    request.get(
+                        options,
+                        function (error, response, body) {
+                            if (!error && response.statusCode == 200) {
+                                var services = JSON.parse(body);
+                                console.log("right is " + body);
+                                socket.broadcast.emit('getRightRet', { data: services });
+                            } else {
+                                console.log("get right error ...");
+                                socket.broadcast.emit('getRightRet', { data: "Failed to get right" });
+                            };
+                        }
+                    );
+                }
+            });
+
+            socket.on('createNewRight', function (dataObj) {
+                console.log("Create new right server function called from browser");
+
+                if (serverAvailable) {
+
+                    // get passed data
+                    console.log("right data " + dataObj.data.rightTypeName);
+                    var rightData = dataObj.data;
+
+                    var request = require("request");
+
+                    var options = {
+                        method: 'POST',
+                        url: serverURL + 'api/righttypes/',
+                        headers:
+                        {
+                            'cache-control': 'no-cache',
+                            'content-type': 'application/json',
+                            'x-access-token': loginToken
+                        },
+                        body:
+                        {
+                            rightTypeName: rightData.rightTypeName,
+                            valueLimit: rightData.valueLimit,
+                            idVerification: rightData.idVerification,
+                            timeLimit: rightData.timeLimit,
+                            divisibility: rightData.divisibility,
+                            tax: rightData.tax
+                        },
+                        json: true
+                    };
+
+                    request(options, function (error, response, body) {
+                        if (!error && response.statusCode == 200) {
+
+                            console.log("created new right " + response);
+                            socket.broadcast.emit('createNewRightRet', { data: "success" });
+                        } else {
+                            console.log("create new service error ..." + response.statusCode);
+                            socket.broadcast.emit('createNewRightRet', { data: "Failed to create right" });
+                        };
+                    });
+                }
+            });
+
+
+            socket.on('amendRight', function (dataObj) {
+                console.log("Amend right server function called from browser");
+
+                if (serverAvailable) {
+
+                    // get passed data
+                    console.log("right data " + dataObj.data.name);
+                    var rightData = dataObj.data;
+
+                    var request = require("request");
+
+                    var options = {
+                        method: 'PUT',
+                        url: serverURL + 'api/righttypes/' + dataObj.data.name,
+                        headers:
+                        {
+                            'cache-control': 'no-cache',
+                            'content-type': 'application/json',
+                            'x-access-token': loginToken
+                        },
+                        body:
+                        {
+                            rightTypeName: rightData.rightTypeName,
+                            valueLimit: rightData.valueLimit,
+                            idVerification: rightData.idVerification,
+                            timeLimit: rightData.timeLimit,
+                            divisibility: rightData.divisibility,
+                            tax: rightData.tax
+                        },
+                        json: true
+                    };
+
+                    request(options, function (error, response, body) {
+                        if (!error && response.statusCode == 200) {
+
+                            console.log("Amended right " + response);
+                            socket.broadcast.emit('amendRightRet', { data: "success" });
+                        } else {
+                            console.log("Amended right error ..." + response.statusCode);
+                            socket.broadcast.emit('amendRightRet', { data: "Failed to amend right" });
+                        };
+                    });
+                }
+            });
+
+            // -----------------------------------------------------
             socket.on('logout', function (data) {
                 console.log(data);
                 console.log("logout server function called from browser");
@@ -308,14 +385,14 @@ function validatelogin(data: string, socket) {
         if ((credentials[0] == "Païvi") && (credentials[1] == "secret")) {
             console.log("login successful ...");
             socket.broadcast.emit('loginRet', { data: "success" });
-        } 
+        }
         if ((credentials[0] == "Tommi") && (credentials[1] == "password")) {
             console.log("login successful ...");
             socket.broadcast.emit('loginRet', { data: "success" });
         }
-        
+
     }
-    
+
 
     //return loggedIn;
 };

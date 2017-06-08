@@ -27,15 +27,47 @@
             console.log("logout button clicked");
         };
 
+        function getServiceData() {
+
+            var serviceData = {
+                name: "",
+                users: "",
+                rights: ""
+            };
+
+            // set service name
+            serviceData.name = document.getElementById("servicetext").value;
+
+            // set service rights
+            var tableRef = document.getElementById('rightTable').getElementsByTagName('tbody')[0];
+            for (counter = 0; counter < rightTotalRows; counter++) {
+                var IDstr = "rightTableRow" + (counter + 1);
+                console.log("set right for " + IDstr);
+                serviceData.rights = document.getElementById(IDstr).innerText;
+            };
+
+            // set service users
+            tableRef = document.getElementById('userTable').getElementsByTagName('tbody')[0];
+            for (counter = 0; counter < userTotalRows; counter++) {
+                var IDstr = "userTableRow" + (counter + 1);
+                console.log("set user for " + IDstr);
+                serviceData.users = document.getElementById(IDstr).innerText;
+            };
+
+           // alert("serviceData is " + serviceData.name + " " + serviceData.rights);
+
+            return serviceData;
+        }
+
         function createNewService() {
             // create and build up data object
             var serviceData = {
-                name: sessionStorage.getItem("servicename"),
-                users: sessionStorage.getItem("authorisedusers").split(","),
-                rights: sessionStorage.getItem("righttypes").split(",")
+                name: "",
+                users: "",
+                rights: ""
             };
 
-            console.log("serviceData is " + serviceData.name + " " + serviceData.rights);
+            serviceData = getServiceData();
 
             var socket = io.connect();
             if (amendData) {
@@ -48,13 +80,22 @@
         };
 
         function setServiceName(value) {
-            sessionStorage.setItem("servicename", value);
+            //sessionStorage.setItem("servicename", value);
             amendData = true;
         }
 
         function createNewRight() {
 
-            // sessionStorage.setItem("servicename", data.data);
+            var serviceData = {
+                name: "",
+                users: "",
+                rights: ""
+            };
+
+            serviceData = getServiceData();
+            sessionStorage.setItem("servicename", serviceData.name);
+            sessionStorage.setItem("authorisedusers", serviceData.users);
+            sessionStorage.setItem("righttypes", serviceData.rights);
             window.location.href = "createright";
             console.log("New Right button clicked");
         };
@@ -95,14 +136,14 @@
             // re number ID's
             var tableRef = document.getElementById('rightTable').getElementsByTagName('tbody')[0];
             for (counter = 0; counter < rightTotalRows; counter++) {
-                var IDstr = "rightTableRow" + counter + 1;
+                var IDstr = "rightTableRow" + (counter + 1);
                 tableRef.rows[counter].setAttribute("id", IDstr);
             };
         };
 
         function addUser(value) {
             // add to session storage 
-            sessionStorage.setItem("authorisedusers", sessionStorage.getItem("authorisedusers") + "," + value);
+           // sessionStorage.setItem("authorisedusers", sessionStorage.getItem("authorisedusers") + "," + value);
             loadUser(value);
         }
 
@@ -137,6 +178,13 @@
                 currentUserTableRow = 0;
                 userTotalRows--;
             }
+
+            // re number ID's
+            var tableRef = document.getElementById('userTable').getElementsByTagName('tbody')[0];
+            for (counter = 0; counter < userTotalRows; counter++) {
+                var IDstr = "userTableRow" + (counter + 1);
+                tableRef.rows[counter].setAttribute("id", IDstr);
+            };
         };
 
 
@@ -223,43 +271,22 @@
         window.onload = function () {
             document.getElementById("hLoggedInAs").innerHTML = "<h1 class=\"ui right aligned header\" style=\"color: white\">Welcome " + sessionStorage.getItem("name") + "</h1>";
 
-            var tmp = sessionStorage.getItem("servicename");
-            console.log(tmp[0]);
-
-            // clear any stored rights
-            sessionStorage.setItem("right", "");
+            //var tmp = sessionStorage.getItem("servicename");
+            //console.log(tmp[0]);
 
             // check if new or amend
             if (sessionStorage.getItem("mode") == "create") {
                 document.getElementById("mainTitle").innerText = "Service - new";
-                document.getElementById("servicetext").innerText = sessionStorage.getItem("servicename");
+               // document.getElementById("servicetext").innerText = sessionStorage.getItem("servicename");
                 amendData = false;
             } else if (sessionStorage.getItem("mode") == "amend") {
                 // add data passed from services page
                 document.getElementById("mainTitle").innerText = "Service - amend";
                 document.getElementById("servicetext").innerText = sessionStorage.getItem("servicename");
 
-                // scan through users and rights arrays 
-                // if they exist
-                if (sessionStorage.getItem("authorisedusers") != null) {
-                    var users = sessionStorage.getItem("authorisedusers").split(",");
-                    for (counter = 0; counter < users.length; counter++) {
-                        if (users[counter] != 'null') {
-                            loadUser(users[counter]);
-                        }
-                    }
-                }
-                if (sessionStorage.getItem("righttypes") != null) {
-                    var rights = sessionStorage.getItem("righttypes").split(",");
-                    for (counter = 0; counter < rights.length; counter++) {
-                        if (rights[counter] != 'null') {
-                            addRight(rights[counter]);
-                        }
-                    }
-                }
-
                 document.getElementById("createButton").innerText = "Amend";
                 amendData = true;
+
             };
 
             // add new right if coming from createright page
@@ -268,7 +295,27 @@
             if (newRight != null) {
                 addRight(newRight);
                 sessionStorage.removeItem("newright");
-                sessionStorage.setItem("righttypes", sessionStorage.getItem("righttypes") + "," + newRight);
+
+                document.getElementById("servicetext").innerText = sessionStorage.getItem("servicename");
+
+                // scan through users and rights arrays 
+                // if they exist
+                if (sessionStorage.getItem("authorisedusers") != null) {
+                    var users = sessionStorage.getItem("authorisedusers").split(",");
+                    for (counter = 0; counter < users.length; counter++) {
+                        if ((users[counter] != 'null') && (users[counter] != "")) {
+                            loadUser(users[counter]);
+                        }
+                    }
+                }
+                if (sessionStorage.getItem("righttypes") != null) {
+                    var rights = sessionStorage.getItem("righttypes").split(",");
+                    for (counter = 0; counter < rights.length; counter++) {
+                        if ((rights[counter] != 'null') && (rights[counter] != "")) {
+                            addRight(rights[counter]);
+                        }
+                    }
+                }
             };
 
             // get no. rows in each table. Used in rowClick()
@@ -279,6 +326,11 @@
 
             currentRightTableRow = 0;
             currentUserTableRow = 0;
+
+            // clear any stored data but keep username stored as this seems to caused the services window to load twice when returning from here if it's null !!!!!!!!
+            var tmpName = sessionStorage.getItem("name");
+            sessionStorage.clear();
+            sessionStorage.setItem("name", tmpName);
         };
 
         var socket = io.connect();

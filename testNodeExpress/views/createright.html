@@ -37,9 +37,29 @@
         };
 
         function createRight() {
+            var rightData = {
+                rightTypeName: "test",
+                valueLimit: 0,
+                idVerification: "",
+                timeLimit: 0,
+                divisibility: false,
+                tax: false
+            };
+
+           // rightData = getRightData();
+
             var socket = io.connect();
-            socket.emit('createRight', { data: 'You clicked the create button' });
-            console.log("create button clicked");
+            //if (amendData) {
+            //    socket.emit('amendRight', { data: rightData });
+            //    console.log("amend button clicked");
+            //} else {
+                socket.emit('createNewRight', { data: rightData });
+                console.log("create button clicked");
+           // }
+
+            //var socket = io.connect();
+            //socket.emit('createNewRight', { data: 'You clicked the create button' });
+            //console.log("create button clicked");
         };
 
         function logout() {
@@ -77,7 +97,7 @@
             console.log("onload called : " + sessionStorage.getItem("name"));
             document.getElementById("hLoggedInAs").innerHTML = "<h1 class=\"ui right aligned header\" style=\"color: white\">Welcome " + sessionStorage.getItem("name") + "</h1>";
             document.getElementById("pagetitle").innerText = "Right Types : " + sessionStorage.getItem("servicename");
-            if (sessionStorage.getItem("right") != '') {
+            if ((sessionStorage.getItem("right") != '') && (sessionStorage.getItem("right") != null)){
                 document.getElementById("righttext").innerText = sessionStorage.getItem("right");
                 document.getElementById("createRightButton").removeAttribute("disabled");
                 document.getElementById("createRightButton").innerText = "Amend";
@@ -109,9 +129,10 @@
             window.location.href = "/";
         });
 
-        socket.on('createRightRet', function (data) {
+        socket.on('createNewRightRet', function (data) {
             console.log("Create right in browser called ...");
             sessionStorage.setItem("newright", document.getElementById("righttext").value);
+          //  sessionStorage.setItem("mode", "amend");
             window.location.href = "createservice";
         });
 
