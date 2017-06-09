@@ -11,6 +11,9 @@
     <script src="socket.io/socket.io.js"></script>
 
     <script>
+
+        var houseOwner;  // set when dd selected but can't get dd selection later
+
         function logout() {
             var socket = io.connect();
             socket.emit('logout', { data: 'You clicked the logout button' });
@@ -18,24 +21,64 @@
         };
 
         function saveHouse() {
+            // create and build up data object
+            var certData = {
+                description: "",
+                propertyID: "",
+                owner: "",
+                authenticationDate: 0,
+                registrationDate: 0,
+                price: 0,
+                taxPaid: false
+            };
+
+            certData.description = document.getElementById("propertyname").value;
+            certData.propertyID = document.getElementById("propertyid").value;
+            certData.owner = houseOwner; //document.getElementById("owner").innerText;  // innertext is name, value is a date
+
+            var dtmp = new Date(document.getElementById("regdate").value);
+            console.log("dtmp is " + dtmp);
+            certData.registrationDate = dtmp.getTime();
+
+            var dtmp = new Date();
+            dtmp.setTime(document.getElementById("authenticationdate").value);
+            console.log("dtmp is " + dtmp);
+            certData.authenticationDate = dtmp.getTime();
+
+            certData.price = document.getElementById("price").value;
+
+            if (document.getElementById("taxpaid").value == 'on') {
+                certData.taxPaid = true;
+            } else {
+                certData.taxPaid = false;
+            }
+
             var socket = io.connect();
-            socket.emit('saveHouse', { data: 'You clicked the save button' });
-            console.log("save button clicked");
+            //if (amendData) {
+            //    socket.emit('amendCert', { data: certData });
+            //    console.log("amend button clicked");
+            //} else {
+            socket.emit('createNewCert', { data: certData });
+            console.log("create button clicked");
+            // }
         };
 
-        function sendHouse() {
-            console.log("sendHouse to DN");
-            alert("Sent to DN");
+        //function sendHouse() {
+        //    console.log("sendHouse to DN");
+        //    alert("Sent to DN");
 
-            var socket = io.connect();
-            socket.emit('sendHouse', { data: 'You clicked the send button' });
-            console.log("send button clicked");
-        };
+        //    var socket = io.connect();
+        //    socket.emit('sendHouse', { data: 'You clicked the send button' });
+        //    console.log("send button clicked");
+        //};
 
         function setAuthDate(elm) {
-            
+
             // set authentication date for owner
             var myVar = $(elm).attr('data-value');
+            houseOwner = elm.innerText;
+            console.log("owner is " + houseOwner);
+            document.getElementById("authenticationdate").value = new Date(myVar);
             document.getElementById("authenticationdate").innerText = myVar;
 
         };
@@ -64,7 +107,7 @@
                 // populate property ID 
                 var choice = Math.floor((Math.random() * 5) + 1);
                 console.log("random " + choice);
-                switch(choice) {
+                switch (choice) {
 
                     case 1:
                         document.getElementById("propertyid").innerText = "234-544-832-182";
@@ -93,6 +136,13 @@
             console.log("logout in browser called ...");
             window.location("/HC");
         });
+
+
+        socket.on('createNewCertRet', function (data) {
+            console.log("Create cert in browser called ...");
+            window.location("/houses");
+        });
+
 
         socket.on('saveHouseRet', function (data) {
             console.log("Create new house in browser called ...");
@@ -208,7 +258,7 @@
             $('.ui.dropdown').dropdown();
         });
 
-        
+
     </script>
 
     <div class="flex-title">
@@ -264,7 +314,7 @@
                                     <input name="owner" id="owner" type="hidden" />
                                     <i class="dropdown icon"></i>
                                     <div class="default text">Select Owner</div>
-                                    <div class="menu" >
+                                    <div class="menu">
                                         <div class="item" data-value="10/05/2017" onclick="setAuthDate(this)"><i class="check circle green icon"></i>Adam Morriss </div>
                                         <div class="item" data-value="23/08/2011" onclick="setAuthDate(this)"><i class="check circle green icon"></i>Helal Miah</div>
                                         <div class="item" data-value="00/00/0000" onclick="setAuthDate(this)"><i class="minus circle red icon"></i>Hugues Flament</div>
@@ -272,11 +322,11 @@
                                         <div class="item" data-value="00/00/0000" onclick="setAuthDate(this)"><i class="minus circle red icon"></i>Sai Rajagopalan </div>
                                     </div>
                                 </div>
-                                 
+
                             </div>
                             <div class="four wide field">
                                 <label>Authentication Date</label>
-                                <input id="authenticationdate" name="authenticationdate" type="date"  />
+                                <input id="authenticationdate" name="authenticationdate" type="date" />
                             </div>
                             <div class="four wide field">
                                 <label>Registration Date</label>
@@ -296,7 +346,7 @@
                                 <!--<div style="vertical-align:middle; display:inline-block">-->
                                 <!--<div class="ui checkbox" style="vertical-align:middle; display:inline-block">-->
                                 <label>Tax Paid</label>
-                                <input tabindex="0" name="taxpaid" class="hidden" type="checkbox" />
+                                <input tabindex="0" id="taxpaid" class="hidden" type="checkbox" />
                                 <!--</div>-->
                             </div>
                             <!--</div>-->

@@ -341,6 +341,53 @@ module.exports = {
                 socket.broadcast.emit('sendHouseRet', { data: data.data });
             });
 
+
+            socket.on('createNewCert', function (dataObj) {
+                console.log("Create new certificate server function called from browser");
+
+                if (serverAvailable) {
+
+                    // get passed data
+                    console.log("cert data " + dataObj.data.description);
+                    var certData = dataObj.data;
+
+                    var request = require("request");
+
+                    var options = {
+                        method: 'POST',
+                        url: serverURL + 'api/certificates/',
+                        headers:
+                        {
+                            'cache-control': 'no-cache',
+                            'content-type': 'application/json',
+                            'x-access-token': loginToken
+                        },
+                        body:
+                        {
+                            description: certData.description,
+                            propertyID: certData.propertyID,
+                            owner: certData.owner,
+                            authenticationDate: certData.authenticationDate,
+                            registrationDate: certData.registrationDate,
+                            price: certData.price,
+                            taxPaid: certData.taxPaid
+                        },
+                        json: true
+                    };
+
+                    request(options, function (error, response, body) {
+                        if (!error && response.statusCode == 200) {
+
+                            console.log("created new certificate " + response);
+                            socket.broadcast.emit('createNewCertRet', { data: "success" });
+                        } else {
+                            console.log("create new certificate error ..." + response.statusCode);
+                            socket.broadcast.emit('createNewCertRet', { data: "Failed to create certificate" });
+                        };
+                    });
+                }
+            });
+
         });
         return io;
     }
