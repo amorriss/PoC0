@@ -13,6 +13,7 @@
     <script>
 
         var houseOwner;  // set when dd selected but can't get dd selection later
+        var amendData;
 
         function logout() {
             var socket = io.connect();
@@ -25,7 +26,7 @@
             var certData = {
                 description: "",
                 propertyID: "",
-                owner: "",
+                owner: "None",
                 authenticationDate: 0,
                 registrationDate: 0,
                 price: 0,
@@ -54,13 +55,13 @@
             }
 
             var socket = io.connect();
-            //if (amendData) {
-            //    socket.emit('amendCert', { data: certData });
-            //    console.log("amend button clicked");
-            //} else {
-            socket.emit('createNewCert', { data: certData });
-            console.log("create button clicked");
-            // }
+            if (amendData) {
+                socket.emit('amendCert', { data: certData });
+                console.log("amend button clicked");
+            } else {
+                socket.emit('createNewCert', { data: certData });
+                console.log("create button clicked");
+            }
         };
 
         //function sendHouse() {
@@ -96,17 +97,26 @@
 
             // set values passed in editing house
             if (sessionStorage.getItem("property") != "") {
-                //document.getElementById("propertyname").innerText = sessionStorage.getItem("property");
-                //document.getElementById("propertyid").innerText = sessionStorage.getItem("propertyid");
-                //document.getElementById("owner").innerText = sessionStorage.getItem("owner");
-                //document.getElementById("regdate").innerText = sessionStorage.getItem("regdate");
+                console.log("amend");
+                document.getElementById("propertyname").innerText = sessionStorage.getItem("property");
+                document.getElementById("propertyid").innerText = sessionStorage.getItem("propertyid");
 
-                var socket = io.connect();
-                socket.emit("getCert", sessionStorage.getItem("propertyid"));
+                document.getElementById("owner").innerText = sessionStorage.getItem("owner");  // NOT WORKING !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                console.log("ownder is " + sessionStorage.getItem("owner"));
+                var dtmp = new Date(parseInt(sessionStorage.getItem("regdate")));
+                document.getElementById("regdate").innerText = dtmp.getDate() + '/' + (dtmp.getMonth() + 1) + '/' + dtmp.getFullYear();
+
+                dtmp = new Date(parseInt(sessionStorage.getItem("authdate")));
+                document.getElementById("authenticationdate").innerText = dtmp.getDate() + '/' + (dtmp.getMonth() + 1) + '/' + dtmp.getFullYear();
+
+                document.getElementById("price").innerText = sessionStorage.getItem("price");
+                document.getElementById("taxpaid").checked = sessionStorage.getItem("taxpaid");
 
                 // make button amend
                 document.getElementById("savebutton").innerText = "Amend";
+                amendData = true;
             } else {
+                console.log("create");
                 // populate property ID 
                 var choice = Math.floor((Math.random() * 5) + 1);
                 console.log("random " + choice);
@@ -130,6 +140,7 @@
                 };
                 // make button create
                 document.getElementById("savebutton").innerText = "Create";
+                amendData = false;
             }
         };
 
@@ -137,69 +148,65 @@
 
         socket.on('logoutRet', function (data) {
             console.log("logout in browser called ...");
-            window.location("/HC");
+            window.location.href = "/HC";
         });
+
+
+        socket.on('amendCertRet', function (data) {
+            console.log("Amend cert in browser called ...");
+            //var sname = document.getElementById("servicetext").value;
+            //sessionStorage.setItem("servicename", sname);
+            window.location.href = "/houses";
+        });
+
 
 
         socket.on('createNewCertRet', function (data) {
-            console.log("Create cert in browser called ...");
-            window.location("/houses");
-        });
-
-        socket.on('getCertRet', function (data) {
-            console.log("Get cert in browser called ...");
-            document.getElementById("propertyname").innerText = data.data.property;
-            document.getElementById("propertyid").innerText = data.data.property;
-            document.getElementById("owner").innerText = data.data.property;
-            document.getElementById("regdate").innerText = data.data.property;
-        });
-
-        socket.on('saveHouseRet', function (data) {
             console.log("Create new house in browser called ...");
             // also save in local storage array for loading table when this screen loads
             var dataArray = new Array();
 
-            // set array to current local storage data then add new data or amend
-            if (JSON.parse(localStorage.getItem("tabledata")) != null) {
-                dataArray = JSON.parse(localStorage.getItem("tabledata"));
-                console.log("array is " + dataArray);
+            //// set array to current local storage data then add new data or amend
+            //if (JSON.parse(localStorage.getItem("tabledata")) != null) {
+            //    dataArray = JSON.parse(localStorage.getItem("tabledata"));
+            //    console.log("array is " + dataArray);
 
-                // clear local storage and then set it again with updated data
-                // this stops duplicates
-                localStorage.clear();
+            // clear local storage and then set it again with updated data
+            // this stops duplicates
+            localStorage.clear();
 
-                if (sessionStorage.getItem("currenthouserow") != "") {
-                    // loop through tabledata up to the current row ( / 4)
+            if (sessionStorage.getItem("currenthouserow") != "") {
+                // loop through tabledata up to the current row ( / 4)
 
-                    var cellCount = 4;
-                    var rowCounter = 0;
-                    var currentHouseRow = sessionStorage.getItem("currenthouserow");
-                    console.log("currentHouseRow is " + currentHouseRow);
-                    for (counter = 0; counter < dataArray.length; counter++) {
-                        if (rowCounter == currentHouseRow) {
-                            // amend data
-                            dataArray[counter] = document.getElementById("propertyname").value;
-                            dataArray[counter + 1] = document.getElementById("propertyid").value;
-                            dataArray[counter + 2] = document.getElementById("owner").value;
-                            dataArray[counter + 3] = document.getElementById("regdate").valueAsDate;
-                        }
-                        if (cellCount == 4) {
-                            rowCounter++;
-                        }
-                        cellCount--;
-                        if (cellCount == -1) { cellCount = 4; }
-                    };
-                } else {
-                    dataArray.push(document.getElementById("propertyname").value);
-                    dataArray.push(document.getElementById("propertyid").value);
-                    dataArray.push(document.getElementById("owner").value);
-                    console.log("date is " + document.getElementById("regdate").valueAsDate);
-                    dataArray.push(document.getElementById("regdate").valueAsDate);
-                }
-                localStorage.setItem("tabledata", JSON.stringify(dataArray));
-                console.log("data saved " + JSON.stringify(dataArray));
+                var cellCount = 4;
+                var rowCounter = 0;
+                var currentHouseRow = sessionStorage.getItem("currenthouserow");
+                console.log("currentHouseRow is " + currentHouseRow);
+                for (counter = 0; counter < dataArray.length; counter++) {
+                    if (rowCounter == currentHouseRow) {
+                        // amend data
+                        dataArray[counter] = document.getElementById("propertyname").value;
+                        dataArray[counter + 1] = document.getElementById("propertyid").value;
+                        dataArray[counter + 2] = document.getElementById("owner").value;
+                        dataArray[counter + 3] = document.getElementById("regdate").valueAsDate;
+                    }
+                    if (cellCount == 4) {
+                        rowCounter++;
+                    }
+                    cellCount--;
+                    if (cellCount == -1) { cellCount = 4; }
+                };
+            } else {
+                dataArray.push(document.getElementById("propertyname").value);
+                dataArray.push(document.getElementById("propertyid").value);
+                dataArray.push(document.getElementById("owner").value);
+                console.log("date is " + document.getElementById("regdate").valueAsDate);
+                dataArray.push(document.getElementById("regdate").valueAsDate);
             }
-            window.location("/houses");
+            localStorage.setItem("tabledata", JSON.stringify(dataArray));
+            console.log("data saved " + JSON.stringify(dataArray));
+            // }
+            window.location.href = "/houses";
         });
 
 
@@ -248,7 +255,7 @@
                 localStorage.setItem("tabledata", JSON.stringify(dataArray));
                 console.log("data saved " + JSON.stringify(dataArray));
             }
-            window.location("/houses");
+            window.location.href = "/houses";
         });
 
         function enableButton() {

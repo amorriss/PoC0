@@ -436,15 +436,17 @@ module.exports = {
             });
 
 
-            socket.on('getCert', function (dataObj) {
-                console.log(dataObj.data);
-                console.log("Get cert server function called from browser");
+            socket.on('getCerts', function (dataObj) {
+                
+                console.log("Get certs server function called from browser");
 
                 if (serverAvailable) {
-                    var certPropertyID = dataObj.data;
+                    var certPropertyID = dataObj.toString();
+                    certPropertyID = certPropertyID.replace(/-/g, '');
+                    console.log("ID" + certPropertyID);
                     var request = require('request');
                     var options = {
-                        url: serverURL + 'api/certificates/' + certPropertyID,
+                        url: serverURL + 'api/certificates/',
                         headers: {
                             'x-access-token': loginToken
                         }
@@ -454,12 +456,12 @@ module.exports = {
                         options,
                         function (error, response, body) {
                             if (!error && response.statusCode == 200) {
-                                var right = JSON.parse(body);
-                                console.log("cert is " + body);
-                                socket.broadcast.emit('getCertRet', { data: right });
+                                var certs = JSON.parse(body);
+                                console.log("certs are " + body);
+                                socket.broadcast.emit('getCertsRet', { data: certs });
                             } else {
                                 console.log("get cert error ...");
-                                socket.broadcast.emit('getCertRet', { data: "Failed to get cert" });
+                                socket.broadcast.emit('getCertsRet', { data: "Failed to get certs" });
                             };
                         }
                     );

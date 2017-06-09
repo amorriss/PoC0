@@ -10,9 +10,8 @@ BUGS
 
  - get right ID DD value. DONE
 
- - set right dd. !!!!!!!! ???????
+ - set right dd and owner dd. How to set semantic ui dd value ?????????????
 
- - create service - add right. return very slow to create service page. Same for return from create service to service list
 
 
 
