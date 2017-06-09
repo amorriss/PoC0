@@ -368,9 +368,9 @@ module.exports = {
                             propertyID: certData.propertyID,
                             owner: certData.owner,
                             authenticationDate: certData.authenticationDate,
-                            registrationDate: certData.registrationDate,
-                            price: certData.price,
-                            taxPaid: certData.taxPaid
+                            RegistrationDate: certData.registrationDate,
+                            Price: certData.price,
+                            TaxPaid: certData.taxPaid
                         },
                         json: true
                     };
@@ -385,6 +385,84 @@ module.exports = {
                             socket.broadcast.emit('createNewCertRet', { data: "Failed to create certificate" });
                         };
                     });
+                }
+            });
+
+
+            socket.on('amendCert', function (dataObj) {
+                console.log("Amend certificate server function called from browser");
+
+                if (serverAvailable) {
+
+                    // get passed data
+                    console.log("cert data " + dataObj.data.description);
+                    var certData = dataObj.data;
+
+                    var request = require("request");
+
+                    var options = {
+                        method: 'PUT',
+                        url: serverURL + 'api/certificates/' + certData.propertyID,
+                        headers:
+                        {
+                            'cache-control': 'no-cache',
+                            'content-type': 'application/json',
+                            'x-access-token': loginToken
+                        },
+                        body:
+                        {
+                            description: certData.description,
+                            propertyID: certData.propertyID,
+                            owner: certData.owner,
+                            authenticationDate: certData.authenticationDate,
+                            RegistrationDate: certData.registrationDate,
+                            Price: certData.price,
+                            TaxPaid: certData.taxPaid
+                        },
+                        json: true
+                    };
+
+                    request(options, function (error, response, body) {
+                        if (!error && response.statusCode == 200) {
+
+                            console.log("amended certificate " + response);
+                            socket.broadcast.emit('amendCertRet', { data: "success" });
+                        } else {
+                            console.log("amended certificate error ..." + response.statusCode);
+                            socket.broadcast.emit('amendCertRet', { data: "Failed to amend certificate" });
+                        };
+                    });
+                }
+            });
+
+
+            socket.on('getCert', function (dataObj) {
+                console.log(dataObj.data);
+                console.log("Get cert server function called from browser");
+
+                if (serverAvailable) {
+                    var certPropertyID = dataObj.data;
+                    var request = require('request');
+                    var options = {
+                        url: serverURL + 'api/certificates/' + certPropertyID,
+                        headers: {
+                            'x-access-token': loginToken
+                        }
+                    };
+
+                    request.get(
+                        options,
+                        function (error, response, body) {
+                            if (!error && response.statusCode == 200) {
+                                var right = JSON.parse(body);
+                                console.log("cert is " + body);
+                                socket.broadcast.emit('getCertRet', { data: right });
+                            } else {
+                                console.log("get cert error ...");
+                                socket.broadcast.emit('getCertRet', { data: "Failed to get cert" });
+                            };
+                        }
+                    );
                 }
             });
 

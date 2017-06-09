@@ -96,10 +96,13 @@
 
             // set values passed in editing house
             if (sessionStorage.getItem("property") != "") {
-                document.getElementById("propertyname").innerText = sessionStorage.getItem("property");
-                document.getElementById("propertyid").innerText = sessionStorage.getItem("propertyid");
-                document.getElementById("owner").innerText = sessionStorage.getItem("owner");
-                document.getElementById("regdate").innerText = sessionStorage.getItem("regdate");
+                //document.getElementById("propertyname").innerText = sessionStorage.getItem("property");
+                //document.getElementById("propertyid").innerText = sessionStorage.getItem("propertyid");
+                //document.getElementById("owner").innerText = sessionStorage.getItem("owner");
+                //document.getElementById("regdate").innerText = sessionStorage.getItem("regdate");
+
+                var socket = io.connect();
+                socket.emit("getCert", sessionStorage.getItem("propertyid"));
 
                 // make button amend
                 document.getElementById("savebutton").innerText = "Amend";
@@ -143,6 +146,13 @@
             window.location("/houses");
         });
 
+        socket.on('getCertRet', function (data) {
+            console.log("Get cert in browser called ...");
+            document.getElementById("propertyname").innerText = data.data.property;
+            document.getElementById("propertyid").innerText = data.data.property;
+            document.getElementById("owner").innerText = data.data.property;
+            document.getElementById("regdate").innerText = data.data.property;
+        });
 
         socket.on('saveHouseRet', function (data) {
             console.log("Create new house in browser called ...");
