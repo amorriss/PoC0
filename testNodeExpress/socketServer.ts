@@ -395,8 +395,11 @@ module.exports = {
                 if (serverAvailable) {
 
                     // get passed data
-                    console.log("cert data " + dataObj.data.description);
                     var certData = dataObj.data;
+                    console.log("cert data " + certData.description);
+                    console.log("cert data " + certData.propertyID);
+                    console.log("cert data " + certData.price);
+                    console.log("cert data " + certData.taxPaid);
 
                     var request = require("request");
 

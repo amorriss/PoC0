@@ -1,6 +1,6 @@
 BUGS
 
- - return to createservice loses name and user data when adding/ amending right. DONE
+ - return to createservice loses name and user data when amending right. !!!!!!!!
 
  - 1st element data arrays is null. DONE
 
@@ -12,7 +12,8 @@ BUGS
 
  - set right dd and owner dd. How to set semantic ui dd value ?????????????
 
+ - HC app. Price not saved when amend
 
-
+ - HC app. Duplicate list when return from cert page
 
  - amend right. finish. DONE

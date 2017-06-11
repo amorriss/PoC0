@@ -13,6 +13,7 @@
     <script>
 
         var houseOwner;  // set when dd selected but can't get dd selection later
+        var authDate; // similar to above as can't seem to get the date value in the date input field
         var amendData;
 
         function logout() {
@@ -37,23 +38,24 @@
             certData.propertyID = document.getElementById("propertyid").value;
             certData.owner = houseOwner; //document.getElementById("owner").innerText;  // innertext is name, value is a date
 
-            var dtmp = new Date(document.getElementById("regdate").value);
-            console.log("dtmp is " + dtmp);
-            certData.registrationDate = dtmp.getTime();
+            var regdt = new Date(document.getElementById("regdate").value);
+            certData.registrationDate = regdt.getTime();
+            console.log("reg date is " + certData.registrationDate);
 
-            var dtmp = new Date();
-            dtmp.setTime(document.getElementById("authenticationdate").value);
-            console.log("dtmp is " + dtmp);
-            certData.authenticationDate = dtmp.getTime();
+            var authdt = new Date(authDate);
+            certData.authenticationDate = authdt.getTime();
+            console.log("auth date is " + document.getElementById("authenticationdate").value);
+            console.log("auth date is " + authdt);
+            console.log("auth date is " + certData.authenticationDate);
 
             certData.price = document.getElementById("price").value;
-
+            console.log("price is " + certData.price); 
             if (document.getElementById("taxpaid").value == 'on') {
                 certData.taxPaid = true;
             } else {
                 certData.taxPaid = false;
             }
-
+            alert("wait");
             var socket = io.connect();
             if (amendData) {
                 socket.emit('amendCert', { data: certData });
@@ -76,11 +78,18 @@
         function setAuthDate(elm) {
 
             // set authentication date for owner
-            var myVar = $(elm).attr('data-value');
+            authDate = $(elm).attr('data-value');
             houseOwner = elm.innerText;
             console.log("owner is " + houseOwner);
-            document.getElementById("authenticationdate").value = new Date(myVar);
-            document.getElementById("authenticationdate").innerText = myVar;
+           // console.log("date is " + myVar);
+
+            //var dtmp = new Date(parseInt(myVar));
+            //document.getElementById("regdate").innerText = dtmp.getDate() + '/' + (dtmp.getMonth() + 1) + '/' + dtmp.getFullYear();
+
+            //document.getElementById("authenticationdate").value = myVar;
+            document.getElementById("authenticationdate").innerText = authDate;
+            // console.log("date is " + document.getElementById("authenticationdate").value.toLocaleString());
+           // console.log("date is " + document.getElementById("authenticationdate").innerText);
 
         };
 

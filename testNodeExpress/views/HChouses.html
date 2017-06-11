@@ -109,14 +109,13 @@
             tableData = dataarray;
 
             if (arrayLen > 0) {
-                var cellCount = 4;
 
                 for (counter = 0; counter < arrayLen; counter++) {
 
                     var numrows = tableRef.rows.length;
                     var row = tableRef.insertRow(numrows);
                     var newRowId = "houseTableRow" + (numrows + 1);
-                    //console.log("new row is " + newRowId);
+                     console.log("new row is " + newRowId);
                     row.setAttribute("id", newRowId);
                     row.setAttribute("onclick", "rowClick(this.rowIndex)");
                     row.setAttribute("ondblclick", "rowDblClick(this)");
