@@ -51,17 +51,6 @@
             rightData.divisibility = document.getElementById("divisibility").checked;
             rightData.tax = document.getElementById("tax").checked;
 
-            //if (document.getElementById("divisibility").value == 'on') {
-            //    rightData.divisibility = true;
-            //} else {
-            //    rightData.divisibility = false;
-            //}
-            //if (document.getElementById("tax").value == 'on') {
-            //    rightData.tax = true;
-            //} else {
-            //    rightData.tax = false;
-            //}
-
             console.log("right data name " + rightData.rightTypeName);
             console.log("right data valuelimit " + rightData.valueLimit);
             console.log("right data timeLimit " + rightData.timeLimit);
@@ -107,25 +96,28 @@
         function loadRight(data) {
 
             var rightData = data.data;
-            console.log("right data is " + rightData.timeLimit);
-            if (rightData.valueLimit != null) {
+            
+            if (rightData.valueLimit != "") {
+                document.getElementById("valuelimitcb").checked = true;
                 enableID('valuelimit');
                 document.getElementById("valuelimit").innerText = rightData.valueLimit;
             };
 
            // var IDdd = document.getElementById("DDclass");
-            document.getElementById("id").checked = true;
-            enableID("DDclass");
-            console.log("id verify" + rightData.idVerification);
-            document.getElementById("DDclass").innerText = rightData.idVerification;
+            if (rightData.idVerification != "") {
+                document.getElementById("id").checked = true;
+                enableID("DDclass");
+                console.log("id verify" + rightData.idVerification);
+                document.getElementById("DDclass").innerText = rightData.idVerification;
+            }
             //enableID('DDclas s');
             //var IDDD = document.getElementById("DDclass");
             //IDDD.set
 
-            document.getElementById("tax").checked = (rightData.tax == "true");
-            document.getElementById("divisibility").checked = (rightData.divisibility == "true");
+            document.getElementById("tax").checked = (rightData.tax == true);
+            document.getElementById("divisibility").checked = (rightData.divisibility == true);
 
-            if (rightData.timeLimit != null) {
+            if (rightData.timeLimit != "") {
                 document.getElementById("timelimitcb").checked = true;
                 enableID('timelimit');
                 var TL = new Date(rightData.timeLimit);
@@ -207,7 +199,7 @@
 
         socket.on('amendRightRet', function (data) {
             console.log("Amend right in browser called ...");
-            //sessionStorage.setItem("mode", "amend");
+            sessionStorage.setItem("mode", "amend");
             window.location.href = "createservice";
         });
 
@@ -324,7 +316,7 @@
 
                             <div class="three wide field">
                                 <div class="ui toggle checkbox" style="position: absolute; left: 230px; top: 76px;">
-                                    <input name="valuelimitcb" type="checkbox" onchange="enableID('valuelimit')" />
+                                    <input id="valuelimitcb" type="checkbox" onchange="enableID('valuelimit')" />
                                     <label></label>
                                 </div>
                             </div>

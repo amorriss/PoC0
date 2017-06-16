@@ -287,10 +287,12 @@
 
             // check if new or amend
             if (sessionStorage.getItem("mode") == "create") {
+                console.log("Service create mode");
                 document.getElementById("mainTitle").innerText = "Service - new";
                // document.getElementById("servicetext").innerText = sessionStorage.getItem("servicename");
                 amendData = false;
             } else if (sessionStorage.getItem("mode") == "amend") {
+                console.log("Service amend mode");
                 // add data passed from services page
                 document.getElementById("mainTitle").innerText = "Service - amend";
                 document.getElementById("servicetext").innerText = sessionStorage.getItem("servicename");
