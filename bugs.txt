@@ -1,7 +1,7 @@
 BUGS
 
- - return to createservice loses name and user data when amending right. !!!!!!!!
-
+ 
+ - amend right. finish. DONE
  - 1st element data arrays is null. DONE
 
  - adding new right get Amended service error ... 500 (from bc server). DONE
@@ -10,10 +10,22 @@ BUGS
 
  - get right ID DD value. DONE
 
- - set right dd and owner dd. How to set semantic ui dd value ?????????????
 
- - HC app. Price not saved when amend
+
+- return to createservice loses name and user data when amending right. !!!!!!!!
+
+ - set right dd and owner dd. How to set semantic ui dd value TEMP FIX DONE
+
+ - HC app. Price not saved when amend. DONE
 
  - HC app. Duplicate list when return from cert page
 
- - amend right. finish. DONE
+ - delete cert not renumbering remaining items
+
+ - had to use instance vars for owner and auth date in housing app as can't get values from page elements
+
+ - no ID verification data in test right data
+
+ - DN. Create right with some false get set to true when retrieved
+
+ - amends not working as values not being set e.g. dates

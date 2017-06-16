@@ -48,16 +48,19 @@
             console.log("dtmp is " + dtmp);
             rightData.timeLimit = dtmp.getTime();
 
-            if (document.getElementById("divisibility").value == 'on') {
-                rightData.divisibility = true;
-            } else {
-                rightData.divisibility = false;
-            }
-            if (document.getElementById("tax").value == 'on') {
-                rightData.tax = true;
-            } else {
-                rightData.tax = false;
-            }
+            rightData.divisibility = document.getElementById("divisibility").checked;
+            rightData.tax = document.getElementById("tax").checked;
+
+            //if (document.getElementById("divisibility").value == 'on') {
+            //    rightData.divisibility = true;
+            //} else {
+            //    rightData.divisibility = false;
+            //}
+            //if (document.getElementById("tax").value == 'on') {
+            //    rightData.tax = true;
+            //} else {
+            //    rightData.tax = false;
+            //}
 
             console.log("right data name " + rightData.rightTypeName);
             console.log("right data valuelimit " + rightData.valueLimit);
@@ -111,13 +114,16 @@
             };
 
            // var IDdd = document.getElementById("DDclass");
-            //document.getElementById("id").checked = true;
-            //enableID('DDclass');
+            document.getElementById("id").checked = true;
+            enableID("DDclass");
+            console.log("id verify" + rightData.idVerification);
+            document.getElementById("DDclass").innerText = rightData.idVerification;
+            //enableID('DDclas s');
             //var IDDD = document.getElementById("DDclass");
             //IDDD.set
 
-            document.getElementById("tax").checked = rightData.tax;
-            document.getElementById("divisibility").checked = rightData.divisibility;
+            document.getElementById("tax").checked = (rightData.tax == "true");
+            document.getElementById("divisibility").checked = (rightData.divisibility == "true");
 
             if (rightData.timeLimit != null) {
                 document.getElementById("timelimitcb").checked = true;

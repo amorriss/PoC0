@@ -44,10 +44,11 @@
         };
 
         function delHouse() {
+            console.log("deleted row is " + currentTableRow);
             if (currentTableRow > 0) {
                 // delete row from table
                 var tableRef = document.getElementById('housetable').getElementsByTagName('tbody')[0];
-                tableRef.deleteRow(currentTableRow);
+                tableRef.deleteRow(currentTableRow - 1);
 
                 // disable del button and set current row to 0
                 document.getElementById("delButton").setAttribute("class", "ui disabled right floated small red icon button");
@@ -62,7 +63,7 @@
 
             for (i = 1; i < numrows + 1; i++) {
                 var IDstr = "houseTableRow" + i;
-                //console.log("id is " + IDstr);
+                console.log("id is " + IDstr);
                 document.getElementById(IDstr).removeAttribute("class");
             }
             var IDstr = "houseTableRow" + value;
@@ -75,7 +76,7 @@
                 document.getElementById("delButton").setAttribute("class", "ui right floated small red icon button");
                 currentTableRow = value;
             }
-
+            console.log("selected row is " + currentTableRow);
         };
 
         function rowDblClick(row) {
@@ -83,15 +84,17 @@
             property = row.getElementsByTagName("td")[0].childNodes[0].data;
             propertyid = row.getElementsByTagName("td")[1].childNodes[0].data;
             owner = row.getElementsByTagName("td")[2].childNodes[0].data;
-            regDate = row.getElementsByTagName("td")[3].childNodes[0].data;
+            regDate = new Date(row.getElementsByTagName("td")[3].childNodes[0].data);
+            console.log("reg date is " + regDate.getTime());
             authDate = tableData[row.rowIndex - 1].authenticationDate;
+            console.log("auth date is " + authDate);
             price = tableData[row.rowIndex - 1].price;
             taxPaid = tableData[row.rowIndex - 1].taxPaid;
             
             sessionStorage.setItem("property", property);
             sessionStorage.setItem("propertyid", propertyid);
             sessionStorage.setItem("owner", owner);
-            sessionStorage.setItem("regdate", regDate);
+            sessionStorage.setItem("regdate", regDate.getTime());
             sessionStorage.setItem("authdate", authDate);
             sessionStorage.setItem("price", price);
             sessionStorage.setItem("taxpaid", taxPaid);
@@ -130,7 +133,10 @@
                     propertyCell.innerHTML = dataarray[counter].description;
                     idCell.innerHTML = dataarray[counter].propertyID;
                     ownerCell.innerHTML = dataarray[counter].owner;
-                    regdateCell.innerHTML = dataarray[counter].registrationDate;
+                    console.log("desc is " + dataarray[counter].description);
+                    console.log("taxpaid is " + dataarray[counter].taxPaid);
+                    dtmp = new Date(parseInt(dataarray[counter].registrationDate));
+                    regdateCell.innerHTML = dtmp.getDate() + '/' + (dtmp.getMonth() + 1) + '/' + dtmp.getFullYear();
                 }
             };
         };

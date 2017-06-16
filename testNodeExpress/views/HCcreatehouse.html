@@ -14,6 +14,7 @@
 
         var houseOwner;  // set when dd selected but can't get dd selection later
         var authDate; // similar to above as can't seem to get the date value in the date input field
+        var regDate; // similar to above as can't seem to get the date value in the date input field
         var amendData;
 
         function logout() {
@@ -37,25 +38,33 @@
             certData.description = document.getElementById("propertyname").value;
             certData.propertyID = document.getElementById("propertyid").value;
             certData.owner = houseOwner; //document.getElementById("owner").innerText;  // innertext is name, value is a date
-
-            var regdt = new Date(document.getElementById("regdate").value);
+            console.log("2.owner is " + houseOwner);
+            var regdt = new Date(regDate); // document.getElementById("regdate").value);
+            var currentDate = $("input#regdate").val();
+            console.log("currentDate is " + currentDate);
             certData.registrationDate = regdt.getTime();
             console.log("reg date is " + certData.registrationDate);
 
-            var authdt = new Date(authDate);
+            var authdt = new Date(authDate); // new Date(document.getElementById("authenticationdate").value); //same problem as owner so stored in instance var
             certData.authenticationDate = authdt.getTime();
-            console.log("auth date is " + document.getElementById("authenticationdate").value);
-            console.log("auth date is " + authdt);
+            //console.log("auth date is " + document.getElementById("authenticationdate").value);
+            //console.log("auth date is " + authdt);
             console.log("auth date is " + certData.authenticationDate);
 
-            certData.price = document.getElementById("price").value;
-            console.log("price is " + certData.price); 
-            if (document.getElementById("taxpaid").value == 'on') {
-                certData.taxPaid = true;
-            } else {
-                certData.taxPaid = false;
-            }
-            alert("wait");
+            certData.price = parseInt(document.getElementById("price").value);
+            console.log("price is " + certData.price);
+
+            
+            certData.taxPaid = document.getElementById("taxpaid").checked;
+            console.log("taxpaid is (checked)" + document.getElementById("taxpaid").checked);
+            //if (document.getElementById("taxpaid").checked == 'on') {
+            //    certData.taxPaid = true;
+            //    console.log("tax paid is true");
+            //} else {
+            //    certData.taxPaid = false;
+            //    console.log("tax paid is false");
+            //}
+            
             var socket = io.connect();
             if (amendData) {
                 socket.emit('amendCert', { data: certData });
@@ -79,18 +88,24 @@
 
             // set authentication date for owner
             authDate = $(elm).attr('data-value');
+            console.log("auth date 1 " + authDate);
             houseOwner = elm.innerText;
-            console.log("owner is " + houseOwner);
-           // console.log("date is " + myVar);
+            console.log("1. owner is " + houseOwner);
 
-            //var dtmp = new Date(parseInt(myVar));
-            //document.getElementById("regdate").innerText = dtmp.getDate() + '/' + (dtmp.getMonth() + 1) + '/' + dtmp.getFullYear();
-
-            //document.getElementById("authenticationdate").value = myVar;
             document.getElementById("authenticationdate").innerText = authDate;
-            // console.log("date is " + document.getElementById("authenticationdate").value.toLocaleString());
-           // console.log("date is " + document.getElementById("authenticationdate").innerText);
+        };
 
+
+        function setRegDate(elm) {
+
+            regDate = elm.value
+            console.log("regDate 1 " + regDate);
+
+        };
+
+
+        function setCheckbox(value) {
+            console.log("checkboc clicked " + value.checked);
         };
 
     </script>
@@ -110,16 +125,27 @@
                 document.getElementById("propertyname").innerText = sessionStorage.getItem("property");
                 document.getElementById("propertyid").innerText = sessionStorage.getItem("propertyid");
 
-                document.getElementById("owner").innerText = sessionStorage.getItem("owner");  // NOT WORKING !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                console.log("ownder is " + sessionStorage.getItem("owner"));
-                var dtmp = new Date(parseInt(sessionStorage.getItem("regdate")));
-                document.getElementById("regdate").innerText = dtmp.getDate() + '/' + (dtmp.getMonth() + 1) + '/' + dtmp.getFullYear();
+                var ddtmp = document.getElementById("ownermenu");
+                document.getElementById("ownermenu").innerText = sessionStorage.getItem("owner");  // sets text but breaks dd func
+                houseOwner = sessionStorage.getItem("owner");  // set instance as dd won't be clicked for amend
+                //$dropdown = $('.ui.dropdown');
+                //$dropdown.dropdown('set selected', [sessionStorage.getItem("regdate")]); 
+              //  $('.ui.dropdown').has(dropdownID).dropdown('set selected', value);
+                //document.getElementById("ownermenu").selectedIndex = 2;
+               // changeValue("ownermenu", sessionStorage.getItem("owner"));
 
-                dtmp = new Date(parseInt(sessionStorage.getItem("authdate")));
-                document.getElementById("authenticationdate").innerText = dtmp.getDate() + '/' + (dtmp.getMonth() + 1) + '/' + dtmp.getFullYear();
+                console.log("owner is " + sessionStorage.getItem("owner"));
+                var dregtmp = new Date(parseInt(sessionStorage.getItem("regdate")));
+                document.getElementById("regdate").innerText = dregtmp.getDate() + '/' + (dregtmp.getMonth() + 1) + '/' + dregtmp.getFullYear();
+                setRegDate = dregtmp.getDate() + '/' + (dregtmp.getMonth() + 1) + '/' + dregtmp.getFullYear();
+
+                var dauthtmp = new Date(parseInt(sessionStorage.getItem("authdate")));
+                document.getElementById("authenticationdate").innerText = dauthtmp.getDate() + '/' + (dauthtmp.getMonth() + 1) + '/' + dauthtmp.getFullYear();
+                authDate = dauthtmp.getDate() + '/' + (dauthtmp.getMonth() + 1) + '/' + dauthtmp.getFullYear(); // set instance as amending i.e. this won't be set by clicking date as on new 
 
                 document.getElementById("price").innerText = sessionStorage.getItem("price");
-                document.getElementById("taxpaid").checked = sessionStorage.getItem("taxpaid");
+                console.log("setting tax paid to " + sessionStorage.getItem("taxpaid"));
+                document.getElementById("taxpaid").checked = (sessionStorage.getItem("taxpaid") == "true");
 
                 // make button amend
                 document.getElementById("savebutton").innerText = "Amend";
@@ -165,6 +191,7 @@
             console.log("Amend cert in browser called ...");
             //var sname = document.getElementById("servicetext").value;
             //sessionStorage.setItem("servicename", sname);
+            console.log("amendCertRet " + data.data);
             window.location.href = "/houses";
         });
 
@@ -175,6 +202,7 @@
             // also save in local storage array for loading table when this screen loads
             var dataArray = new Array();
 
+            console.log("createNewCertRet " + data.data);
             //// set array to current local storage data then add new data or amend
             //if (JSON.parse(localStorage.getItem("tabledata")) != null) {
             //    dataArray = JSON.parse(localStorage.getItem("tabledata"));
@@ -184,38 +212,43 @@
             // this stops duplicates
             localStorage.clear();
 
-            if (sessionStorage.getItem("currenthouserow") != "") {
-                // loop through tabledata up to the current row ( / 4)
+            if (data.data != "Owner not validated") {
 
-                var cellCount = 4;
-                var rowCounter = 0;
-                var currentHouseRow = sessionStorage.getItem("currenthouserow");
-                console.log("currentHouseRow is " + currentHouseRow);
-                for (counter = 0; counter < dataArray.length; counter++) {
-                    if (rowCounter == currentHouseRow) {
-                        // amend data
-                        dataArray[counter] = document.getElementById("propertyname").value;
-                        dataArray[counter + 1] = document.getElementById("propertyid").value;
-                        dataArray[counter + 2] = document.getElementById("owner").value;
-                        dataArray[counter + 3] = document.getElementById("regdate").valueAsDate;
-                    }
-                    if (cellCount == 4) {
-                        rowCounter++;
-                    }
-                    cellCount--;
-                    if (cellCount == -1) { cellCount = 4; }
-                };
+                if (sessionStorage.getItem("currenthouserow") != "") {
+                    // loop through tabledata up to the current row ( / 4)
+
+                    var cellCount = 4;
+                    var rowCounter = 0;
+                    var currentHouseRow = sessionStorage.getItem("currenthouserow");
+                    console.log("currentHouseRow is " + currentHouseRow);
+                    for (counter = 0; counter < dataArray.length; counter++) {
+                        if (rowCounter == currentHouseRow) {
+                            // amend data
+                            dataArray[counter] = document.getElementById("propertyname").value;
+                            dataArray[counter + 1] = document.getElementById("propertyid").value;
+                            dataArray[counter + 2] = document.getElementById("owner").value;
+                            dataArray[counter + 3] = document.getElementById("regdate").valueAsDate;
+                        }
+                        if (cellCount == 4) {
+                            rowCounter++;
+                        }
+                        cellCount--;
+                        if (cellCount == -1) { cellCount = 4; }
+                    };
+                } else {
+                    dataArray.push(document.getElementById("propertyname").value);
+                    dataArray.push(document.getElementById("propertyid").value);
+                    dataArray.push(document.getElementById("owner").value);
+                    console.log("date is " + document.getElementById("regdate").valueAsDate);
+                    dataArray.push(document.getElementById("regdate").valueAsDate);
+                }
+                localStorage.setItem("tabledata", JSON.stringify(dataArray));
+                console.log("data saved " + JSON.stringify(dataArray));
+                // }
+                window.location.href = "/houses";
             } else {
-                dataArray.push(document.getElementById("propertyname").value);
-                dataArray.push(document.getElementById("propertyid").value);
-                dataArray.push(document.getElementById("owner").value);
-                console.log("date is " + document.getElementById("regdate").valueAsDate);
-                dataArray.push(document.getElementById("regdate").valueAsDate);
+                alert("This owner has not been validated");
             }
-            localStorage.setItem("tabledata", JSON.stringify(dataArray));
-            console.log("data saved " + JSON.stringify(dataArray));
-            // }
-            window.location.href = "/houses";
         });
 
 
@@ -284,6 +317,25 @@
             $('.ui.dropdown').dropdown();
         });
 
+        //function changeValue(dropdownID, value) {
+        //    $('.ui.dropdown').has(dropdownID).dropdown('set selected', value);
+        //}
+
+        //$('#regdate').on('click', function () {
+        //    var date = new Date($('#regdate').val());
+        //    day = date.getDate();
+        //    month = date.getMonth() + 1;
+        //    year = date.getFullYear();
+        //    alert([day, month, year].join('/'));
+        //});
+
+        //$('#authenticationdate').on('change', function () {
+        //    var date = new Date($('#authenticationdate').val());
+        //    day = date.getDate();
+        //    month = date.getMonth() + 1;
+        //    year = date.getFullYear();
+        //    alert([day, month, year].join('/'));
+        //});
 
     </script>
 
@@ -336,16 +388,14 @@
 
                             <div class="eight wide field">
                                 <label>Owner</label>
-                                <div class="ui fluid search selection dropdown">
+                                <div class="ui fluid search selection dropdown" id="ownermenu">
                                     <input name="owner" id="owner" type="hidden" />
                                     <i class="dropdown icon"></i>
                                     <div class="default text">Select Owner</div>
-                                    <div class="menu">
-                                        <div class="item" data-value="10/05/2017" onclick="setAuthDate(this)"><i class="check circle green icon"></i>Adam Morriss </div>
-                                        <div class="item" data-value="23/08/2011" onclick="setAuthDate(this)"><i class="check circle green icon"></i>Helal Miah</div>
-                                        <div class="item" data-value="00/00/0000" onclick="setAuthDate(this)"><i class="minus circle red icon"></i>Hugues Flament</div>
-                                        <div class="item" data-value="11/02/2012" onclick="setAuthDate(this)"><i class="check circle green icon"></i>Neil Rapley </div>
-                                        <div class="item" data-value="00/00/0000" onclick="setAuthDate(this)"><i class="minus circle red icon"></i>Sai Rajagopalan </div>
+                                    <div class="menu" >
+                                        <div class="item" data-value="00/00/0000" onclick="setAuthDate(this)"><i class="minus circle red icon"></i>Hannah</div>
+                                        <div class="item" data-value="23/08/2011" onclick="setAuthDate(this)"><i class="check circle green icon"></i>Paivi</div>
+                                        <div class="item" data-value="10/05/2017" onclick="setAuthDate(this)"><i class="check circle green icon"></i>Tommi</div>
                                     </div>
                                 </div>
 
@@ -356,7 +406,7 @@
                             </div>
                             <div class="four wide field">
                                 <label>Registration Date</label>
-                                <input id="regdate" name="regdate" type="date" />
+                                <input id="regdate" name="regdate" type="date" onchange="setRegDate(this)"/>
                             </div>
                         </div>
                     </div>
@@ -372,7 +422,7 @@
                                 <!--<div style="vertical-align:middle; display:inline-block">-->
                                 <!--<div class="ui checkbox" style="vertical-align:middle; display:inline-block">-->
                                 <label>Tax Paid</label>
-                                <input tabindex="0" id="taxpaid" class="hidden" type="checkbox" />
+                                <input tabindex="0" id="taxpaid" class="hidden" type="checkbox" onclick="setCheckbox(this)"/>
                                 <!--</div>-->
                             </div>
                             <!--</div>-->

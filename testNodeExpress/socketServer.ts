@@ -120,7 +120,7 @@ module.exports = {
 
                             console.log("created new service " + response);
                             socket.broadcast.emit('createNewServiceRet', { data: "success" });
-                        } else {
+                         } else {
                             console.log("create new service error ..." + response.statusCode);
                             socket.broadcast.emit('createNewServiceRet', { data: "Failed to create service" });
                         };
@@ -355,7 +355,7 @@ module.exports = {
 
                     var options = {
                         method: 'POST',
-                        url: serverURL + 'api/certificates/',
+                        url: serverURL + 'api/certificates',
                         headers:
                         {
                             'cache-control': 'no-cache',
@@ -368,9 +368,9 @@ module.exports = {
                             propertyID: certData.propertyID,
                             owner: certData.owner,
                             authenticationDate: certData.authenticationDate,
-                            RegistrationDate: certData.registrationDate,
-                            Price: certData.price,
-                            TaxPaid: certData.taxPaid
+                            registrationDate: certData.registrationDate,
+                            price: certData.price,
+                            taxPaid: certData.taxPaid
                         },
                         json: true
                     };
@@ -381,8 +381,14 @@ module.exports = {
                             console.log("created new certificate " + response);
                             socket.broadcast.emit('createNewCertRet', { data: "success" });
                         } else {
-                            console.log("create new certificate error ..." + response.statusCode);
-                            socket.broadcast.emit('createNewCertRet', { data: "Failed to create certificate" });
+                            var responseStr = JSON.stringify(response.body);
+                            if (responseStr.indexOf("has not been validated") > 1) {
+                                console.log("Owner not validated ..." + response.statusCode);
+                                socket.broadcast.emit('createNewCertRet', { data: responseStr });
+                            } else {
+                                console.log("create new certificate error ..." + response.statusCode);
+                                socket.broadcast.emit('createNewCertRet', { data: "Failed to create certificate" });
+                            }
                         };
                     });
                 }
@@ -396,7 +402,7 @@ module.exports = {
 
                     // get passed data
                     var certData = dataObj.data;
-                    console.log("cert data " + certData.description);
+                    console.log("cert data " + certData.owner);
                     console.log("cert data " + certData.propertyID);
                     console.log("cert data " + certData.price);
                     console.log("cert data " + certData.taxPaid);
@@ -418,9 +424,9 @@ module.exports = {
                             propertyID: certData.propertyID,
                             owner: certData.owner,
                             authenticationDate: certData.authenticationDate,
-                            RegistrationDate: certData.registrationDate,
-                            Price: certData.price,
-                            TaxPaid: certData.taxPaid
+                            registrationDate: certData.registrationDate,
+                            price: certData.price,
+                            taxPaid: certData.taxPaid
                         },
                         json: true
                     };
@@ -431,8 +437,14 @@ module.exports = {
                             console.log("amended certificate " + response);
                             socket.broadcast.emit('amendCertRet', { data: "success" });
                         } else {
-                            console.log("amended certificate error ..." + response.statusCode);
-                            socket.broadcast.emit('amendCertRet', { data: "Failed to amend certificate" });
+                            var responseStr = JSON.stringify(response.body);
+                            if (responseStr.indexOf("has not been validated") > 1) {
+                                console.log("Owner not validated ..." + response.statusCode);
+                                socket.broadcast.emit('amendCertRet', { data: responseStr });
+                            } else {
+                                console.log("amended certificate error ..." + response.statusCode);
+                                socket.broadcast.emit('amendCertRet', { data: "Failed to amend certificate" });
+                            }
                         };
                     });
                 }
