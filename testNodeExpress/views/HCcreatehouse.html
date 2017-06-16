@@ -202,7 +202,7 @@
             // also save in local storage array for loading table when this screen loads
             var dataArray = new Array();
 
-            console.log("createNewCertRet " + data.data);
+            //console.log("createNewCertRet " + data.data);
             //// set array to current local storage data then add new data or amend
             //if (JSON.parse(localStorage.getItem("tabledata")) != null) {
             //    dataArray = JSON.parse(localStorage.getItem("tabledata"));
@@ -212,7 +212,9 @@
             // this stops duplicates
             localStorage.clear();
 
-            if (data.data != "Owner not validated") {
+            var dataStr = data.data;
+            console.log("data str " + dataStr);
+            if (dataStr == "success") {
 
                 if (sessionStorage.getItem("currenthouserow") != "") {
                     // loop through tabledata up to the current row ( / 4)
@@ -247,7 +249,7 @@
                 // }
                 window.location.href = "/houses";
             } else {
-                alert("This owner has not been validated");
+                alert(dataStr);
             }
         });
 

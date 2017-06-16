@@ -384,7 +384,7 @@ module.exports = {
                             var responseStr = JSON.stringify(response.body);
                             if (responseStr.indexOf("has not been validated") > 1) {
                                 console.log("Owner not validated ..." + response.statusCode);
-                                socket.broadcast.emit('createNewCertRet', { data: responseStr });
+                                socket.broadcast.emit('createNewCertRet', { data: "User not validated" });
                             } else {
                                 console.log("create new certificate error ..." + response.statusCode);
                                 socket.broadcast.emit('createNewCertRet', { data: "Failed to create certificate" });
@@ -438,9 +438,10 @@ module.exports = {
                             socket.broadcast.emit('amendCertRet', { data: "success" });
                         } else {
                             var responseStr = JSON.stringify(response.body);
+
                             if (responseStr.indexOf("has not been validated") > 1) {
                                 console.log("Owner not validated ..." + response.statusCode);
-                                socket.broadcast.emit('amendCertRet', { data: responseStr });
+                                socket.broadcast.emit('amendCertRet', { data: "User not validated" });
                             } else {
                                 console.log("amended certificate error ..." + response.statusCode);
                                 socket.broadcast.emit('amendCertRet', { data: "Failed to amend certificate" });
