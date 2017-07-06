@@ -12,7 +12,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.8/semantic.min.js"></script>
 
-    <link rel="stylesheet" href=".\stylesheets\hc.css" />
+    <link rel="stylesheet" href=".\stylesheets\dn.css" />
   <!--  <link rel="stylesheet" href=".\stylesheets\components\button.css" />
     <link rel="stylesheet" href=".\stylesheets\components\input.css" />-->
 
@@ -22,10 +22,9 @@
 
         function login() {
             var socket = io.connect();
-            var data = document.getElementById("username").value;
-            data += ":" + document.getElementById("passwordtext").value;
-            socket.emit('login', { data: data });
-            console.log(data + " tried to login");
+            var data = document.getElementById("userID").value;
+            socket.emit('queryBC', { data: data });
+            console.log(data + " tried to query BC");
         }
     </script>
 
@@ -33,17 +32,11 @@
 <body>
     <script>
 
-        //window.onload = function () {
-        //    var socket = io.connect();
-        //    // try to connect to db
-        //    socket.emit("connecttodb", "");
-
-        //};
-
+       
         var socket = io.connect();
-        socket.on('loginRet', function (data) {
-            console.log("HC login in browser called with ...");
-            var name = document.getElementById("username").value;
+        socket.on('queryBCRet', function (data) {
+            console.log("Query BC in browser called with ...");
+            var name = document.getElementById("userID").value;
             console.log(name);
             var str = data.data;
 
@@ -51,11 +44,11 @@
                 // clear storage (house table data)
                 localStorage.clear();
                 // and connect to mySQL db
-                socket.emit("connecttodb", "");
-                sessionStorage.setItem("name", name);
-                window.location("houses");
+               // socket.emit("connecttodb", "");
+               // sessionStorage.setItem("name", name);
+                window.location("DNresult");
             } else {
-                window.alert("Login Failed for " + name);
+                window.alert("Query BC Failed for " + name);
                 //window.location("HCloginfail?name=" + name);
             }
         });
@@ -71,10 +64,7 @@
       
     <div class="flex-title">
         <div>
-            <img alt="no logo" src="images/HC.png" width="200" height="150" style="position: absolute; left: 0px; top: 0px" />
-        </div>
-        <div>
-            <h1>Finnish Home Service</h1>
+            <h1>Query DN Service</h1>
         </div>
 
     </div>
@@ -83,14 +73,8 @@
         <div class="flex-containerrightalign">
             <div class="flex-containerlogin">
                 <div>&nbsp;</div>
-                <div class="ui right icon input">
-                    <i class="user large icon"></i>
-                    <input class="input-username" value="Tommi" type="text" id="username" />
-                </div>
-                <div>&nbsp;</div>
-                <div>&nbsp;</div>
                 <div class="ui icon input">
-                    <input class="input-password" type="password" id="passwordtext" placeholder="pwd..." autofocus="autofocus" onkeypress="return checkSubmit(event)"/>
+                    <input class="input-username" type="text" id="userID" placeholder="Id number..." autofocus="autofocus" onkeypress="return checkSubmit(event)"/>
                     <i class="sign in large link icon" onclick="login()" ></i>
                 </div>
             </div>

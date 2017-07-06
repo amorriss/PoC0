@@ -5,6 +5,15 @@
 var express = require("express");
 var router = express.Router();
 var name = "none";
+// --------------------- Query DN routing --------------------
+router.get('/DN', function (req, res) {
+    //res.render('index', { title: 'Testing ....' });
+    res.sendfile("views/DNlogin.html");
+});
+router.get('/DNresult', function (req, res) {
+    //res.render('index', { title: 'Testing ....' });
+    res.sendfile("views/DNresult.html");
+});
 // ---------------------- Housing co. routing ------------------
 router.get('/HC', function (req, res) {
     //res.render('index', { title: 'Testing ....' });

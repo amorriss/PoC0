@@ -19,58 +19,67 @@
 
         function logout() {
             var socket = io.connect();
-            socket.emit('logout', { data: 'You clicked the logout button' });
+            socket.emit('logoutHC', { data: 'You clicked the logout button' });
             console.log("logout button clicked");
         };
 
         function saveHouse() {
             // create and build up data object
+            //var certData = {
+            //    description: "",
+            //    propertyID: "",
+            //    owner: "None",
+            //    authenticationDate: 0,
+            //    registrationDate: 0,
+            //    price: 0,
+            //    taxPaid: false
+            //};
+
             var certData = {
                 description: "",
-                propertyID: "",
+                property_id: "",
                 owner: "None",
-                authenticationDate: 0,
-                registrationDate: 0,
+                owner_id: 0,
+                authentication_date: 0,
+                registration_date: 0,
                 price: 0,
-                taxPaid: false
+                tax_paid: "N"
             };
-
             certData.description = document.getElementById("propertyname").value;
-            certData.propertyID = document.getElementById("propertyid").value;
+            certData.property_id = document.getElementById("propertyid").value;
             certData.owner = houseOwner; //document.getElementById("owner").innerText;  // innertext is name, value is a date
+            certData.owner_id = 1234567890;
             console.log("2.owner is " + houseOwner);
             var regdt = new Date(regDate); // document.getElementById("regdate").value);
-            var currentDate = $("input#regdate").val();
-            console.log("currentDate is " + currentDate);
-            certData.registrationDate = regdt.getTime();
-            console.log("reg date is " + certData.registrationDate);
-
+            certData.registration_date = regdt.getTime();
+            console.log("reg date is " + certData.registration_date);
+       
             var authdt = new Date(authDate); // new Date(document.getElementById("authenticationdate").value); //same problem as owner so stored in instance var
-            certData.authenticationDate = authdt.getTime();
+            certData.authentication_date = authdt.getTime();
             //console.log("auth date is " + document.getElementById("authenticationdate").value);
-            //console.log("auth date is " + authdt);
-            console.log("auth date is " + certData.authenticationDate);
+            console.log("auth date is " + authdt);
+            console.log("auth date is " + certData.authentication_date);
 
             certData.price = parseInt(document.getElementById("price").value);
             console.log("price is " + certData.price);
 
-            
-            certData.taxPaid = document.getElementById("taxpaid").checked;
-            console.log("taxpaid is (checked)" + document.getElementById("taxpaid").checked);
-            //if (document.getElementById("taxpaid").checked == 'on') {
-            //    certData.taxPaid = true;
-            //    console.log("tax paid is true");
-            //} else {
-            //    certData.taxPaid = false;
-            //    console.log("tax paid is false");
-            //}
+            //certData.taxPaid = document.getElementById("taxpaid").checked;
+           // console.log("taxpaid is (checked)" + document.getElementById("taxpaid").checked);
+            if (document.getElementById("taxpaid").checked == true) {
+                certData.tax_paid = "Y";
+                console.log("tax paid is true");
+            } else {
+                certData.tax_paid = "N";
+                console.log("tax paid is false");
+            }
             
             var socket = io.connect();
             if (amendData) {
-                socket.emit('amendCert', { data: certData });
+                socket.emit('amendCertDB', { data: certData });
                 console.log("amend button clicked");
             } else {
-                socket.emit('createNewCert', { data: certData });
+                socket.emit('createNewCertDB', { data: certData });
+                socket.emit('createNewCertBC', { data: certData });
                 console.log("create button clicked");
             }
         };
@@ -137,7 +146,7 @@
                 console.log("owner is " + sessionStorage.getItem("owner"));
                 var dregtmp = new Date(parseInt(sessionStorage.getItem("regdate")));
                 document.getElementById("regdate").innerText = dregtmp.getDate() + '/' + (dregtmp.getMonth() + 1) + '/' + dregtmp.getFullYear();
-                setRegDate = dregtmp.getDate() + '/' + (dregtmp.getMonth() + 1) + '/' + dregtmp.getFullYear();
+                regDate = dregtmp.getDate() + '/' + (dregtmp.getMonth() + 1) + '/' + dregtmp.getFullYear();
 
                 var dauthtmp = new Date(parseInt(sessionStorage.getItem("authdate")));
                 document.getElementById("authenticationdate").innerText = dauthtmp.getDate() + '/' + (dauthtmp.getMonth() + 1) + '/' + dauthtmp.getFullYear();
@@ -145,7 +154,7 @@
 
                 document.getElementById("price").innerText = sessionStorage.getItem("price");
                 console.log("setting tax paid to " + sessionStorage.getItem("taxpaid"));
-                document.getElementById("taxpaid").checked = (sessionStorage.getItem("taxpaid") == "true");
+                document.getElementById("taxpaid").checked = (sessionStorage.getItem("taxpaid") == "Y");
  
                 // make button amend
                 document.getElementById("savebutton").innerText = "Amend";
@@ -153,7 +162,7 @@
             } else {
                 console.log("create");
                 // populate property ID 
-                var choice = Math.floor((Math.random() * 5) + 1);
+                var choice = Math.floor((Math.random() * 10) + 1);
                 console.log("random " + choice);
                 switch (choice) {
 
@@ -172,6 +181,21 @@
                     case 5:
                         document.getElementById("propertyid").innerText = "319-945-992-122";
                         break;
+                    case 6:
+                        document.getElementById("propertyid").innerText = "373-473-694-101";
+                        break;
+                    case 7:
+                        document.getElementById("propertyid").innerText = "282-389-824-033";
+                        break;
+                    case 8:
+                        document.getElementById("propertyid").innerText = "282-151-494-209";
+                        break;
+                    case 9:
+                        document.getElementById("propertyid").innerText = "142-192-882-783";
+                        break;
+                    case 10:
+                        document.getElementById("propertyid").innerText = "565-295-620-974";
+                        break;
                 };
                 // make button create
                 document.getElementById("savebutton").innerText = "Create";
@@ -187,7 +211,7 @@
         });
 
 
-        socket.on('amendCertRet', function (data) {
+        socket.on('amendCertDBRet', function (data) {
             console.log("Amend cert in browser called ...");
             //var sname = document.getElementById("servicetext").value;
             //sessionStorage.setItem("servicename", sname);
@@ -216,7 +240,7 @@
             console.log("data str " + dataStr);
             if (dataStr == "success") {
 
-                if (sessionStorage.getItem("currenthouserow") != "") {
+                if (sessionStorage.getItem("currenthouserow") != "") {        THIS NEVER EXECUTES ????
                     // loop through tabledata up to the current row ( / 4)
 
                     var cellCount = 4;

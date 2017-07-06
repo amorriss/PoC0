@@ -19,7 +19,7 @@
 
         function logout() {
             var socket = io.connect();
-            socket.emit('logout', { data: 'You clicked the logout button' });
+            socket.emit('logoutHC', { data: 'You clicked the logout button' });
             console.log("logout button clicked");
         };
 
@@ -46,13 +46,27 @@
         function delHouse() {
             console.log("deleted row is " + currentTableRow);
             if (currentTableRow > 0) {
+                // delete from remote mySQL db
+                console.log("deleting record " + tableData[currentTableRow - 1].id);
+                socket.emit('deleteCert', { data: tableData[currentTableRow - 1].id });
+
                 // delete row from table
                 var tableRef = document.getElementById('housetable').getElementsByTagName('tbody')[0];
                 tableRef.deleteRow(currentTableRow - 1);
 
+                // delete row from array
+                tableData.splice(0, currentTableRow - 1);
+
                 // disable del button and set current row to 0
                 document.getElementById("delButton").setAttribute("class", "ui disabled right floated small red icon button");
                 currentTableRow = 0;
+
+                // re number ID's
+                var numrows = tableRef.rows.length;
+                for (counter = 0; counter < numrows; counter++) {
+                    var  IDstr = "houseTableRow" + (counter + 1);
+                    tableRef.rows[counter].setAttribute("id", IDstr);
+                };
             };
         };
 
@@ -85,12 +99,13 @@
             propertyid = row.getElementsByTagName("td")[1].childNodes[0].data;
             owner = row.getElementsByTagName("td")[2].childNodes[0].data;
             regDate = new Date(row.getElementsByTagName("td")[3].childNodes[0].data);
-            console.log("reg date is " + regDate.getTime());
-            authDate = tableData[row.rowIndex - 1].authenticationDate;
+            //console.log("reg date is " + regDate.getTime());
+            authDate = tableData[row.rowIndex - 1].authentication_date;
             console.log("auth date is " + authDate);
             price = tableData[row.rowIndex - 1].price;
-            taxPaid = tableData[row.rowIndex - 1].taxPaid;
-            
+            taxPaid = tableData[row.rowIndex - 1].tax_paid;
+            console.log("Tax paid " + taxPaid);
+
             sessionStorage.setItem("property", property);
             sessionStorage.setItem("propertyid", propertyid);
             sessionStorage.setItem("owner", owner);
@@ -128,18 +143,25 @@
                     var idCell = row.insertCell(1);
                     var ownerCell = row.insertCell(2);
                     var regdateCell = row.insertCell(3);
+                    var finalityCell = row.insertCell(4);
 
                     // Add some text to the new cells:
                     propertyCell.innerHTML = dataarray[counter].description;
-                    idCell.innerHTML = dataarray[counter].propertyID;
+                    idCell.innerHTML = dataarray[counter].property_id;
                     ownerCell.innerHTML = dataarray[counter].owner;
-                    console.log("desc is " + dataarray[counter].description);
-                    console.log("taxpaid is " + dataarray[counter].taxPaid);
-                    dtmp = new Date(parseInt(dataarray[counter].registrationDate));
+                    dtmp = new Date(parseInt(dataarray[counter].registration_date));
                     regdateCell.innerHTML = dtmp.getDate() + '/' + (dtmp.getMonth() + 1) + '/' + dtmp.getFullYear();
+                    finalityCell.innerHTML = "No";
                 }
             };
         };
+        //propertyCell.innerHTML = dataarray[counter].description;
+        //idCell.innerHTML = dataarray[counter].propertyID;
+        //ownerCell.innerHTML = dataarray[counter].owner;
+        //console.log("desc is " + dataarray[counter].description);
+        //console.log("taxpaid is " + dataarray[counter].taxPaid);
+        //dtmp = new Date(parseInt(dataarray[counter].registrationDate));
+        //regdateCell.innerHTML = dtmp.getDate() + '/' + (dtmp.getMonth() + 1) + '/' + dtmp.getFullYear();
         //description: certData.description,
         //    propertyID: certData.propertyID,
         //        owner: certData.owner,
@@ -147,6 +169,18 @@
         //                RegistrationDate: certData.registrationDate,
         //                    Price: certData.price,
         //                        TaxPaid: certData.taxPaid
+
+        //[RowDataPacket {
+        //    id: 1,
+        //    description: 'Watling House',
+        //    property_id: '123-456-789-000',
+        //    certificate_id: 'cert1234567890',
+        //    owner: 'Hugues Flament',
+        //    authentication_date: 2014 - 03 - 22T00: 00:00.000Z,
+        //    registration_date: 2017 - 06 - 27T23: 00:00.000Z,
+        //    price: 2300000,
+        //    tax_paid: 'Y'
+        //}]
 
     </script>
 
@@ -161,7 +195,9 @@
             // document.getElementById("hLoggedInAs").innerHTML = "Welcome " + sessionStorage.getItem("name"); // + "<br/>" + ts.toString('dddd, MMMM') ;
 
             var socket = io.connect();
-            socket.emit("getCerts", "");
+           // socket.emit("getCerts", "");
+
+            socket.emit("getCertsDB", "");
 
         };
 
@@ -183,12 +219,20 @@
             };
         });
 
+        socket.on('retryGetCertsDB', function () {
+            console.log("Retrying getCertsDB ...");
+            socket.emit("getCertsDB", "");
+        });
 
         socket.on('createHouseRet', function (data) {
             console.log("Create service in browser called ...");
             sessionStorage.setItem("servicename", data.data);
             window.location("createhouse");
 
+        });
+        
+        socket.on('deleteCertRet', function (data) {
+            console.log("Delete cert in browser called ...");
         });
 
         function goBack() {
@@ -222,6 +266,7 @@
                             <th>ID</th>
                             <th>Owner</th>
                             <th>Registration</th>
+                            <th>Finalised</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -247,7 +292,7 @@
                     </tbody>
                     <tfoot class="full-width">
                         <tr>
-                            <th colspan="4">
+                            <th colspan="5">
                                 <div class="ui right floated small primary labeled icon button" id="newButton" onclick="newHouse(true)">
                                     <i class="file text outline icon"></i>New
                                 </div>

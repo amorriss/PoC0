@@ -6,6 +6,17 @@ import express = require('express');
 const router = express.Router();
 var name = "none";
 
+// --------------------- Query DN routing --------------------
+router.get('/DN', (req: express.Request, res: express.Response) => {
+    //res.render('index', { title: 'Testing ....' });
+    res.sendfile("views/DNlogin.html");
+});
+
+router.get('/DNresult', (req: express.Request, res: express.Response) => {
+    //res.render('index', { title: 'Testing ....' });
+    res.sendfile("views/DNresult.html");
+});
+
 // ---------------------- Housing co. routing ------------------
 
 router.get('/HC', (req: express.Request, res: express.Response) => {

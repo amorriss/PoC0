@@ -29,3 +29,18 @@ BUGS
  - DN. Create right with some false get set to true when retrieved
 
  - amends not working as values not being set e.g. dates
+
+
+
+
+22/06/2017
+
+use DB for HC app and link to DN BC records which records finality 
+use prod version of Hyperledger Fabric
+
+what next for a DN
+
+1.connect to euroclear assett e.g. SSE or funds
+  roadmap constraints
+2. new product e.g. gold (paxos problem), trade finance (press release) 
+

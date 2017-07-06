@@ -78,10 +78,20 @@
     <Content Include="housedata.json">
       <SubType>Code</SubType>
     </Content>
+    <Content Include="public\images\dn.jpg" />
+    <Content Include="public\stylesheets\DN.css">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="views\createright_grid.html">
       <SubType>Code</SubType>
     </Content>
     <Content Include="views\createservice_grid.html">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="views\DNresult.html">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="views\DNlogin.html">
       <SubType>Code</SubType>
     </Content>
     <Content Include="views\services_grid.html">

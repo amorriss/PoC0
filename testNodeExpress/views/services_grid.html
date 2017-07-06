@@ -96,16 +96,13 @@
                 sessionStorage.setItem("servicename", servicesDataArray[currentTableRow - 1].serviceName);
                 sessionStorage.setItem("authorisedusers", servicesDataArray[currentTableRow - 1].authorisedUsers);
                 sessionStorage.setItem("righttypes", servicesDataArray[currentTableRow - 1].rightTypes);
-
             }
-
         };
 
         /* When the user clicks on the button toggle between hiding and showing the dropdown content */
         function ddShow() {
             document.getElementById("myDropdown").classList.toggle("show");
         };
-
 
         function loadServicesTable(dataarray) {
             // load table data
@@ -147,7 +144,6 @@
     <script>
 
         var createNew = false;
-
 
         window.onload = function () {
             console.log("onload called : " + sessionStorage.getItem("name"));

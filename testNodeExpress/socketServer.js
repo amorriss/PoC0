@@ -1,8 +1,12 @@
 var socketIo = require('socket.io');
+var mysql = require("mysql");
+var dbURL = "51.140.59.244";
 var mySocket;
+var dbConnection;
 var loginToken;
 var serverURL = "http://bcserver.uksouth.cloudapp.azure.com:8080/"; // http://rapley.ukwest.cloudapp.azure.com:8080/      // http://bcserver.uksouth.cloudapp.azure.com:8080/   //https://dn-server.eu-gb.mybluemix.net/
 var serverAvailable = true;
+var retryCount = 3;
 function myTimer() {
     var d = new Date();
     // document.getElementById("demo").innerHTML = d.toLocaleTimeString();
@@ -35,6 +39,11 @@ module.exports = {
             socket.on('login', function (data) {
                 console.log("login server function called from browser");
                 validatelogin(data.data, socket);
+            });
+            // -------------------- DN query
+            socket.on('queryBC', function (data) {
+                console.log("Query BC function called from browser");
+                socket.broadcast.emit('queryBCRet', { data: "success" });
             });
             // ----------------- services
             socket.on('getServices', function (data) {
@@ -256,13 +265,22 @@ module.exports = {
                     });
                 }
             });
-            // -----------------------------------------------------
             socket.on('logout', function (data) {
                 console.log(data);
                 console.log("logout server function called from browser");
                 socket.broadcast.emit('logoutRet', { 'message': 'Logged Out' });
+                retryCount = 3;
             });
-            // HC ------------------------------------------------------------------
+            socket.on('logoutHC', function (data) {
+                console.log(data);
+                console.log("logout HC server function called from browser");
+                socket.broadcast.emit('logoutRet', { 'message': 'Logged Out' });
+                // disconnect from database
+                dbConnection.release();
+                retryCount = 3;
+            });
+            // -------------------------- HOUSING APP socket methods -------------------------------------
+            // -----------------------------------------------------
             socket.on('createHouse', function (data) {
                 console.log(data);
                 console.log("Create house server function called from browser");
@@ -278,11 +296,11 @@ module.exports = {
                 console.log("Send house server function called from browser");
                 socket.broadcast.emit('sendHouseRet', { data: data.data });
             });
-            socket.on('createNewCert', function (dataObj) {
-                console.log("Create new certificate server function called from browser");
+            socket.on('createNewCertBC', function (dataObj) {
+                console.log("Create new certificate on BC server function called from browser");
                 if (serverAvailable) {
                     // get passed data
-                    console.log("cert data " + dataObj.data.description);
+                    // console.log("cert data " + dataObj.data.description);
                     var certData = dataObj.data;
                     var request = require("request");
                     var options = {
@@ -294,13 +312,14 @@ module.exports = {
                             'x-access-token': loginToken
                         },
                         body: {
-                            description: certData.description,
-                            propertyID: certData.propertyID,
+                            // description: certData.description,
+                            personID: certData.owner_id,
+                            propertyID: certData.property_id,
                             owner: certData.owner,
-                            authenticationDate: certData.authenticationDate,
-                            registrationDate: certData.registrationDate,
-                            price: certData.price,
-                            taxPaid: certData.taxPaid
+                            // authenticationDate: certData.authenticationDate,
+                            registrationDate: certData.registration_date,
+                            // price: certData.price,
+                            taxPaid: certData.tax_paid
                         },
                         json: true
                     };
@@ -400,6 +419,115 @@ module.exports = {
                     });
                 }
             });
+            // mySQL database functions
+            // connect to remote mySQL db
+            socket.on('connecttodb', function (data) {
+                var pool = mysql.createPool({
+                    connectionLimit: 100,
+                    host: dbURL,
+                    port: 3306,
+                    user: 'root',
+                    password: 'Innovation3182',
+                    database: 'HCtest',
+                });
+                pool.getConnection(function (err, conn) {
+                    if (err) {
+                        dbConnection = null;
+                        console.log("db connect error " + err);
+                    }
+                    else {
+                        dbConnection = conn;
+                        console.log("db connect success");
+                    }
+                });
+            });
+            // get housing data from mySQL db
+            socket.on('getCertsDB', function (data) {
+                if (dbConnection != null) {
+                    dbConnection.query('SELECT * FROM housing', function (err, rows) {
+                        if (err) {
+                            console.log("getCertsDB failed : " + err);
+                            socket.broadcast.emit('getCertsRet', { data: "Failed to get certs" });
+                        }
+                        else {
+                            console.log('Data received from Db:\n');
+                            //  console.log(rows);
+                            socket.broadcast.emit('getCertsRet', { data: rows });
+                        }
+                    });
+                }
+                else {
+                    retryCount--;
+                    if (retryCount > 0) {
+                        socket.broadcast.emit('retryGetCertsDB');
+                    }
+                    else {
+                        console.log("No database connection");
+                    }
+                }
+            });
+            // get housing data from mySQL db
+            socket.on('createNewCertDB', function (dataObj) {
+                if (dbConnection != null) {
+                    var certData = dataObj.data;
+                    console.log("createNewCertDB auth date " + certData.authentication_date);
+                    dbConnection.query('INSERT INTO housing SET ?', certData, function (err, res) {
+                        if (err) {
+                            console.log("createNewCertDB failed : " + err);
+                            socket.broadcast.emit('createNewCertRet', { data: "Failed to create new cert" });
+                        }
+                        else {
+                            console.log('Last insert ID:', res.insertId);
+                            //  console.log(rows);
+                            socket.broadcast.emit('createNewCertRet', { data: "success" });
+                        }
+                    });
+                }
+                else {
+                    console.log("No database connection");
+                }
+            });
+            // get housing data from mySQL db
+            socket.on('amendCertDB', function (dataObj) {
+                if (dbConnection != null) {
+                    var certData = dataObj.data;
+                    console.log("amendCertDB auth date " + certData.authentication_date);
+                    dbConnection.query('UPDATE housing SET ? WHERE ID = ?', [certData, certData.id], function (err, res) {
+                        if (err) {
+                            console.log("amendCertDB failed : " + err);
+                            socket.broadcast.emit('amendCertDBRet', { data: "Failed to amend cert" });
+                        }
+                        else {
+                            console.log('Last insert ID:', res.insertId);
+                            //  console.log(rows);
+                            socket.broadcast.emit('amendCertDBRet', { data: "success" });
+                        }
+                    });
+                }
+                else {
+                    console.log("No database connection");
+                }
+            });
+            socket.on('deleteCert', function (dataObj) {
+                if (dbConnection != null) {
+                    var dbID = dataObj.data;
+                    console.log("deleteCert ID " + dbID);
+                    dbConnection.query('DELETE FROM housing where ID = ?', dbID, function (err, res) {
+                        if (err) {
+                            console.log("deleteCert failed : " + err);
+                            socket.broadcast.emit('deleteCertRet', { data: "Failed to delete cert" });
+                        }
+                        else {
+                            console.log('Deleted ID:', dbID);
+                            //  console.log(rows);
+                            socket.broadcast.emit('deleteCertRet', { data: "success" });
+                        }
+                    });
+                }
+                else {
+                    console.log("No database connection");
+                }
+            });
         });
         return io;
     }
@@ -438,7 +566,7 @@ function validatelogin(data, socket) {
             console.log("login successful ...");
             socket.broadcast.emit('loginRet', { data: "success" });
         }
-        if ((credentials[0] == "Tommi") && (credentials[1] == "password")) {
+        if ((credentials[0] == "Tommi") && (credentials[1] == "passw0rd")) {
             console.log("login successful ...");
             socket.broadcast.emit('loginRet', { data: "success" });
         }
