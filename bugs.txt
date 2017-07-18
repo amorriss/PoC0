@@ -20,7 +20,7 @@ BUGS
 
  - HC app. Duplicate list when return from cert page
 
- - delete cert not renumbering remaining items
+ - delete cert not renumbering remaining items DONE????
 
  - had to use instance vars for owner and auth date in housing app as can't get values from page elements
 
@@ -28,9 +28,9 @@ BUGS
 
  - DN. Create right with some false get set to true when retrieved
 
- - amends not working as values not being set e.g. dates
+ - amends not working as values not being set e.g. dates   DONE
 
-
+ - HC. cannot delete 2 rows without reloading page after 1st delete
 
 
 22/06/2017
@@ -43,4 +43,11 @@ what next for a DN
 1.connect to euroclear assett e.g. SSE or funds
   roadmap constraints
 2. new product e.g. gold (paxos problem), trade finance (press release) 
+
+
+
+
+ - HC app to write cert to BC which validates against rights template
+ - 3rd app to view via a ID/? that a valid cert exists on the BC
+ - 
 

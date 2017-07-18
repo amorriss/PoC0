@@ -5,6 +5,7 @@ let dbURL = "51.140.59.244";
 var mySocket;
 var dbConnection;
 var loginToken;
+var loggedIn: boolean = false;
 let serverURL = "http://bcserver.uksouth.cloudapp.azure.com:8080/";    // http://rapley.ukwest.cloudapp.azure.com:8080/      // http://bcserver.uksouth.cloudapp.azure.com:8080/   //https://dn-server.eu-gb.mybluemix.net/
 var serverAvailable = true;
 var retryCount = 3;
@@ -56,7 +57,38 @@ module.exports = {
             socket.on('queryBC', function (data) {
                 console.log("Query BC function called from browser");
 
-                socket.broadcast.emit('queryBCRet', { data: "success" });
+                if (serverAvailable) {
+
+                    var userID = data.data;
+                    console.log("ID " + userID);
+                    var request = require('request');
+                    var options = {
+                        url: serverURL + 'api/certificates/' + userID,
+                        headers: {
+                            'x-access-token': loginToken
+                        }
+                    };
+
+                    request.get(
+                        options,
+                        function (error, response, body) {
+                            if (!error && response.statusCode == 200) {
+                                var certs = JSON.parse(body);
+                                console.log("certs returned are " + body);
+
+                                setTimeout(function () { socket.emit('queryBCRet', { data: body }) }, 500);
+                               // socket.broadcast.emit('queryBCRet', { data: body });
+                                
+                                console.log("after broadcast ");
+                            } else {
+                                console.log("get cert error ...");
+                                socket.broadcast.emit('queryBCRet', { data: "Failed to get query BC" });
+                            };
+                        }
+                    );
+                }
+
+                
 
             });
 
@@ -371,8 +403,13 @@ module.exports = {
                 if (serverAvailable) {
 
                     // get passed data
-                   // console.log("cert data " + dataObj.data.description);
-                    var certData = dataObj.data;
+                    var certBCData = dataObj.data;
+
+                    if (certBCData.tax_paid == "Y") {
+                        certBCData.tax_paid = "true";
+                    } else {
+                        certBCData.tax_paid = "false";
+                    }
 
                     var request = require("request");
 
@@ -387,19 +424,16 @@ module.exports = {
                         },
                         body:
                         {
-                            // description: certData.description,
-                            personID: certData.owner_id,
-                            propertyID: certData.property_id,
-                            owner: certData.owner,
-                           // authenticationDate: certData.authenticationDate,
-                            registrationDate: certData.registration_date,
-                           // price: certData.price,
-                            taxPaid: certData.tax_paid
+                            rightTypeName: "Freehold",
+                            propertyID: certBCData.property_id,
+                            ownerID: certBCData.owner_id.toString(),
+                            taxPaid: certBCData.tax_paid
                         },
                         json: true
                     };
 
                     request(options, function (error, response, body) {
+                        console.log("response status code is " + response.statusCode);
                         if (!error && response.statusCode == 200) {
 
                             console.log("created new certificate " + response);
@@ -583,14 +617,25 @@ module.exports = {
             socket.on('amendCertDB', function (dataObj) {
                 if (dbConnection != null) {
                     var certData = dataObj.data;
-                    console.log("amendCertDB auth date " + certData.authentication_date);
-                    
+                    console.log("amendCertDB ID to update is " + certData.owner_id);
+
+                    //var certData = {
+                    //    id: 0,
+                    //    description: "",
+                    //    property_id: "",
+                    //    owner: "None",
+                    //    owner_id: 0,
+                    //    authentication_date: 0,
+                    //    registration_date: 0,
+                    //    price: 0,
+                    //    tax_paid: "N"
+
                     dbConnection.query('UPDATE housing SET ? WHERE ID = ?', [certData, certData.id], function (err, res) {
                         if (err) {
                             console.log("amendCertDB failed : " + err);
                             socket.broadcast.emit('amendCertDBRet', { data: "Failed to amend cert" });
                         } else {
-                            console.log('Last insert ID:', res.insertId);
+                            console.log('Updated:', res.message);
                             //  console.log(rows);
                             socket.broadcast.emit('amendCertDBRet', { data: "success" });
                         }
@@ -628,50 +673,54 @@ module.exports = {
 
 function validatelogin(data: string, socket) {
 
-    var loggedIn: boolean = false;
     var credentials = data.split(":");
 
-    if (serverAvailable) {
-        var request = require('request');
+    if (!loggedIn) {
+        if (serverAvailable) {
+            var request = require('request');
 
-        request.post(
-            serverURL + 'auth/login',
-            { json: { username: credentials[0], password: credentials[1] } },
-            function (error, response, body) {
-                if (!error && response.statusCode == 200) {
-                    console.log("success " + body.authenticated);
+            request.post(
+                serverURL + 'auth/login',
+                { json: { username: credentials[0], password: credentials[1] } },
+                function (error, response, body) {
+                    if (!error && response.statusCode == 200) {
+                        console.log("success " + body.authenticated);
 
-                    if (body.authenticated == true) {
-                        //let token = JSON.stringify({ body });
-                        loginToken = body.token;
+                        if (body.authenticated == true) {
+                            //let token = JSON.stringify({ body });
+                            loginToken = body.token;
+                            loggedIn = true;
+                            //console.log("logged in user is " + success);
+                            console.log("logged in token is " + loginToken);
 
-                        //console.log("logged in user is " + success);
-                        console.log("logged in token is " + loginToken);
-
-                        console.log("login successful ...");
-                        socket.broadcast.emit('loginRet', { data: "success" });
-                    }
-                    else {
-                        console.log("login failed ...");
+                            console.log("login successful ...");
+                            socket.broadcast.emit('loginRet', { data: "success" });
+                        }
+                        else {
+                            console.log("login failed ...");
+                            socket.broadcast.emit('loginRet', { data: "failed" });
+                        };
+                    } else {
+                        console.log("login error ...");
                         socket.broadcast.emit('loginRet', { data: "failed" });
                     };
-                } else {
-                    console.log("login error ...");
-                    socket.broadcast.emit('loginRet', { data: "failed" });
-                };
+                }
+            );
+        } else {
+
+            if ((credentials[0] == "Païvi") && (credentials[1] == "secret")) {
+                console.log("login successful ...");
+                socket.broadcast.emit('loginRet', { data: "success" });
             }
-        );
+            if ((credentials[0] == "Tommi") && (credentials[1] == "passw0rd")) {
+                console.log("login successful ...");
+                socket.broadcast.emit('loginRet', { data: "success" });
+            }
+
+        } 
     } else {
-
-        if ((credentials[0] == "Païvi") && (credentials[1] == "secret")) {
-            console.log("login successful ...");
-            socket.broadcast.emit('loginRet', { data: "success" });
-        }
-        if ((credentials[0] == "Tommi") && (credentials[1] == "passw0rd")) {
-            console.log("login successful ...");
-            socket.broadcast.emit('loginRet', { data: "success" });
-        }
-
+        console.log("already logged in ...");
+        socket.broadcast.emit('loginRet', { data: "success" });
     }
 
 

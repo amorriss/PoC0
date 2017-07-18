@@ -35,25 +35,53 @@
             //    taxPaid: false
             //};
 
-            var certData = {
-                description: "",
-                property_id: "",
-                owner: "None",
-                owner_id: 0,
-                authentication_date: 0,
-                registration_date: 0,
-                price: 0,
-                tax_paid: "N"
-            };
+            if (amendData) {
+
+                var certData = {
+                    id: "",
+                    description: "",
+                    property_id: "",
+                    owner: "None",
+                    owner_id: 0,
+                    authentication_date: 0,
+                    registration_date: 0,
+                    price: 0,
+                    tax_paid: "N"
+                };
+
+                var rowid = sessionStorage.getItem("rowid");
+                certData.id = rowid;
+                var ownerid = sessionStorage.getItem("ownerid");
+                certData.owner_id = parseInt(ownerid);
+
+            } else {
+
+                var certData = {
+                    description: "",
+                    property_id: "",
+                    owner: "None",
+                    owner_id: "",
+                    authentication_date: 0,
+                    registration_date: 0,
+                    price: 0,
+                    tax_paid: "N"
+                };
+
+                var min = Math.ceil(10000000);
+                var max = Math.floor(99999999);
+                certData.owner_id = Math.floor(Math.random() * (max - min)) + min;
+            }
+
             certData.description = document.getElementById("propertyname").value;
             certData.property_id = document.getElementById("propertyid").value;
+            console.log("property id is " + certData.property_id);
             certData.owner = houseOwner; //document.getElementById("owner").innerText;  // innertext is name, value is a date
-            certData.owner_id = 1234567890;
+            
             console.log("2.owner is " + houseOwner);
             var regdt = new Date(regDate); // document.getElementById("regdate").value);
             certData.registration_date = regdt.getTime();
             console.log("reg date is " + certData.registration_date);
-       
+
             var authdt = new Date(authDate); // new Date(document.getElementById("authenticationdate").value); //same problem as owner so stored in instance var
             certData.authentication_date = authdt.getTime();
             //console.log("auth date is " + document.getElementById("authenticationdate").value);
@@ -64,7 +92,7 @@
             console.log("price is " + certData.price);
 
             //certData.taxPaid = document.getElementById("taxpaid").checked;
-           // console.log("taxpaid is (checked)" + document.getElementById("taxpaid").checked);
+            // console.log("taxpaid is (checked)" + document.getElementById("taxpaid").checked);
             if (document.getElementById("taxpaid").checked == true) {
                 certData.tax_paid = "Y";
                 console.log("tax paid is true");
@@ -72,14 +100,14 @@
                 certData.tax_paid = "N";
                 console.log("tax paid is false");
             }
-            
+
             var socket = io.connect();
             if (amendData) {
                 socket.emit('amendCertDB', { data: certData });
                 console.log("amend button clicked");
             } else {
                 socket.emit('createNewCertDB', { data: certData });
-                socket.emit('createNewCertBC', { data: certData });
+                socket.emit('createNewCertBC', { data: certData });   
                 console.log("create button clicked");
             }
         };
@@ -139,9 +167,9 @@
                 houseOwner = sessionStorage.getItem("owner");  // set instance as dd won't be clicked for amend
                 //$dropdown = $('.ui.dropdown');
                 //$dropdown.dropdown('set selected', [sessionStorage.getItem("regdate")]); 
-              //  $('.ui.dropdown').has(dropdownID).dropdown('set selected', value);
+                //  $('.ui.dropdown').has(dropdownID).dropdown('set selected', value);
                 //document.getElementById("ownermenu").selectedIndex = 2;
-               // changeValue("ownermenu", sessionStorage.getItem("owner"));
+                // changeValue("ownermenu", sessionStorage.getItem("owner"));
 
                 console.log("owner is " + sessionStorage.getItem("owner"));
                 var dregtmp = new Date(parseInt(sessionStorage.getItem("regdate")));
@@ -155,7 +183,7 @@
                 document.getElementById("price").innerText = sessionStorage.getItem("price");
                 console.log("setting tax paid to " + sessionStorage.getItem("taxpaid"));
                 document.getElementById("taxpaid").checked = (sessionStorage.getItem("taxpaid") == "Y");
- 
+
                 // make button amend
                 document.getElementById("savebutton").innerText = "Amend";
                 amendData = true;
@@ -240,7 +268,7 @@
             console.log("data str " + dataStr);
             if (dataStr == "success") {
 
-                if (sessionStorage.getItem("currenthouserow") != "") {        THIS NEVER EXECUTES ????
+                if (sessionStorage.getItem("currenthouserow") != "") {       // THIS NEVER EXECUTES ????
                     // loop through tabledata up to the current row ( / 4)
 
                     var cellCount = 4;
@@ -256,7 +284,7 @@
                             dataArray[counter + 3] = document.getElementById("regdate").valueAsDate;
                         }
                         if (cellCount == 4) {
-                            rowCounter++;
+                            rowCounter 
                         }
                         cellCount--;
                         if (cellCount == -1) { cellCount = 4; }
@@ -418,7 +446,7 @@
                                     <input name="owner" id="owner" type="hidden" />
                                     <i class="dropdown icon"></i>
                                     <div class="default text">Select Owner</div>
-                                    <div class="menu" >
+                                    <div class="menu">
                                         <div class="item" data-value="00/00/0000" onclick="setAuthDate(this)"><i class="minus circle red icon"></i>Hannah</div>
                                         <div class="item" data-value="23/08/2011" onclick="setAuthDate(this)"><i class="check circle green icon"></i>Paivi</div>
                                         <div class="item" data-value="10/05/2017" onclick="setAuthDate(this)"><i class="check circle green icon"></i>Tommi</div>
@@ -432,7 +460,7 @@
                             </div>
                             <div class="four wide field">
                                 <label>Registration Date</label>
-                                <input id="regdate" name="regdate" type="date" onchange="setRegDate(this)"/>
+                                <input id="regdate" name="regdate" type="date" onchange="setRegDate(this)" />
                             </div>
                         </div>
                     </div>
@@ -448,7 +476,7 @@
                                 <!--<div style="vertical-align:middle; display:inline-block">-->
                                 <!--<div class="ui checkbox" style="vertical-align:middle; display:inline-block">-->
                                 <label>Tax Paid</label>
-                                <input tabindex="0" id="taxpaid" class="hidden" type="checkbox" onclick="setCheckbox(this)"/>
+                                <input tabindex="0" id="taxpaid" class="hidden" type="checkbox" onclick="setCheckbox(this)" />
                                 <!--</div>-->
                             </div>
                             <!--</div>-->

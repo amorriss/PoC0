@@ -16,16 +16,11 @@
   <!--  <link rel="stylesheet" href=".\stylesheets\components\button.css" />
     <link rel="stylesheet" href=".\stylesheets\components\input.css" />-->
 
-    <script src="socket.io/socket.io.js"></script>
+    <script src="socket.io/socket.io.js"></script> 
 
     <script>        
 
-        function login() {
-            var socket = io.connect();
-            var data = document.getElementById("userID").value;
-            socket.emit('queryBC', { data: data });
-            console.log(data + " tried to query BC");
-        }
+       
     </script>
 
 </head>
@@ -33,32 +28,29 @@
     <script>
 
        
+        window.onload = function () {
+            console.log("onload called : " + sessionStorage.getItem("ownerID"));
+
+            var tableRef = document.getElementById('propertytable').getElementsByTagName('tbody')[0];
+
+            var numrows = tableRef.rows.length;
+            var row = tableRef.insertRow(numrows);
+            var newRowId = "propertyTableRow" + (numrows + 1);
+            console.log("new row is " + newRowId);
+            row.setAttribute("id", newRowId);
+            //row.setAttribute("onclick", "rowClick(this.rowIndex)");
+            //row.setAttribute("ondblclick", "rowDblClick(this)");
+
+            // Insert new cells (<td> elements) at the 1st and 2nd position of the "new" <tr> element:
+            var owneridCell = row.insertCell(0);
+            var propertyidCell = row.insertCell(1);
+            
+            // Add some text to the new cells:
+            propertyidCell.innerHTML = sessionStorage.getItem("propertyID");
+            owneridCell.innerHTML = sessionStorage.getItem("ownerID");
+
+        };
         var socket = io.connect();
-        socket.on('queryBCRet', function (data) {
-            console.log("Query BC in browser called with ...");
-            var name = document.getElementById("userID").value;
-            console.log(name);
-            var str = data.data;
-
-            if (str.substring(0, 7) == "success") {
-                // clear storage (house table data)
-                localStorage.clear();
-                // and connect to mySQL db
-                socket.emit("connecttodb", "");
-                sessionStorage.setItem("name", name);
-                window.location("houses");
-            } else {
-                window.alert("Query BC Failed for " + name);
-                //window.location("HCloginfail?name=" + name);
-            }
-        });
-
-        function checkSubmit(e) {
-            // try login if Enter key hit
-            if (e && e.keyCode == 13) {
-                login();
-            }
-        }
 
         function logout() {
             var socket = io.connect();
@@ -86,38 +78,17 @@
         <div class="ui right aligned column">
             <div class="flex-container3">
                 <div>&nbsp;</div>
-                <table class="ui selectable striped celled table" style="background-color: white; overflow-y: scroll" id="housetable">
+                <table class="ui selectable striped celled table" style="background-color: white; overflow-y: scroll" id="propertytable">
                     <thead>
                         <tr>
-                            <th>Housing Certificate</th>
-                            <th>ID</th>
-                            <th>Owner</th>
-                            <th>Registration</th>
-                            <th>Finalised</th>
+                            <th>Owner ID</th>
+                            <th>Property ID</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <!--<tr id="houseTableRow1" onclick="rowClick(this.rowIndex)" ondblclick="rowDblClick(this)">
-                            <td>Computer Science building, Konemiehentie 2, 02150 Espoo</td>
-                            <td>123-456-789-000</td>
-                            <td>Linus Torvalds
-                            </td>
-                            <td>17/09/1991</td>
-                        </tr>
-                        <tr id="houseTableRow2" onclick="rowClick(this.rowIndex)" ondblclick="rowDblClick(this)">
-                            <td>34 Angular Street </td>
-                            <td>489-293-23-583</td>
-                            <td>Miško Hevery</td>
-                            <td>14/09/2016</td>
-                        </tr>
-                        <tr id="houseTableRow3" onclick="rowClick(this.rowIndex)" ondblclick="rowDblClick(this)">
-                            <td>Bike Shed</td>
-                            <td>483-233-789-102</td>
-                            <td>Eddie Merckx</td>
-                            <td>17/06/1945</td>
-                        </tr>-->
+                       
                     </tbody>
-                    <tfoot class="full-width">
+                   <!-- <tfoot class="full-width">
                         <tr>
                             <th colspan="5">
                                 <div class="ui right floated small primary labeled icon button" id="newButton" onclick="newHouse(true)">
@@ -128,7 +99,7 @@
                                 </div>
                             </th>
                         </tr>
-                    </tfoot>
+                    </tfoot>-->
                 </table>
             </div>
         </div>

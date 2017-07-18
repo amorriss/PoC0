@@ -8,12 +8,12 @@
 
     <!--<link rel='stylesheet prefetch' href='http://cdnjs.cloudflare.com/ajax/libs/semantic-ui/0.16.1/css/semantic.min.css' />-->
 
-     <link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.8/semantic.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.8/semantic.min.css" rel="stylesheet" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.8/semantic.min.js"></script>
 
     <link rel="stylesheet" href=".\stylesheets\dn.css" />
-  <!--  <link rel="stylesheet" href=".\stylesheets\components\button.css" />
+    <!--  <link rel="stylesheet" href=".\stylesheets\components\button.css" />
     <link rel="stylesheet" href=".\stylesheets\components\input.css" />-->
 
     <script src="socket.io/socket.io.js"></script>
@@ -22,9 +22,10 @@
 
         function login() {
             var socket = io.connect();
-            var data = document.getElementById("userID").value;
-            socket.emit('queryBC', { data: data });
-            console.log(data + " tried to query BC");
+
+            // login first to get a token
+            var data = "Paivi:passw0rd";
+            socket.emit('login', { data: data });
         }
     </script>
 
@@ -32,24 +33,37 @@
 <body>
     <script>
 
-       
+
         var socket = io.connect();
+
+        socket.on('loginRet', function (data) {
+            var data = document.getElementById("userID").value;
+
+            //setTimeout(function () { socket.emit('queryBC', { data: data }) }, 80);
+            socket.emit('queryBC', { data: data });
+
+            console.log(data + " tried to query BC");
+        });
+
+        socket.on('TEST', function (data) {
+            console.log("TEST return " + data);
+        });
+
         socket.on('queryBCRet', function (data) {
             console.log("Query BC in browser called with ...");
-            var name = document.getElementById("userID").value;
-            console.log(name);
-            var str = data.data;
+            console.log(data.data);
 
-            if (str.substring(0, 7) == "success") {
-                // clear storage (house table data)
-                localStorage.clear();
-                // and connect to mySQL db
-               // socket.emit("connecttodb", "");
-               // sessionStorage.setItem("name", name);
+            if (data.data == '[]') {
+                sessionStorage.setItem("ownerID", document.getElementById("userID").value);
+                sessionStorage.setItem("propertyID", "No records");
                 window.location("DNresult");
-            } else {
-                window.alert("Query BC Failed for " + name);
-                //window.location("HCloginfail?name=" + name);
+            } else {  // success
+                var str = JSON.parse(data.data);
+                sessionStorage.setItem("ownerID", str[0].ownerID);
+               // console.log("owner1 " + str[0].ownerID);
+                //  console.log("owner2 " + str[0].["ownerID"]);
+                sessionStorage.setItem("propertyID", str[0].propertyID);
+                window.location("DNresult");
             }
         });
 
@@ -61,7 +75,7 @@
         }
 
     </script>
-      
+
     <div class="flex-title">
         <div>
             <h1>Query DN Service</h1>
@@ -74,8 +88,8 @@
             <div class="flex-containerlogin">
                 <div>&nbsp;</div>
                 <div class="ui icon input">
-                    <input class="input-username" type="text" id="userID" placeholder="Id number..." autofocus="autofocus" onkeypress="return checkSubmit(event)"/>
-                    <i class="sign in large link icon" onclick="login()" ></i>
+                    <input class="input-username" type="text" id="userID" placeholder="Id number..." autofocus="autofocus" onkeypress="return checkSubmit(event)" />
+                    <i class="sign in large link icon" onclick="login()"></i>
                 </div>
             </div>
         </div>

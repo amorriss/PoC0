@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+﻿  <!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -30,6 +30,7 @@
                 sessionStorage.setItem("propertyid", "");
                 sessionStorage.setItem("owner", "");
                 sessionStorage.setItem("regdate", "");
+                sessionStorage.setItem("ownerid", "");
                 // clear current row so we can add a new row
                 sessionStorage.setItem("currenthouserow", "");
             } else {
@@ -98,17 +99,21 @@
             property = row.getElementsByTagName("td")[0].childNodes[0].data;
             propertyid = row.getElementsByTagName("td")[1].childNodes[0].data;
             owner = row.getElementsByTagName("td")[2].childNodes[0].data;
-            regDate = new Date(row.getElementsByTagName("td")[3].childNodes[0].data);
+            ownerid = row.getElementsByTagName("td")[3].childNodes[0].data;
+            regDate = new Date(row.getElementsByTagName("td")[4].childNodes[0].data);
             //console.log("reg date is " + regDate.getTime());
             authDate = tableData[row.rowIndex - 1].authentication_date;
             console.log("auth date is " + authDate);
             price = tableData[row.rowIndex - 1].price;
             taxPaid = tableData[row.rowIndex - 1].tax_paid;
+            rowid = tableData[row.rowIndex - 1].id;
             console.log("Tax paid " + taxPaid);
 
+            sessionStorage.setItem("rowid", rowid);
             sessionStorage.setItem("property", property);
             sessionStorage.setItem("propertyid", propertyid);
             sessionStorage.setItem("owner", owner);
+            sessionStorage.setItem("ownerid", ownerid);
             sessionStorage.setItem("regdate", regDate.getTime());
             sessionStorage.setItem("authdate", authDate);
             sessionStorage.setItem("price", price);
@@ -140,15 +145,17 @@
 
                     // Insert new cells (<td> elements) at the 1st and 2nd position of the "new" <tr> element:
                     var propertyCell = row.insertCell(0);
-                    var idCell = row.insertCell(1);
+                    var propertyidCell = row.insertCell(1);
                     var ownerCell = row.insertCell(2);
-                    var regdateCell = row.insertCell(3);
-                    var finalityCell = row.insertCell(4);
+                    var owneridCell = row.insertCell(3);
+                    var regdateCell = row.insertCell(4);
+                    var finalityCell = row.insertCell(5);
 
                     // Add some text to the new cells:
                     propertyCell.innerHTML = dataarray[counter].description;
-                    idCell.innerHTML = dataarray[counter].property_id;
+                    propertyidCell.innerHTML = dataarray[counter].property_id;
                     ownerCell.innerHTML = dataarray[counter].owner;
+                    owneridCell.innerHTML = dataarray[counter].owner_id;
                     dtmp = new Date(parseInt(dataarray[counter].registration_date));
                     regdateCell.innerHTML = dtmp.getDate() + '/' + (dtmp.getMonth() + 1) + '/' + dtmp.getFullYear();
                     finalityCell.innerHTML = "No";
@@ -263,8 +270,9 @@
                     <thead>
                         <tr>
                             <th>Housing Certificate</th>
-                            <th>ID</th>
+                            <th>Property ID</th>
                             <th>Owner</th>
+                            <th>Owner ID</th>
                             <th>Registration</th>
                             <th>Finalised</th>
                         </tr>
@@ -292,7 +300,7 @@
                     </tbody>
                     <tfoot class="full-width">
                         <tr>
-                            <th colspan="5">
+                            <th colspan="6">
                                 <div class="ui right floated small primary labeled icon button" id="newButton" onclick="newHouse(true)">
                                     <i class="file text outline icon"></i>New
                                 </div>
